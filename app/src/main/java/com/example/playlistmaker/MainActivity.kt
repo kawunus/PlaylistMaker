@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
             val findIntent = Intent(this, FindActivity::class.java)
             startActivity(findIntent)
         }
+
         buttonLibrary.setOnClickListener {
             val libraryIntent = Intent(this, LibraryActivity::class.java)
             startActivity(libraryIntent)
