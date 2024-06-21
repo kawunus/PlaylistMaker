@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="main_menu">22sp</dimen>
+    <dimen name="settings_item">16sp</dimen>
+    <dimen name="main_menu_card_radius">16dp</dimen>
+</resources>

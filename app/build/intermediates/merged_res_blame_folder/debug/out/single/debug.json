@@ -1,0 +1,142 @@
+[
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\drawable_ic_settings.xml.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\drawable\\ic_settings.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\drawable_ic_share.xml.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\drawable\\ic_share.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\mipmap-mdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.playlistmaker.app-merged_res-31:/layout_activity_settings.xml.flat",
+        "source": "com.example.playlistmaker.app-main-33:/layout/activity_settings.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\drawable_ic_support.xml.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\drawable\\ic_support.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\drawable_ic_arrow.xml.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\drawable\\ic_arrow.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\drawable\\ic_launcher_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\drawable_ic_mediateck.xml.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\drawable\\ic_mediateck.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\xml_backup_rules.xml.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\xml\\backup_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\mipmap-xhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\drawable_shape_button.xml.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\drawable\\shape_button.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\mipmap-xhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\drawable_ic_switch.xml.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\drawable\\ic_switch.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\drawable_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\drawable\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\mipmap-mdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\font_ys.ttf.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\font\\ys.ttf"
+    },
+    {
+        "merged": "com.example.playlistmaker.app-merged_res-31:/drawable_ic_library.xml.flat",
+        "source": "com.example.playlistmaker.app-main-33:/drawable/ic_library.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\mipmap-xxxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\mipmap-xxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\font_ys_bold.ttf.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\font\\ys_bold.ttf"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\xml_data_extraction_rules.xml.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\xml\\data_extraction_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\mipmap-xxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.playlistmaker.app-merged_res-31:/layout_activity_main.xml.flat",
+        "source": "com.example.playlistmaker.app-main-33:/layout/activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\drawable_ic_search.xml.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\drawable\\ic_search.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\drawable_ic_arrow_forward.xml.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\drawable\\ic_arrow_forward.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\mipmap-anydpi_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\mipmap-anydpi\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\mipmap-xxxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\layout_activity_settings.xml.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\layout\\activity_settings.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\mipmap-hdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\layout_activity_library.xml.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\layout\\activity_library.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\font_yandex_sans_display_regular.ttf.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\font\\yandex_sans_display_regular.ttf"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\mipmap-hdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\mipmap-anydpi_ic_launcher.xml.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\mipmap-anydpi\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-merged_res-31:\\layout_activity_find.xml.flat",
+        "source": "C:\\Users\\Stanislau\\.gradle\\daemon\\8.2\\com.example.playlistmaker.app-main-33:\\layout\\activity_find.xml"
+    }
+]

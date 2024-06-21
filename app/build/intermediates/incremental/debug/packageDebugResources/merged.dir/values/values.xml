@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="base_color">#1A1B22</color>
+    <color name="black">#FF000000</color>
+    <color name="main_menu_background_color">#3772E7</color>
+    <color name="main_menu_item_color">#FFFFFF</color>
+    <color name="main_menu_logo_color">#FFFFFF</color>
+    <color name="settings_background_color">#FFFFFF</color>
+    <color name="settings_icon_color">#AEAFB4</color>
+    <color name="settings_text_color">#000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <dimen name="main_menu">22sp</dimen>
+    <dimen name="main_menu_card_radius">16dp</dimen>
+    <dimen name="settings_item">16sp</dimen>
+    <string name="app_name" translatable="false">Playlist maker</string>
+    <string name="main_find" translatable="false">Поиск</string>
+    <string name="main_library" translatable="false">Медиатека</string>
+    <string name="main_settings" translatable="false">Настройки</string>
+    <string name="main_tittle" translatable="false">Playlist maker</string>
+    <string name="settings_agreement" translatable="false">Пользовательское соглашение</string>
+    <string name="settings_share" translatable="false">Поделится приложением</string>
+    <string name="settings_support" translatable="false">Написать в поддержку</string>
+    <string name="settings_theme" translatable="false">Тёмная тема</string>
+    <style name="Base.Theme.PlaylistMaker" parent="Theme.Material3.DayNight.NoActionBar">
+        
+        
+    </style>
+    <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker"/>
+    <style name="mainButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="backgroundTint">@color/main_menu_item_color</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="fontFamily">@font/yandex_sans_display_regular</item>
+        <item name="android:textColor">@color/base_color</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:textSize">@dimen/main_menu</item>
+        <item name="cornerRadius">@dimen/main_menu_card_radius</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconTint">@color/base_color</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+    <style name="mainToolbarTitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">@dimen/main_menu</item>
+        <item name="android:textColor">@color/main_menu_logo_color</item>
+        <item name="android:fontFamily">@font/yandex_sans_display_regular</item>
+    </style>
+    <style name="settingsItemStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="fontFamily">@font/yandex_sans_display_regular</item>
+        <item name="android:drawableTint">@color/settings_icon_color</item>
+        <item name="android:paddingHorizontal">16dp</item>
+        <item name="android:paddingVertical">20dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/settings_text_color</item>
+    </style>
+    <style name="settingsToolbarTitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/base_color</item>
+        <item name="android:fontFamily">@font/yandex_sans_display_regular</item>
+    </style>
+</resources>
