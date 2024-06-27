@@ -27,14 +27,14 @@ class SettingsActivity : AppCompatActivity() {
             val message = "https://practicum.yandex.ru/android-developer/"
             intent.putExtra(Intent.EXTRA_TEXT, message)
             intent.type = "text/plain"
-            val chooser = Intent.createChooser(intent, "Поделится приложением через:")
+            val chooser = Intent.createChooser(intent, getString(R.string.share_title))
             startActivity(chooser)
         }
 
         supportView.setOnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO)
-            val message = "Спасибо разработчикам и разработчицам за крутое приложение!"
-            val title = "Сообщение разработчикам и разработчицам приложения Playlist Maker"
+            val message = getString(R.string.support_message)
+            val title = getString(R.string.support_title)
             intent.data = Uri.parse("mailto:")
             intent.putExtra(Intent.EXTRA_SUBJECT, title)
             intent.putExtra(Intent.EXTRA_TEXT, message)
