@@ -44,6 +44,7 @@ class FindActivity : AppCompatActivity() {
         editText.addTextChangedListener(editTextWatcher)
         clearButton.setOnClickListener {
             editText.text.clear()
+            editText.clearFocus()
         }
     }
 

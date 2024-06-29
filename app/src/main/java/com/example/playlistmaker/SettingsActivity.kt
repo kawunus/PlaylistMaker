@@ -24,7 +24,7 @@ class SettingsActivity : AppCompatActivity() {
 
         shareView.setOnClickListener {
             val intent = Intent(Intent.ACTION_SEND)
-            val message = "https://practicum.yandex.ru/android-developer/"
+            val message = getString(R.string.link_on_course)
             intent.putExtra(Intent.EXTRA_TEXT, message)
             intent.type = "text/plain"
             val chooser = Intent.createChooser(intent, getString(R.string.share_title))
@@ -38,14 +38,14 @@ class SettingsActivity : AppCompatActivity() {
             intent.data = Uri.parse("mailto:")
             intent.putExtra(Intent.EXTRA_SUBJECT, title)
             intent.putExtra(Intent.EXTRA_TEXT, message)
-            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("markovtsev.stas@yandex.by"))
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.dev_email)))
 
             startActivity(intent)
         }
 
 
         agreementView.setOnClickListener {
-            val url = Uri.parse("https://yandex.ru/legal/practicum_offer/")
+            val url = Uri.parse(getString(R.string.link_to_agreement))
             val intent = Intent(Intent.ACTION_VIEW, url)
 
             startActivity(intent)
