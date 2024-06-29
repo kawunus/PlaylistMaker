@@ -46,6 +46,8 @@ class FindActivity : AppCompatActivity() {
             editText.text.clear()
             editText.clearFocus()
         }
+
+
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
