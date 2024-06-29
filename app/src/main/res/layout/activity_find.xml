@@ -13,24 +13,44 @@
         android:title="@string/main_find"
         android:titleTextAppearance="@style/settingsToolbarTitleText" />
 
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/edit_text_background"
-        android:drawableStart="@drawable/ic_search_edittext"
-        android:drawablePadding="8dp"
-        android:drawableTint="@color/editTextColor"
-        android:fontFamily="@font/yandex_sans_display_regular"
-        android:hint="@string/main_find"
-        android:inputType="text"
-        android:lines="1"
-        android:maxLength="15"
-        android:paddingVertical="10dp"
-        android:paddingStart="14dp"
-        android:textSize="16dp"
-        android:textColor="@color/editTextColor"
-        android:textColorHint="@color/editTextColor"/>
+        android:paddingVertical="8dp">
 
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+
+            android:layout_weight="1"
+            android:background="@drawable/edit_text_background"
+            android:drawableStart="@drawable/ic_search_edittext"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/editTextColor"
+            android:fontFamily="@font/yandex_sans_display_regular"
+            android:hint="@string/main_find"
+            android:inputType="text"
+            android:lines="1"
+            android:maxLength="15"
+            android:paddingVertical="10dp"
+            android:paddingStart="14dp"
+            android:textColor="@color/editTextColor"
+            android:textColorHint="@color/editTextColor"
+            android:textSize="16sp" />
+
+
+        <ImageView
+            android:id="@+id/clearIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0"
+            android:src="@drawable/ic_cross"
+            android:visibility="gone"
+            android:layout_marginEnd="16dp"
+            android:tint="?attr/colorOnSecondary"
+            />
+    </LinearLayout>
 </LinearLayout>
