@@ -5,12 +5,15 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 
 class FindActivity : AppCompatActivity() {
+
+    private var editTextContext = ""
+    private lateinit var editText: EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_find)
@@ -21,7 +24,7 @@ class FindActivity : AppCompatActivity() {
         }
 
 
-        val editText = findViewById<EditText>(R.id.editText)
+        editText = findViewById<EditText>(R.id.editText)
         val editTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
@@ -29,6 +32,7 @@ class FindActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
+                editTextContext = editText.text.toString()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -38,15 +42,27 @@ class FindActivity : AppCompatActivity() {
 
         }
         editText.addTextChangedListener(editTextWatcher)
-        clearButton.setOnClickListener{
+        clearButton.setOnClickListener {
             editText.text.clear()
         }
     }
+
     private fun clearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
             View.GONE
         } else {
             View.VISIBLE
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("EDIT_TEXT_CONTEXT", editTextContext)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        editTextContext = savedInstanceState.getString("EDIT_TEXT_CONTEXT", "")
+        editText.setText(editTextContext)
     }
 }
