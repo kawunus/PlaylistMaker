@@ -9,4 +9,8 @@
     <color name="main_menu_item_color">#FFFFFF</color>
     <color name="settings_background_color">#FFFFFF</color>
     <color name="settings_icon_color">#AEAFB4</color>
+    <color name="iconColor">#AEAFB4</color>
+    <color name="arrowColor">#000000</color>
+    <color name="editTextBackgroundColor">#E6E8EB</color>
+    <color name="editTextColor">#AEAFB4</color>
 </resources>

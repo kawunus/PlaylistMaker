@@ -2,9 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/settings_background_color"
+    android:background="?attr/colorSecondary"
     android:orientation="vertical">
-
 
     <Toolbar
         android:id="@+id/toolbar"
@@ -30,23 +29,20 @@
         android:thumbTintMode="screen" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/shareView"
         style="@style/settingsItemStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:drawableEnd="@drawable/ic_share"
         android:text="@string/settings_share" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/supportView"
         style="@style/settingsItemStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:drawableEnd="@drawable/ic_support"
         android:text="@string/settings_support" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/agreementView"
         style="@style/settingsItemStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:drawableEnd="@drawable/ic_arrow_forward"
         android:text="@string/settings_agreement" />
 </LinearLayout>

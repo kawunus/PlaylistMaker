@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="iconColor">#FFFFFF</color>
+    <color name="arrowColor">#FFFFFF</color>
+    <color name="editTextBackgroundColor">#FFFFFF</color>
+    <color name="editTextColor">#000000</color>
+</resources>
