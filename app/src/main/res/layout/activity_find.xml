@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSecondary"
@@ -40,8 +41,8 @@
             android:paddingStart="14dp"
             android:textColor="@color/black"
             android:textColorHint="@color/editTextColor"
-            android:textSize="16sp"
-            android:textCursorDrawable="@drawable/edit_text_cursor"/>
+            android:textCursorDrawable="@drawable/edit_text_cursor"
+            android:textSize="16sp" />
 
 
         <ImageView
@@ -56,4 +57,10 @@
             android:visibility="gone" />
 
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 </LinearLayout>

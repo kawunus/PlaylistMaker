@@ -14,4 +14,7 @@
     <string name="link_on_course">https://practicum.yandex.ru/android-developer/</string>
     <string name="link_to_agreement">https://yandex.ru/legal/practicum_offer/</string>
     <string name="dev_email">markovtsev.stas@yandex.by</string>
+    <string name="track_name_placeholder">Название песни</string>
+    <string name="artist_name_placeholder">Исполнитель</string>
+    <string name="track_time_placeholder">0:00</string>
 </resources>
