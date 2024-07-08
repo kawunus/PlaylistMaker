@@ -27,7 +27,7 @@
             android:fontFamily="@font/yandex_sans_display_regular"
             android:text="@string/track_name_placeholder"
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="16dp" />
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
                 android:fontFamily="@font/yandex_sans_display_regular"
                 android:text="@string/artist_name_placeholder"
                 android:textColor="@color/trackTextColor"
-                android:textSize="11dp" />
+                android:textSize="11sp" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
                 android:fontFamily="@font/yandex_sans_display_regular"
                 android:text="@string/track_time_placeholder"
                 android:textColor="@color/trackTextColor"
-                android:textSize="11dp" />
+                android:textSize="11sp" />
         </LinearLayout>
 
     </LinearLayout>
