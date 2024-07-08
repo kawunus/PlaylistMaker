@@ -4,4 +4,7 @@
     <color name="arrowColor">#FFFFFF</color>
     <color name="editTextBackgroundColor">#FFFFFF</color>
     <color name="editTextColor">#000000</color>
+    <color name="trackTextColor">#FFFFFF</color>
+    <color name="thumbColor">#3772E7</color>
+    <color name="trackColor">#9FBBF3</color>
 </resources>
