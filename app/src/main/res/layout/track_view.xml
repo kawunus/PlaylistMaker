@@ -24,7 +24,9 @@
             android:id="@+id/trackNameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:fontFamily="@font/yandex_sans_display_regular"
+            android:maxLines="1"
             android:text="@string/track_name_placeholder"
             android:textColor="?attr/colorOnSecondary"
             android:textSize="16sp" />
@@ -40,7 +42,9 @@
                 android:id="@+id/artistNameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
                 android:fontFamily="@font/yandex_sans_display_regular"
+                android:maxLines="1"
                 android:text="@string/artist_name_placeholder"
                 android:textColor="@color/trackTextColor"
                 android:textSize="11sp" />

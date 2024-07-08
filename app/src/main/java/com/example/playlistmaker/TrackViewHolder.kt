@@ -20,13 +20,13 @@ class TrackViewHolder(trackView: View) : RecyclerView.ViewHolder(trackView) {
             .transform(RoundedCorners(2))
             .placeholder(R.drawable.placeholder)
             .into(artworkImageView)
-        trackNameTextView.text = getCurrentStrind(model.trackName)
+        trackNameTextView.text = model.trackName
         artistNameTextView.text = getCurrentStrind(model.artistName)
         trackTimeTextView.text = model.trackTime
     }
 
     private fun getCurrentStrind(string: String): String {
-        return if (string.length <= 33) string
-        else string.substring(0, 29) + "..."
+        return if (string.length <= 43) string
+        else string.substring(0, 39) + "..."
     }
 }
