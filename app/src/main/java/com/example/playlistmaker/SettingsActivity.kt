@@ -3,26 +3,20 @@ package com.example.playlistmaker
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
+import com.example.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySettingsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
-
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        val shareView =
-            findViewById<com.google.android.material.textview.MaterialTextView>(R.id.shareView)
-        val supportView =
-            findViewById<com.google.android.material.textview.MaterialTextView>(R.id.supportView)
-        val agreementView =
-            findViewById<com.google.android.material.textview.MaterialTextView>(R.id.agreementView)
-        toolbar.setNavigationOnClickListener {
+        setContentView(binding.root)
+        binding.toolbar.setNavigationOnClickListener {
             finish()
         }
 
-        shareView.setOnClickListener {
+        binding.shareView.setOnClickListener {
             val intent = Intent(Intent.ACTION_SEND)
             val message = getString(R.string.link_on_course)
             intent.putExtra(Intent.EXTRA_TEXT, message)
@@ -31,7 +25,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(chooser)
         }
 
-        supportView.setOnClickListener {
+        binding.supportView.setOnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO)
             val message = getString(R.string.support_message)
             val title = getString(R.string.support_title)
@@ -44,7 +38,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
 
-        agreementView.setOnClickListener {
+        binding.agreementView.setOnClickListener {
             val url = Uri.parse(getString(R.string.link_to_agreement))
             val intent = Intent(Intent.ACTION_VIEW, url)
 
