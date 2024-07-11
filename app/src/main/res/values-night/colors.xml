@@ -7,4 +7,6 @@
     <color name="trackTextColor">#FFFFFF</color>
     <color name="thumbColor">#3772E7</color>
     <color name="trackColor">#9FBBF3</color>
+    <color name="findUpdateButtonColor">#FFFFFF</color>
+    <color name="findUpdateButtonTextColor">#000000</color>
 </resources>

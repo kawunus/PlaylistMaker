@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.databinding.TrackViewBinding
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class TrackViewHolder(trackView: View) : RecyclerView.ViewHolder(trackView) {
     private val binding: TrackViewBinding = TrackViewBinding.bind(trackView)
@@ -16,6 +18,8 @@ class TrackViewHolder(trackView: View) : RecyclerView.ViewHolder(trackView) {
             .into(binding.artworkImageView)
         binding.trackNameTextView.text = model.trackName
         binding.artistNameTextView.text = model.artistName
-        binding.trackTimeTextView.text = model.trackTime
+
+        val dateFormatter = SimpleDateFormat("mm:ss", Locale.getDefault())
+        binding.trackTimeTextView.text = dateFormatter.format(model.trackTime)
     }
 }

@@ -1,20 +1,29 @@
 <resources>
     <string name="app_name" translatable="false">Playlist maker</string>
+    <!-- Main Activity -->
     <string name="main_tittle" translatable="false">Playlist maker</string>
     <string name="main_find" translatable="false">Поиск</string>
     <string name="main_library" translatable="false">Медиатека</string>
     <string name="main_settings" translatable="false">Настройки</string>
+
+    <!-- Settings Activity -->
     <string name="settings_theme" translatable="false">Тёмная тема</string>
     <string name="settings_share" translatable="false">Поделится приложением</string>
     <string name="settings_support" translatable="false">Написать в поддержку</string>
     <string name="settings_agreement" translatable="false">Пользовательское соглашение</string>
+    <!-- Строковые ресурсы для взаимодействий с кнопками в Settings Activity -->
     <string name="support_message" translatable="false">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="support_title" translatable="false">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="share_title" translatable="false">Поделится приложением через:</string>
     <string name="link_on_course">https://practicum.yandex.ru/android-developer/</string>
     <string name="link_to_agreement">https://yandex.ru/legal/practicum_offer/</string>
     <string name="dev_email">markovtsev.stas@yandex.by</string>
+
+    <!-- Find Activity -->
     <string name="track_name_placeholder">Название песни</string>
     <string name="artist_name_placeholder">Исполнитель</string>
     <string name="track_time_placeholder">0:00</string>
+    <string name="not_found">Ничего не нашлось</string>
+    <string name="no_internet">Проблемы со связью\n\nЗагрузка не удалась. Проверьте\nподключение к интернету</string>
+    <string name="update_button_text">Обновить</string>
 </resources>

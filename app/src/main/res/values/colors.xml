@@ -16,4 +16,6 @@
     <color name="trackTextColor">#AEAFB4</color>
     <color name="thumbColor">#AEAFB4</color>
     <color name="trackColor">#E6E8EB</color>
+    <color name="findUpdateButtonColor">#000000</color>
+    <color name="findUpdateButtonTextColor">#FFFFFF</color>
 </resources>

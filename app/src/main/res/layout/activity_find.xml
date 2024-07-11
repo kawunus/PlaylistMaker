@@ -25,8 +25,6 @@
             android:id="@+id/editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-
             android:layout_weight="1"
             android:background="@drawable/edit_text_background"
             android:drawableStart="@drawable/ic_search_edittext"
@@ -34,6 +32,7 @@
             android:drawableTint="@color/editTextColor"
             android:fontFamily="@font/yandex_sans_display_regular"
             android:hint="@string/main_find"
+            android:imeOptions="actionDone"
             android:inputType="text"
             android:lines="1"
             android:maxLength="20"
@@ -61,6 +60,45 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <LinearLayout
+        android:id="@+id/errorLinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+
+        <ImageView
+            android:id="@+id/errorImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="102dp"
+            android:src="@drawable/ic_no_internet" />
+
+        <TextView
+            android:id="@+id/errorText"
+            style="@style/findTextStyle"
+            android:layout_marginTop="16dp"
+            android:text="@string/no_internet"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/updateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/findUpdateButtonColor"
+            android:fontFamily="@font/yandex_sans_display_regular"
+            android:text="@string/update_button_text"
+            android:textColor="@color/findUpdateButtonTextColor"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+
+    </LinearLayout>
 </LinearLayout>
