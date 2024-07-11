@@ -24,7 +24,7 @@ class FindActivity : AppCompatActivity() {
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
             .build()
     val trackList = ArrayList<Track>()
-    val iTunesApiService = retrofit.create(ITunesApi::class.java)
+    private val iTunesApiService = retrofit.create(ITunesApi::class.java)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFindBinding.inflate(layoutInflater)
@@ -119,7 +119,7 @@ class FindActivity : AppCompatActivity() {
         deleteErrorViews()
         trackList.clear()
         recyclerView.adapter?.notifyDataSetChanged()
-        if (editText.text.isNotEmpty()) {
+        if (editText.text.toString() != "") {
             iTunesApiService.search("${editText.text}").enqueue(object : Callback<TrackResponce> {
                 override fun onResponse(
                     call: Call<TrackResponce>, response: Response<TrackResponce>
@@ -144,7 +144,7 @@ class FindActivity : AppCompatActivity() {
 
             })
         } else {
-            TODO("Сделать что-то что оповещает о пустом тексте")
+
         }
     }
 }
