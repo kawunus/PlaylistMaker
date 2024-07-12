@@ -4,6 +4,7 @@ ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:2:1-39:12
 INJECTED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:2:1-39:12
 INJECTED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:2:1-39:12
 INJECTED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:2:1-39:12
+MERGED from [androidx.databinding:viewbinding:8.5.0] C:\Users\Stanislau\.gradle\caches\transforms-4\135311c0a292e96c7daf0425482d558f\transformed\viewbinding-8.5.0\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\Stanislau\.gradle\caches\transforms-4\ddd915be85539511167c834bddc23932\transformed\material-1.12.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\Stanislau\.gradle\caches\transforms-4\81efd4f696866364d11e51c5f909c880\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\Stanislau\.gradle\caches\transforms-4\a6fa91a05cb28a997929b8c3a1f79125\transformed\appcompat-resources-1.6.1\AndroidManifest.xml:17:1-22:12
@@ -147,6 +148,8 @@ uses-sdk
 INJECTED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml
 INJECTED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml
+MERGED from [androidx.databinding:viewbinding:8.5.0] C:\Users\Stanislau\.gradle\caches\transforms-4\135311c0a292e96c7daf0425482d558f\transformed\viewbinding-8.5.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.databinding:viewbinding:8.5.0] C:\Users\Stanislau\.gradle\caches\transforms-4\135311c0a292e96c7daf0425482d558f\transformed\viewbinding-8.5.0\AndroidManifest.xml:5:5-44
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\Stanislau\.gradle\caches\transforms-4\ddd915be85539511167c834bddc23932\transformed\material-1.12.0\AndroidManifest.xml:20:5-44
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\Stanislau\.gradle\caches\transforms-4\ddd915be85539511167c834bddc23932\transformed\material-1.12.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\Stanislau\.gradle\caches\transforms-4\81efd4f696866364d11e51c5f909c880\transformed\constraintlayout-2.1.4\AndroidManifest.xml:5:5-7:41
