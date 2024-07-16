@@ -23,13 +23,12 @@ class FindActivity : AppCompatActivity() {
     private val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
             .build()
-    val trackList = ArrayList<Track>()
     private val iTunesApiService = retrofit.create(ITunesApi::class.java)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFindBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.recyclerView.adapter = TrackAdapter(trackList)
+        binding.recyclerView.adapter = TrackAdapter()
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
@@ -53,8 +52,7 @@ class FindActivity : AppCompatActivity() {
         binding.clearIcon.setOnClickListener {
             binding.editText.text.clear()
             binding.editText.clearFocus()
-            trackList.clear()
-            binding.recyclerView.adapter?.notifyDataSetChanged()
+            (binding.recyclerView.adapter as TrackAdapter).saveData(emptyList())
             hideKeyboard()
         }
         binding.editText.setOnEditorActionListener { _, actionId, _ ->
@@ -117,8 +115,7 @@ class FindActivity : AppCompatActivity() {
 
     private fun search() = with(binding) {
         deleteErrorViews()
-        trackList.clear()
-        recyclerView.adapter?.notifyDataSetChanged()
+        (recyclerView.adapter as TrackAdapter).saveData(emptyList())
         if (editText.text.toString() != "") {
             iTunesApiService.search("${editText.text}").enqueue(object : Callback<TrackResponce> {
                 override fun onResponse(
@@ -127,8 +124,7 @@ class FindActivity : AppCompatActivity() {
                     when (response.code()) {
                         200 -> {
                             if (response.body()?.results?.isNotEmpty() == true) {
-                                trackList.addAll(response.body()?.results!!)
-                                recyclerView.adapter?.notifyDataSetChanged()
+                                (recyclerView.adapter as TrackAdapter).saveData(ArrayList(response.body()?.results!!))
                             } else {
                                 notFoundError()
                             }

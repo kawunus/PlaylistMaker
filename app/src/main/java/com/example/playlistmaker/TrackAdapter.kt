@@ -2,18 +2,36 @@ package com.example.playlistmaker
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
-class TrackAdapter(private val trackList: ArrayList<Track>) :
+class TrackAdapter() :
     RecyclerView.Adapter<TrackViewHolder>() {
+    private val diffUtil = object : DiffUtil.ItemCallback<Track>() {
+        override fun areItemsTheSame(oldItem: Track, newItem: Track): Boolean {
+            return oldItem.trackName == newItem.trackName && oldItem.artistName == newItem.artistName
+        }
+
+        override fun areContentsTheSame(oldItem: Track, newItem: Track): Boolean {
+            return oldItem == newItem
+        }
+
+    }
+    private val asyncListDiffer = AsyncListDiffer(this, diffUtil)
+
+    fun saveData(trackList: List<Track>) {
+        asyncListDiffer.submitList(trackList)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_view, parent, false)
         return TrackViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(trackList[position])
+        holder.bind(asyncListDiffer.currentList[position])
     }
 
-    override fun getItemCount() = trackList.size
+    override fun getItemCount() = asyncListDiffer.currentList.size
 }

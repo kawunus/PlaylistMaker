@@ -2,5 +2,5 @@ package com.example.playlistmaker
 
 class TrackResponce(
     val resultCount: Int,
-    val results: ArrayList<Track>
+    val results: List<Track>
 )
