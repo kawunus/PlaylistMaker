@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.UI.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -28,5 +28,6 @@ class MainActivity : AppCompatActivity() {
             val settingsIntent = Intent(this@MainActivity, SettingsActivity::class.java)
             startActivity(settingsIntent)
         }
+
     }
 }

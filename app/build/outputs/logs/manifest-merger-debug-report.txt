@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:2:1-39:12
-INJECTED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:2:1-39:12
-INJECTED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:2:1-39:12
-INJECTED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:2:1-39:12
+ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:2:1-36:12
+INJECTED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:2:1-36:12
+INJECTED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:2:1-36:12
+INJECTED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:2:1-36:12
 MERGED from [androidx.databinding:viewbinding:8.5.0] C:\Users\Stanislau\.gradle\caches\transforms-4\135311c0a292e96c7daf0425482d558f\transformed\viewbinding-8.5.0\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\Stanislau\.gradle\caches\transforms-4\ddd915be85539511167c834bddc23932\transformed\material-1.12.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\Stanislau\.gradle\caches\transforms-4\81efd4f696866364d11e51c5f909c880\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
@@ -64,8 +64,8 @@ ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:5:5-67
 	android:name
 		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:5:22-64
 application
-ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:6:5-37:19
-INJECTED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:6:5-37:19
+ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:6:5-34:19
+INJECTED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:6:5-34:19
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\Stanislau\.gradle\caches\transforms-4\ddd915be85539511167c834bddc23932\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\Stanislau\.gradle\caches\transforms-4\ddd915be85539511167c834bddc23932\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\Stanislau\.gradle\caches\transforms-4\81efd4f696866364d11e51c5f909c880\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
@@ -87,63 +87,59 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\St
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.13.1] C:\Users\Stanislau\.gradle\caches\transforms-4\c1e340abda283ca6036575aab6bf153c\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:13:9-35
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:14:9-35
 	android:label
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:11:9-41
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:12:9-41
 	android:fullBackupContent
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:9:9-54
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:10:9-54
 	android:roundIcon
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:12:9-54
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:13:9-54
 	tools:targetApi
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:15:9-29
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:16:9-29
 	android:icon
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:10:9-43
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:11:9-43
 	android:allowBackup
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:7:9-35
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:8:9-35
 	android:theme
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:14:9-56
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:15:9-56
 	android:dataExtractionRules
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:8:9-65
-activity#com.example.playlistmaker.TrackView
-ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:16:9-18:40
-	android:exported
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:18:13-37
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:9:9-65
 	android:name
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:17:13-38
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:7:9-28
 activity#com.example.playlistmaker.SettingsActivity
-ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:19:9-21:40
+ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:17:9-19:40
 	android:exported
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:21:13-37
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:19:13-37
 	android:name
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:20:13-45
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:18:13-45
 activity#com.example.playlistmaker.LibraryActivity
-ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:22:9-24:40
+ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:20:9-22:40
 	android:exported
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:24:13-37
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:22:13-37
 	android:name
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:23:13-44
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:21:13-44
 activity#com.example.playlistmaker.FindActivity
-ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:25:9-27:40
+ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:23:9-25:40
 	android:exported
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:27:13-37
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:25:13-37
 	android:name
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:26:13-41
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:24:13-41
 activity#com.example.playlistmaker.MainActivity
-ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:28:9-36:20
+ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:26:9-33:20
 	android:exported
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:30:13-36
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:28:13-36
 	android:name
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:29:13-41
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:27:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:31:13-35:29
+ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:29:13-32:29
 action#android.intent.action.MAIN
-ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:32:17-69
+ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:30:17-69
 	android:name
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:32:25-66
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:30:25-66
 category#android.intent.category.LAUNCHER
-ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:34:17-77
+ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:31:17-77
 	android:name
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:34:27-74
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:31:27-74
 uses-sdk
 INJECTED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml

@@ -1,17 +1,26 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.UI.activities
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.playlistmaker.App
+import com.example.playlistmaker.data.track.prefs.AppSharedPreferences
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
+    private lateinit var appPreferences: AppSharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
+
+        appPreferences = AppSharedPreferences(this@SettingsActivity)
+        binding.themeSwitcher.isChecked = appPreferences.getTheme()
+
         setContentView(binding.root)
+        binding.themeSwitcher.isChecked
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
@@ -43,6 +52,10 @@ class SettingsActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_VIEW, url)
 
             startActivity(intent)
+        }
+
+        binding.themeSwitcher.setOnCheckedChangeListener { _, checked ->
+            (applicationContext as App).switchTheme(checked)
         }
     }
 

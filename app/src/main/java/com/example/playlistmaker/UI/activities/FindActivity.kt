@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.UI.activities
 
 import android.content.Context
 import android.os.Bundle
@@ -8,6 +8,10 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import com.example.playlistmaker.API.ITunesApi
+import com.example.playlistmaker.R
+import com.example.playlistmaker.adapters.track.TrackAdapter
+import com.example.playlistmaker.API.responces.TrackResponce
 import com.example.playlistmaker.databinding.ActivityFindBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -43,7 +47,7 @@ class FindActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-
+                // search()
             }
 
 
