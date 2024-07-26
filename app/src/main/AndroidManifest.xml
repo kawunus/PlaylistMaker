@@ -15,16 +15,16 @@
         android:theme="@style/Base.Theme.PlaylistMaker"
         tools:targetApi="31">
         <activity
-            android:name=".UI.activities.SettingsActivity"
+            android:name=".ui.activities.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.LibraryActivity"
+            android:name=".ui.activities.LibraryActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.FindActivity"
+            android:name=".ui.activities.FindActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

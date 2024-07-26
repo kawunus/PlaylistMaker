@@ -33,6 +33,9 @@ class TrackAdapter() :
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(asyncListDiffer.currentList[position])
+        holder.itemView.setOnClickListener {
+
+        }
     }
 
     override fun getItemCount() = asyncListDiffer.currentList.size
