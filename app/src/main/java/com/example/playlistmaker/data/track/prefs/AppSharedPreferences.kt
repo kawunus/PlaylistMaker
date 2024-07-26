@@ -32,4 +32,9 @@ class AppSharedPreferences(context: Context) {
         prefs.edit().putString(PrefKeys.HISTORY_LIST, converter.trackListToJson(list)).apply()
     }
 
+    fun addToHistoryList(track: Track){
+        val trackList = getHistoryList() + track
+        setHistoryList(trackList)
+    }
+
 }

@@ -9,10 +9,11 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.API.ITunesApi
+import com.example.playlistmaker.API.responces.TrackResponce
 import com.example.playlistmaker.R
 import com.example.playlistmaker.adapters.track.TrackAdapter
-import com.example.playlistmaker.API.responces.TrackResponce
 import com.example.playlistmaker.databinding.ActivityFindBinding
+import com.example.playlistmaker.utils.SearchHistory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,7 +24,7 @@ class FindActivity : AppCompatActivity() {
 
     private var editTextContext = ""
     private var baseUrl = "https://itunes.apple.com"
-    private lateinit var binding: ActivityFindBinding
+    lateinit var binding: ActivityFindBinding
     private val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -32,7 +33,9 @@ class FindActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFindBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.recyclerView.adapter = TrackAdapter()
+        binding.recyclerView.adapter = TrackAdapter(this)
+        val searchHistory = SearchHistory(this)
+        searchHistory.showList()
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
@@ -44,10 +47,12 @@ class FindActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.clearIcon.visibility = clearButtonVisibility(s)
                 editTextContext = binding.editText.text.toString()
+                if (binding.editText.hasFocus() && s?.isEmpty() == true) {
+                    searchHistory.showList()
+                } else searchHistory.hideHistory()
             }
 
             override fun afterTextChanged(s: Editable?) {
-                // search()
             }
 
 
@@ -56,7 +61,7 @@ class FindActivity : AppCompatActivity() {
         binding.clearIcon.setOnClickListener {
             binding.editText.text.clear()
             binding.editText.clearFocus()
-            (binding.recyclerView.adapter as TrackAdapter).saveData(emptyList())
+            searchHistory.showList()
             hideKeyboard()
         }
         binding.editText.setOnEditorActionListener { _, actionId, _ ->
@@ -68,6 +73,17 @@ class FindActivity : AppCompatActivity() {
         }
         binding.updateButton.setOnClickListener {
             search()
+        }
+
+        binding.editText.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus && binding.editText.text.isEmpty()) {
+                searchHistory.showList()
+            }
+
+        }
+
+        binding.historyButton.setOnClickListener {
+            searchHistory.clearHistory()
         }
     }
 
