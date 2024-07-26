@@ -32,9 +32,15 @@ class AppSharedPreferences(context: Context) {
         prefs.edit().putString(PrefKeys.HISTORY_LIST, converter.trackListToJson(list)).apply()
     }
 
-    fun addToHistoryList(track: Track){
-        val trackList = getHistoryList() + track
-        setHistoryList(trackList)
+    fun addToHistoryList(track: Track) {
+        val oldTrackList = getHistoryList().toMutableList()
+        if (oldTrackList.none { it.trackId == track.trackId }) {
+            if (oldTrackList.size >= 10) {
+                oldTrackList.removeLast()
+            }
+            oldTrackList.add(0, track)
+            setHistoryList(oldTrackList)
+        }
     }
 
 }

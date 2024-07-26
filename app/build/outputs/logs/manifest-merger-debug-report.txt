@@ -106,30 +106,30 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\St
 		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:9:9-65
 	android:name
 		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:7:9-28
-activity#com.example.playlistmaker.SettingsActivity
+activity#com.example.playlistmaker.ui.activities.SettingsActivity
 ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:17:9-19:40
 	android:exported
 		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:19:13-37
 	android:name
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:18:13-45
-activity#com.example.playlistmaker.LibraryActivity
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:18:13-59
+activity#com.example.playlistmaker.ui.activities.LibraryActivity
 ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:20:9-22:40
 	android:exported
 		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:22:13-37
 	android:name
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:21:13-44
-activity#com.example.playlistmaker.FindActivity
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:21:13-58
+activity#com.example.playlistmaker.ui.activities.FindActivity
 ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:23:9-25:40
 	android:exported
 		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:25:13-37
 	android:name
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:24:13-41
-activity#com.example.playlistmaker.MainActivity
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:24:13-55
+activity#com.example.playlistmaker.ui.activities.MainActivity
 ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:26:9-33:20
 	android:exported
 		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:28:13-36
 	android:name
-		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:27:13-41
+		ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:27:13-55
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
 ADDED from F:\PlaylistMaker\app\src\main\AndroidManifest.xml:29:13-32:29
 action#android.intent.action.MAIN

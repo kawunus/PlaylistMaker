@@ -19,6 +19,7 @@ class SearchHistory(private val context: FindActivity) {
     fun hideHistory() = with(context.binding) {
         historyButton.visibility = View.GONE
         historyTextView.visibility = View.GONE
+
     }
 
     fun clearHistory() = with(context.binding) {
