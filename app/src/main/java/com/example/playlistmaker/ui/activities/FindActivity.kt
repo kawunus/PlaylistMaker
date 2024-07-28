@@ -49,7 +49,7 @@ class FindActivity : AppCompatActivity() {
                 editTextContext = binding.editText.text.toString()
                 if (binding.editText.hasFocus() && s?.isEmpty() == true) {
                     searchHistory.showList()
-                } else searchHistory.hideHistory()
+                } else searchHistory.hideHistoryViews()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -84,6 +84,7 @@ class FindActivity : AppCompatActivity() {
 
         binding.historyButton.setOnClickListener {
             searchHistory.clearHistory()
+            searchHistory.hideHistoryViews()
         }
     }
 

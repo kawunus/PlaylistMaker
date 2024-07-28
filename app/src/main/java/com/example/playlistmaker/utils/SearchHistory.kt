@@ -11,12 +11,16 @@ class SearchHistory(private val context: FindActivity) {
 
     fun showList() = with(context.binding) {
         (recyclerView.adapter as TrackAdapter).saveData(appSharedPreferences.getHistoryList())
-        historyButton.visibility = View.VISIBLE
-        historyTextView.visibility = View.VISIBLE
-        errorLinear.visibility = View.GONE
+        if (checkHistory()) {
+            hideHistoryViews()
+        } else {
+            historyButton.visibility = View.VISIBLE
+            historyTextView.visibility = View.VISIBLE
+            errorLinear.visibility = View.GONE
+        }
     }
 
-    fun hideHistory() = with(context.binding) {
+    fun hideHistoryViews() = with(context.binding) {
         historyButton.visibility = View.GONE
         historyTextView.visibility = View.GONE
 
@@ -25,5 +29,9 @@ class SearchHistory(private val context: FindActivity) {
     fun clearHistory() = with(context.binding) {
         appSharedPreferences.setHistoryList(emptyList())
         (recyclerView.adapter as TrackAdapter).saveData(appSharedPreferences.getHistoryList())
+    }
+
+    private fun checkHistory(): Boolean {
+        return appSharedPreferences.getHistoryList().isEmpty()
     }
 }
