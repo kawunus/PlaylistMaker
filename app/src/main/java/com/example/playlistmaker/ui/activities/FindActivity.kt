@@ -29,11 +29,13 @@ class FindActivity : AppCompatActivity() {
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
             .build()
     private val iTunesApiService = retrofit.create(ITunesApi::class.java)
+    private lateinit var trackAdapter: TrackAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFindBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.recyclerView.adapter = TrackAdapter(this)
+        trackAdapter = TrackAdapter(this)
+        binding.recyclerView.adapter = trackAdapter
         val searchHistory = SearchHistory(this)
         searchHistory.showList()
         binding.toolbar.setNavigationOnClickListener {
@@ -136,7 +138,7 @@ class FindActivity : AppCompatActivity() {
 
     private fun search() = with(binding) {
         deleteErrorViews()
-        (recyclerView.adapter as TrackAdapter).saveData(emptyList())
+        trackAdapter.saveData(emptyList())
         if (editText.text.toString() != "") {
             iTunesApiService.search("${editText.text}").enqueue(object : Callback<TrackResponce> {
                 override fun onResponse(
@@ -145,7 +147,7 @@ class FindActivity : AppCompatActivity() {
                     when (response.code()) {
                         200 -> {
                             if (response.body()?.results?.isNotEmpty() == true) {
-                                (recyclerView.adapter as TrackAdapter).saveData(ArrayList(response.body()?.results!!))
+                                trackAdapter.saveData(ArrayList(response.body()?.results!!))
                             } else {
                                 notFoundError()
                             }
