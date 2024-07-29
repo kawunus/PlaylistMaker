@@ -1,16 +1,22 @@
 package com.example.playlistmaker.utils
 
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import com.example.playlistmaker.adapters.track.TrackAdapter
-import com.example.playlistmaker.data.track.prefs.AppSharedPreferences
+import com.example.playlistmaker.data.track.prefs.PrefKeys
+import com.example.playlistmaker.data.track.prefs.historyprefs.HistoryPrefs
 import com.example.playlistmaker.ui.activities.FindActivity
 
 class SearchHistory(private val context: FindActivity) {
 
-    val appSharedPreferences: AppSharedPreferences = AppSharedPreferences(context)
+    private val historyPrefs = HistoryPrefs(
+        context.getSharedPreferences(
+            PrefKeys.PREFS, MODE_PRIVATE
+        )
+    )
 
     fun showList() = with(context.binding) {
-        (recyclerView.adapter as TrackAdapter).saveData(appSharedPreferences.getHistoryList())
+        (recyclerView.adapter as TrackAdapter).saveData(historyPrefs.getHistoryList())
         if (checkHistory()) {
             hideHistoryViews()
         } else {
@@ -27,11 +33,11 @@ class SearchHistory(private val context: FindActivity) {
     }
 
     fun clearHistory() = with(context.binding) {
-        appSharedPreferences.setHistoryList(emptyList())
-        (recyclerView.adapter as TrackAdapter).saveData(appSharedPreferences.getHistoryList())
+        historyPrefs.setHistoryList(emptyList())
+        (recyclerView.adapter as TrackAdapter).saveData(historyPrefs.getHistoryList())
     }
 
     private fun checkHistory(): Boolean {
-        return appSharedPreferences.getHistoryList().isEmpty()
+        return historyPrefs.getHistoryList().isEmpty()
     }
 }

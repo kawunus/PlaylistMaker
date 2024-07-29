@@ -5,19 +5,24 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.App
-import com.example.playlistmaker.data.track.prefs.AppSharedPreferences
 import com.example.playlistmaker.R
+import com.example.playlistmaker.data.track.prefs.PrefKeys
+import com.example.playlistmaker.data.track.prefs.ThemePrefs
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
-    private lateinit var appPreferences: AppSharedPreferences
+    private lateinit var themePrefs: ThemePrefs
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
 
-        appPreferences = AppSharedPreferences(this@SettingsActivity)
-        binding.themeSwitcher.isChecked = appPreferences.getTheme()
+        themePrefs = ThemePrefs(
+            getSharedPreferences(
+                PrefKeys.PREFS, MODE_PRIVATE
+            )
+        )
+        binding.themeSwitcher.isChecked = themePrefs.getTheme()
 
         setContentView(binding.root)
         binding.themeSwitcher.isChecked

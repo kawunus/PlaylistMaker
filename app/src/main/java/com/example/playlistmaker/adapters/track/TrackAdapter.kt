@@ -12,7 +12,7 @@ import com.example.playlistmaker.data.track.Track
 class TrackAdapter(private val context: Context) : RecyclerView.Adapter<TrackViewHolder>() {
     private val diffUtil = object : DiffUtil.ItemCallback<Track>() {
         override fun areItemsTheSame(oldItem: Track, newItem: Track): Boolean {
-            return oldItem.trackName == newItem.trackName && oldItem.artistName == newItem.artistName
+            return oldItem.trackId == newItem.trackId
         }
 
         override fun areContentsTheSame(oldItem: Track, newItem: Track): Boolean {
