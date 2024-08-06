@@ -12,6 +12,8 @@ import com.example.playlistmaker.API.ITunesApi
 import com.example.playlistmaker.API.responces.TrackResponce
 import com.example.playlistmaker.R
 import com.example.playlistmaker.adapters.track.TrackAdapter
+import com.example.playlistmaker.data.track.prefs.PrefKeys
+import com.example.playlistmaker.data.track.prefs.historyprefs.HistoryPrefs
 import com.example.playlistmaker.databinding.ActivityFindBinding
 import com.example.playlistmaker.utils.SearchHistory
 import retrofit2.Call
@@ -36,7 +38,13 @@ class FindActivity : AppCompatActivity() {
         setContentView(binding.root)
         trackAdapter = TrackAdapter(this)
         binding.recyclerView.adapter = trackAdapter
-        val searchHistory = SearchHistory(this)
+        val searchHistory = SearchHistory(
+            historyPrefs = HistoryPrefs(
+                getSharedPreferences(
+                    PrefKeys.PREFS, MODE_PRIVATE
+                )
+            ), binding = binding
+        )
         searchHistory.showList()
         binding.toolbar.setNavigationOnClickListener {
             finish()
