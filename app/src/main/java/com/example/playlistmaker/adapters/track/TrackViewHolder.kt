@@ -1,6 +1,7 @@
 package com.example.playlistmaker.adapters.track
 
 import android.content.Context
+import android.content.Intent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,7 @@ import com.example.playlistmaker.data.track.Track
 import com.example.playlistmaker.data.track.prefs.PrefKeys
 import com.example.playlistmaker.data.track.prefs.historyprefs.HistoryPrefs
 import com.example.playlistmaker.databinding.TrackViewBinding
+import com.example.playlistmaker.ui.activities.TrackActivity
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -32,6 +34,19 @@ class TrackViewHolder(trackView: View, private val context: Context) :
                 )
             )
             historyPrefs.addToHistoryList(track = model)
+            val intent = Intent(context, TrackActivity::class.java)
+            intent.putExtra("trackName", model.trackName)
+            intent.putExtra("artistName", model.artistName)
+            intent.putExtra("trackTime", binding.trackTimeTextView.text)
+            intent.putExtra(
+                "artworkUrl",
+                model.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
+            )
+            intent.putExtra("trackCountry", model.country)
+            intent.putExtra("trackGenre", model.primaryGenreName)
+            intent.putExtra("trackYear", model.releaseDate.substring(0,4))
+            intent.putExtra("trackAlbum", model.collectionName)
+            context.startActivity(intent)
         }
     }
 }

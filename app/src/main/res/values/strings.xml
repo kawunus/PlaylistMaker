@@ -28,8 +28,12 @@
     <string name="update_button_text">Обновить</string>
     <string name="you_search">Вы искали</string>
     <string name="reset_history">Очистить историю</string>
+
+    <!-- Track Activity -->
     <string name="track_duration">Длительность</string>
     <string name="track_album">Альбом</string>
     <string name="track_year">Год</string>
     <string name="track_genre">Жанр</string>
+    <string name="track_country">Страна</string>
+    <string name="track_current_time">0:00</string>
 </resources>

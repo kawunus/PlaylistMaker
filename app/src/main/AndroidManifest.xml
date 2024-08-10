@@ -16,7 +16,7 @@
         android:theme="@style/Base.Theme.PlaylistMaker"
         tools:targetApi="31">
         <activity
-            android:name=".TrackActivity"
+            android:name=".ui.activities.TrackActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.SettingsActivity"
