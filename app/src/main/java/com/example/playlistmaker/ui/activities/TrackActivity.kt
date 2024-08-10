@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.example.playlistmaker.IntentConsts
 import com.example.playlistmaker.R
 import com.example.playlistmaker.data.track.Track
 import com.example.playlistmaker.databinding.ActivityTrackBinding
@@ -21,7 +22,7 @@ class TrackActivity : AppCompatActivity() {
             finish()
         }
         val dateFormatter = SimpleDateFormat("mm:ss", Locale.getDefault())
-        val model = intent.getParcelableExtra<Track>("track")
+        val model = intent.getParcelableExtra<Track>(IntentConsts.TRACK)
 
         binding.trackNameTextView.text = model?.trackName
         binding.artistNameTextView.text = model?.artistName
