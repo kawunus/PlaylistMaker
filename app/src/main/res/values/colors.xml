@@ -2,13 +2,13 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="base_color">#1A1B22</color>
-    <color name="settings_text_color">#000000</color>
-    <color name="main_menu_background_color">#3772E7</color>
-    <color name="main_menu_logo_color">#FFFFFF</color>
-    <color name="main_menu_item_color">#FFFFFF</color>
-    <color name="settings_background_color">#FFFFFF</color>
-    <color name="settings_icon_color">#AEAFB4</color>
+    <color name="baseColor">#1A1B22</color>
+    <color name="settingsTextColor">#000000</color>
+    <color name="mainMenuBackgroundColor">#3772E7</color>
+    <color name="mainMenuLogoColor">#FFFFFF</color>
+    <color name="mainMenuItemColor">#FFFFFF</color>
+    <color name="settingsBackgroundColor">#FFFFFF</color>
+    <color name="settingsIconColor">#AEAFB4</color>
     <color name="iconColor">#AEAFB4</color>
     <color name="arrowColor">#000000</color>
     <color name="editTextBackgroundColor">#E6E8EB</color>
@@ -18,4 +18,6 @@
     <color name="trackColor">#E6E8EB</color>
     <color name="findUpdateButtonColor">#000000</color>
     <color name="findUpdateButtonTextColor">#FFFFFF</color>
+    <color name="textViewTrackInfoColor">#AEAFB4</color>
+    <color name="playIconColor">#000000</color>
 </resources>

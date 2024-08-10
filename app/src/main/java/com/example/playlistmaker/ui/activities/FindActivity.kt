@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.activities
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.API.ITunesApi
 import com.example.playlistmaker.API.responces.TrackResponce
+import com.example.playlistmaker.IntentConsts
 import com.example.playlistmaker.R
 import com.example.playlistmaker.adapters.track.TrackAdapter
 import com.example.playlistmaker.data.track.prefs.PrefKeys
@@ -32,12 +34,26 @@ class FindActivity : AppCompatActivity() {
             .build()
     private val iTunesApiService = retrofit.create(ITunesApi::class.java)
     private lateinit var trackAdapter: TrackAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFindBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        trackAdapter = TrackAdapter(this)
+
+        trackAdapter = TrackAdapter { position ->
+            val model = trackAdapter.getItem(position)
+            val historyPrefs = HistoryPrefs(
+                getSharedPreferences(
+                    PrefKeys.PREFS, MODE_PRIVATE
+                )
+            )
+            historyPrefs.addToHistoryList(track = model)
+            val intent = Intent(this, TrackActivity::class.java)
+            intent.putExtra(IntentConsts.TRACK, model)
+            startActivity(intent)
+        }
         binding.recyclerView.adapter = trackAdapter
+
         val searchHistory = SearchHistory(
             historyPrefs = HistoryPrefs(
                 getSharedPreferences(
@@ -96,6 +112,7 @@ class FindActivity : AppCompatActivity() {
             searchHistory.clearHistory()
             searchHistory.hideHistoryViews()
         }
+
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
