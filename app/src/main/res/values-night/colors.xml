@@ -9,4 +9,6 @@
     <color name="trackColor">#9FBBF3</color>
     <color name="findUpdateButtonColor">#FFFFFF</color>
     <color name="findUpdateButtonTextColor">#000000</color>
+    <color name="playIconColor">#ffffff</color>
+    <color name="mainMenuBackgroundColor">#1A1B22</color>
 </resources>
