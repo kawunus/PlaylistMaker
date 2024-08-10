@@ -51,11 +51,11 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="26dp"
                 android:src="@drawable/placeholder"
+                app:layout_constraintBottom_toTopOf="@id/trackNameTextView"
                 app:layout_constraintDimensionRatio="h, 1:1"
                 app:layout_constraintEnd_toEndOf="@id/rightBorder"
                 app:layout_constraintStart_toStartOf="@id/leftBorder"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/trackNameTextView"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/trackNameTextView"
@@ -126,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/yandex_sans_display_regular"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@id/rightBorder"
                 app:layout_constraintStart_toStartOf="@id/leftBorder"
@@ -210,6 +210,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"
+                android:layout_marginBottom="20dp"
                 android:text="@string/track_country"
                 app:layout_constraintEnd_toStartOf="@id/trackCountryTextView"
                 app:layout_constraintTop_toBottomOf="@id/genreTextView" />
