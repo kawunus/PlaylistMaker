@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:2:1-36:12
-INJECTED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:2:1-36:12
-INJECTED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:2:1-36:12
-INJECTED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:2:1-36:12
+ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:2:1-41:12
+INJECTED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:2:1-41:12
+INJECTED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:2:1-41:12
+INJECTED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:2:1-41:12
 MERGED from [androidx.databinding:viewbinding:8.5.0] /home/stanislau/.gradle/caches/transforms-4/135311c0a292e96c7daf0425482d558f/transformed/viewbinding-8.5.0/AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.material:material:1.12.0] /home/stanislau/.gradle/caches/transforms-4/ddd915be85539511167c834bddc23932/transformed/material-1.12.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/stanislau/.gradle/caches/transforms-4/81efd4f696866364d11e51c5f909c880/transformed/constraintlayout-2.1.4/AndroidManifest.xml:2:1-11:12
@@ -64,8 +64,8 @@ ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidMani
 	android:name
 		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:5:22-64
 application
-ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:6:5-34:19
-INJECTED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:6:5-34:19
+ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:7:5-39:19
+INJECTED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:7:5-39:19
 MERGED from [com.google.android.material:material:1.12.0] /home/stanislau/.gradle/caches/transforms-4/ddd915be85539511167c834bddc23932/transformed/material-1.12.0/AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.12.0] /home/stanislau/.gradle/caches/transforms-4/ddd915be85539511167c834bddc23932/transformed/material-1.12.0/AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/stanislau/.gradle/caches/transforms-4/81efd4f696866364d11e51c5f909c880/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
@@ -87,59 +87,65 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/stani
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.13.1] /home/stanislau/.gradle/caches/transforms-4/c1e340abda283ca6036575aab6bf153c/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:14:9-35
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:15:9-35
 	android:label
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:12:9-41
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:13:9-41
 	android:fullBackupContent
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:10:9-54
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:11:9-54
 	android:roundIcon
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:13:9-54
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:14:9-54
 	tools:targetApi
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:16:9-29
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:17:9-29
 	android:icon
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:11:9-43
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:12:9-43
 	android:allowBackup
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:8:9-35
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:9:9-35
 	android:theme
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:15:9-56
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:16:9-56
 	android:dataExtractionRules
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:9:9-65
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:10:9-65
 	android:name
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:7:9-28
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:8:9-28
+activity#com.example.playlistmaker.ui.activities.TrackActivity
+ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:18:9-20:40
+	android:exported
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:20:13-37
+	android:name
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:19:13-56
 activity#com.example.playlistmaker.ui.activities.SettingsActivity
-ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:17:9-19:40
+ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:21:9-23:40
 	android:exported
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:19:13-37
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:23:13-37
 	android:name
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:18:13-59
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:22:13-59
 activity#com.example.playlistmaker.ui.activities.LibraryActivity
-ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:20:9-22:40
+ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:24:9-26:40
 	android:exported
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:22:13-37
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:26:13-37
 	android:name
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:21:13-58
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:25:13-58
 activity#com.example.playlistmaker.ui.activities.FindActivity
-ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:23:9-25:40
+ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:27:9-29:40
 	android:exported
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:25:13-37
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:29:13-37
 	android:name
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:24:13-55
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:28:13-55
 activity#com.example.playlistmaker.ui.activities.MainActivity
-ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:26:9-33:20
+ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:30:9-38:20
 	android:exported
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:28:13-36
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:32:13-36
 	android:name
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:27:13-55
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:31:13-55
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:29:13-32:29
+ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:33:13-37:29
 action#android.intent.action.MAIN
-ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:30:17-69
+ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:34:17-69
 	android:name
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:30:25-66
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:34:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:31:17-77
+ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:36:17-77
 	android:name
-		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:31:27-74
+		ADDED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml:36:27-74
 uses-sdk
 INJECTED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /home/stanislau/StudioProjects/PlaylistMaker/app/src/main/AndroidManifest.xml
