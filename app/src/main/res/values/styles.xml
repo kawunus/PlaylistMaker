@@ -64,5 +64,7 @@
         <item name="layout_constraintEnd_toEndOf">@id/rightBorder</item>
         <item name="color">?attr/colorSecondary</item>
         <item name="android:gravity">end</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
     </style>
 </resources>

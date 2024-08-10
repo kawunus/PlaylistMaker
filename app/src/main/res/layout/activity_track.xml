@@ -225,7 +225,7 @@
                 style="@style/trackInfoRightTextViewStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Великобритания"
+                android:text=""
                 app:layout_constraintStart_toEndOf="@id/countryTextView"
                 app:layout_constraintTop_toTopOf="@id/countryTextView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
