@@ -18,4 +18,5 @@
     <color name="trackColor">#E6E8EB</color>
     <color name="findUpdateButtonColor">#000000</color>
     <color name="findUpdateButtonTextColor">#FFFFFF</color>
+    <color name="textViewTrackInfoColor">#AEAFB4</color>
 </resources>

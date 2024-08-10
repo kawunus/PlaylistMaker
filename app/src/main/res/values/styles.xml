@@ -49,7 +49,20 @@
         <item name="android:textSize">19sp</item>
         <item name="fontFamily">@font/yandex_sans_display_regular</item>
         <item name="android:textStyle">bold</item>
-
     </style>
 
+    <style name="trackInfoLeftTextViewStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">13dp</item>
+        <item name="fontFamily">@font/yandex_sans_display_regular</item>
+        <item name="layout_constraintStart_toStartOf">@id/leftBorder</item>
+        <item name="android:textColor">@color/textViewTrackInfoColor</item>
+    </style>
+
+    <style name="trackInfoRightTextViewStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">13dp</item>
+        <item name="fontFamily">@font/yandex_sans_display_regular</item>
+        <item name="layout_constraintEnd_toEndOf">@id/rightBorder</item>
+        <item name="color">?attr/colorSecondary</item>
+        <item name="android:gravity">end</item>
+    </style>
 </resources>
