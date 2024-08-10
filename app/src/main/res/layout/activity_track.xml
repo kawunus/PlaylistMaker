@@ -54,7 +54,8 @@
                 app:layout_constraintDimensionRatio="h, 1:1"
                 app:layout_constraintEnd_toEndOf="@id/rightBorder"
                 app:layout_constraintStart_toStartOf="@id/leftBorder"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/trackNameTextView"/>
 
             <TextView
                 android:id="@+id/trackNameTextView"
@@ -64,7 +65,6 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/yandex_sans_display_regular"
                 android:maxLines="1"
-                android:text=""
                 android:textSize="22sp"
                 android:textStyle="bold"
                 app:layout_constrainedWidth="true"
@@ -81,7 +81,6 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/yandex_sans_display_regular"
                 android:maxLines="1"
-                android:text=""
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constrainedWidth="true"
@@ -127,7 +126,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/yandex_sans_display_regular"
-                android:text=""
                 android:textSize="14dp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@id/rightBorder"
@@ -149,7 +147,6 @@
                 style="@style/trackInfoRightTextViewStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text=""
                 app:layout_constraintStart_toEndOf="@id/durationTextView"
                 app:layout_constraintTop_toTopOf="@id/durationTextView" />
 
@@ -168,7 +165,6 @@
                 style="@style/trackInfoRightTextViewStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text=""
                 app:layout_constraintStart_toEndOf="@id/albumTextView"
                 app:layout_constraintTop_toTopOf="@id/albumTextView" />
 
@@ -187,7 +183,6 @@
                 style="@style/trackInfoRightTextViewStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text=""
                 app:layout_constraintStart_toEndOf="@id/yearTextView"
                 app:layout_constraintTop_toTopOf="@id/yearTextView" />
 
@@ -206,7 +201,6 @@
                 style="@style/trackInfoRightTextViewStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text=""
                 app:layout_constraintStart_toEndOf="@id/genreTextView"
                 app:layout_constraintTop_toTopOf="@id/genreTextView" />
 
@@ -225,7 +219,6 @@
                 style="@style/trackInfoRightTextViewStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text=""
                 app:layout_constraintStart_toEndOf="@id/countryTextView"
                 app:layout_constraintTop_toTopOf="@id/countryTextView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
