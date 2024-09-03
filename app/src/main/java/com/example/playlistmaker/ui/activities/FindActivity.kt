@@ -98,13 +98,7 @@ class FindActivity : AppCompatActivity() {
             searchHistory.showList()
             hideKeyboard()
         }
-        binding.editText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                search()
-                true
-            }
-            false
-        }
+
         binding.updateButton.setOnClickListener {
             search()
         }
