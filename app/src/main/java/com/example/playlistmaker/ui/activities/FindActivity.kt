@@ -3,6 +3,8 @@ package com.example.playlistmaker.ui.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -34,6 +36,10 @@ class FindActivity : AppCompatActivity() {
             .build()
     private val iTunesApiService = retrofit.create(ITunesApi::class.java)
     private lateinit var trackAdapter: TrackAdapter
+    private val searchRunnable = Runnable {
+        search()
+    }
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,6 +82,8 @@ class FindActivity : AppCompatActivity() {
                 if (binding.editText.hasFocus() && s?.isEmpty() == true) {
                     searchHistory.showList()
                 } else searchHistory.hideHistoryViews()
+                trackAdapter.saveData(emptyList())
+                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -190,6 +198,15 @@ class FindActivity : AppCompatActivity() {
         } else {
 
         }
+    }
+
+    fun searchDebounce(){
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBUNCE_DELAY)
+    }
+
+    companion object {
+        private const val SEARCH_DEBUNCE_DELAY = 300L
     }
 }
 
