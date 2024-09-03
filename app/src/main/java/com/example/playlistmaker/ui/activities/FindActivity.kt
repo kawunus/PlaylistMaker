@@ -166,7 +166,7 @@ class FindActivity : AppCompatActivity() {
         deleteErrorViews()
         trackAdapter.saveData(emptyList())
         progressBar.visibility = View.VISIBLE
-        if (editText.text.toString() != "") {
+        if (editText.text.isNotBlank()) {
             iTunesApiService.search("${editText.text}").enqueue(object : Callback<TrackResponce> {
                 override fun onResponse(
                     call: Call<TrackResponce>, response: Response<TrackResponce>
@@ -191,8 +191,6 @@ class FindActivity : AppCompatActivity() {
                 }
 
             })
-        } else {
-
         }
     }
 
