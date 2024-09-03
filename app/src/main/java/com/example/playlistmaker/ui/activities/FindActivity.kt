@@ -8,7 +8,6 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.API.ITunesApi
@@ -166,11 +165,13 @@ class FindActivity : AppCompatActivity() {
     private fun search() = with(binding) {
         deleteErrorViews()
         trackAdapter.saveData(emptyList())
+        progressBar.visibility = View.VISIBLE
         if (editText.text.toString() != "") {
             iTunesApiService.search("${editText.text}").enqueue(object : Callback<TrackResponce> {
                 override fun onResponse(
                     call: Call<TrackResponce>, response: Response<TrackResponce>
                 ) {
+                    progressBar.visibility = View.GONE
                     when (response.code()) {
                         200 -> {
                             if (response.body()?.results?.isNotEmpty() == true) {
@@ -185,6 +186,7 @@ class FindActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<TrackResponce>, t: Throwable) {
+                    progressBar.visibility = View.GONE
                     noInternetError()
                 }
 
@@ -194,9 +196,11 @@ class FindActivity : AppCompatActivity() {
         }
     }
 
-    fun searchDebounce(){
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBUNCE_DELAY)
+    fun searchDebounce() {
+        if (binding.editText.text.isNotBlank()) {
+            handler.removeCallbacks(searchRunnable)
+            handler.postDelayed(searchRunnable, SEARCH_DEBUNCE_DELAY)
+        }
     }
 
     companion object {
