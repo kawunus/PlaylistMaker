@@ -107,7 +107,6 @@ class TrackActivity : AppCompatActivity() {
         return object : Runnable {
             override fun run() {
                 val remainingTime = mediaPlayer.duration - mediaPlayer.currentPosition
-                Log.d("TimerTask", "Remaining time: $remainingTime")
                 if (remainingTime > 0) {
 
                     val currTime =
@@ -115,12 +114,11 @@ class TrackActivity : AppCompatActivity() {
                             "mm:ss",
                             Locale.getDefault()
                         ).format(remainingTime)
-                    Log.d("TimerTask", "Current formatted time: $currTime")
                     binding.currentTimeTextView.text = currTime
                     mainThreadHandler.postDelayed(this, DELAY)
                 } else {
                     binding.currentTimeTextView.text = getString(R.string.track_current_time)
-                    Log.d("TimerTask", "Time is up, stopping task")
+                    binding.playButton.setImageResource(R.drawable.ic_play)
                 }
             }
         }
