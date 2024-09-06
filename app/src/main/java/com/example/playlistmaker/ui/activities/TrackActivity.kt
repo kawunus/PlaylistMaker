@@ -131,8 +131,4 @@ class TrackActivity : AppCompatActivity() {
         private const val STATE_PAUSED = 3
         private const val DELAY = 1000L
     }
-
-
-    //TODO: Debauncer при открытии
-    //TODO: Менять кнопку после полного воиспроизведения
 }

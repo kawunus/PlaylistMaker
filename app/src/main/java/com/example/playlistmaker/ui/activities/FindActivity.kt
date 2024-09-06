@@ -38,6 +38,7 @@ class FindActivity : AppCompatActivity() {
     private val searchRunnable = Runnable {
         search()
     }
+    private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,9 +54,11 @@ class FindActivity : AppCompatActivity() {
                 )
             )
             historyPrefs.addToHistoryList(track = model)
-            val intent = Intent(this, TrackActivity::class.java)
-            intent.putExtra(IntentConsts.TRACK, model)
-            startActivity(intent)
+            if (clickDebounce()) {
+                val intent = Intent(this, TrackActivity::class.java)
+                intent.putExtra(IntentConsts.TRACK, model)
+                startActivity(intent)
+            }
         }
         binding.recyclerView.adapter = trackAdapter
 
@@ -197,12 +200,22 @@ class FindActivity : AppCompatActivity() {
     fun searchDebounce() {
         if (binding.editText.text.isNotBlank()) {
             handler.removeCallbacks(searchRunnable)
-            handler.postDelayed(searchRunnable, SEARCH_DEBUNCE_DELAY)
+            handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
         }
     }
 
+    fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
     companion object {
-        private const val SEARCH_DEBUNCE_DELAY = 300L
+        private const val SEARCH_DEBOUNCE_DELAY = 300L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
 
