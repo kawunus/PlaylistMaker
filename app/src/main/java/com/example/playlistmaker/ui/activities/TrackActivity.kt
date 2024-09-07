@@ -114,7 +114,7 @@ class TrackActivity : AppCompatActivity() {
                         SimpleDateFormat(
                             "mm:ss",
                             Locale.getDefault()
-                        ).format(remainingTime)
+                        ).format(mediaPlayer.currentPosition)
                     binding.currentTimeTextView.text = currTime
                     mainThreadHandler.postDelayed(this, DELAY)
                 } else {
@@ -134,5 +134,5 @@ class TrackActivity : AppCompatActivity() {
     }
 }
 
-// TODO: Поменять таймер
+// TODO: Баг на таймере
 // TODO: Системная кнопка назад
