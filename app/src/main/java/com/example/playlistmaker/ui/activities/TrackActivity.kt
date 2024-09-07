@@ -138,4 +138,3 @@ class TrackActivity : AppCompatActivity() {
     }
 }
 
-// TODO: Баг на таймере с зависанием

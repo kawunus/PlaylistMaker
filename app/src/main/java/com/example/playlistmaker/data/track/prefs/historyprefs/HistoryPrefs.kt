@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import com.example.playlistmaker.data.track.Track
 import com.example.playlistmaker.data.track.prefs.PrefKeys
 
-class HistoryPrefs(private val prefs:SharedPreferences) {
+class HistoryPrefs(private val prefs: SharedPreferences) {
 
 
     private val converter = JsonConverter()
@@ -21,12 +21,15 @@ class HistoryPrefs(private val prefs:SharedPreferences) {
 
     fun addToHistoryList(track: Track) {
         val oldTrackList = getHistoryList().toMutableList()
-        if (oldTrackList.none { it.trackId == track.trackId }) {
-            if (oldTrackList.size >= 10) {
-                oldTrackList.removeLast()
-            }
-            oldTrackList.add(0, track)
-            setHistoryList(oldTrackList)
+        val existingTrackIndex = oldTrackList.indexOfFirst { it.trackId == track.trackId }
+        if (existingTrackIndex != -1) {
+            oldTrackList.removeAt(existingTrackIndex)
         }
+        oldTrackList.add(0, track)
+        if (oldTrackList.size > 10) {
+            oldTrackList.removeLast()
+        }
+        setHistoryList(oldTrackList)
     }
+
 }

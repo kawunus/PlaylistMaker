@@ -45,23 +45,6 @@ class FindActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFindBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        trackAdapter = TrackAdapter { position ->
-            val model = trackAdapter.getItem(position)
-            val historyPrefs = HistoryPrefs(
-                getSharedPreferences(
-                    PrefKeys.PREFS, MODE_PRIVATE
-                )
-            )
-            historyPrefs.addToHistoryList(track = model)
-            if (clickDebounce()) {
-                val intent = Intent(this, TrackActivity::class.java)
-                intent.putExtra(IntentConsts.TRACK, model)
-                startActivity(intent)
-            }
-        }
-        binding.recyclerView.adapter = trackAdapter
-
         val searchHistory = SearchHistory(
             historyPrefs = HistoryPrefs(
                 getSharedPreferences(
@@ -69,6 +52,21 @@ class FindActivity : AppCompatActivity() {
                 )
             ), binding = binding
         )
+        trackAdapter = TrackAdapter { track ->
+            val historyPrefs = HistoryPrefs(
+                getSharedPreferences(
+                    PrefKeys.PREFS, MODE_PRIVATE
+                )
+            )
+            historyPrefs.addToHistoryList(track)
+            if (clickDebounce()) {
+                val intent = Intent(this, TrackActivity::class.java)
+                intent.putExtra(IntentConsts.TRACK, track)
+                startActivity(intent)
+            }
+        }
+        binding.recyclerView.adapter = trackAdapter
+
         searchHistory.showList()
         binding.toolbar.setNavigationOnClickListener {
             finish()
@@ -213,6 +211,18 @@ class FindActivity : AppCompatActivity() {
         return current
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (binding.historyButton.visibility == View.VISIBLE) {
+            val historyPrefs = HistoryPrefs(
+                getSharedPreferences(
+                    PrefKeys.PREFS, MODE_PRIVATE
+                )
+            )
+            trackAdapter.saveData(historyPrefs.getHistoryList())
+        }
+    }
+
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val CLICK_DEBOUNCE_DELAY = 1000L
@@ -220,7 +230,7 @@ class FindActivity : AppCompatActivity() {
 }
 
 // TODO: Баг с прогресс баром
-// TODO: Повторное открытие трека не переносит его на первое место в истории.
 // TODO: Баг с историей когда удаляем текст
+// TODO: баг с неизвестными символами
 
 
