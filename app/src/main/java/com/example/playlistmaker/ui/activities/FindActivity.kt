@@ -81,6 +81,7 @@ class FindActivity : AppCompatActivity() {
                 editTextContext = binding.editText.text.toString()
                 if (binding.editText.hasFocus() && s?.isEmpty() == true) {
                     searchHistory.showList()
+                    binding.progressBar.visibility = View.GONE
                 } else searchHistory.hideHistoryViews()
                 trackAdapter.saveData(emptyList())
                 searchDebounce()
@@ -165,9 +166,9 @@ class FindActivity : AppCompatActivity() {
 
     private fun search() = with(binding) {
         deleteErrorViews()
-        trackAdapter.saveData(emptyList())
-        progressBar.visibility = View.VISIBLE
         if (editText.text.isNotBlank()) {
+            trackAdapter.saveData(emptyList())
+            binding.progressBar.visibility = View.VISIBLE
             iTunesApiService.search("${editText.text}").enqueue(object : Callback<TrackResponce> {
                 override fun onResponse(
                     call: Call<TrackResponce>, response: Response<TrackResponce>
@@ -213,6 +214,7 @@ class FindActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        binding.progressBar.visibility = View.GONE
         if (binding.historyButton.visibility == View.VISIBLE) {
             val historyPrefs = HistoryPrefs(
                 getSharedPreferences(
@@ -229,7 +231,7 @@ class FindActivity : AppCompatActivity() {
     }
 }
 
-// TODO: Баг с прогресс баром
+// TODO: Баг с историей и запросом
 // TODO: Баг с историей когда удаляем текст
 // TODO: баг с неизвестными символами
 
