@@ -93,15 +93,19 @@ class TrackActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        pausePlayer()
+        if (playerState == STATE_PLAYING) {
+            pausePlayer()
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        if (playerState!= STATE_DEFAULT)
         mediaPlayer.release()
-        if (timerThread != null) {
-            mainThreadHandler.removeCallbacks(timerThread!!)
+        timerThread?.let {
+            mainThreadHandler.removeCallbacks(it)
         }
+
     }
 
     private fun createUpdateTimerTask(): Runnable {
@@ -134,5 +138,4 @@ class TrackActivity : AppCompatActivity() {
     }
 }
 
-// TODO: Баг на таймере
-// TODO: Системная кнопка назад
+// TODO: Баг на таймере с зависанием
