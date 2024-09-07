@@ -177,6 +177,7 @@ class FindActivity : AppCompatActivity() {
                     when (response.code()) {
                         200 -> {
                             if (response.body()?.results?.isNotEmpty() == true) {
+                                if (editText.text.isNotBlank())
                                 trackAdapter.saveData(ArrayList(response.body()?.results!!))
                             } else {
                                 notFoundError()
@@ -231,8 +232,6 @@ class FindActivity : AppCompatActivity() {
     }
 }
 
-// TODO: Баг с историей и запросом
-// TODO: Баг с историей когда удаляем текст
 // TODO: баг с неизвестными символами
 
 
