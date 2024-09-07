@@ -214,13 +214,13 @@ class FindActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val SEARCH_DEBOUNCE_DELAY = 300L
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
 
 // TODO: Баг с прогресс баром
-// TODO: Debounce задержка
 // TODO: Повторное открытие трека не переносит его на первое место в истории.
+// TODO: Баг с историей когда удаляем текст
 
 
