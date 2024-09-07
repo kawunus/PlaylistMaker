@@ -11,10 +11,10 @@ class SearchHistory(
 ) {
 
     fun showList() = with(binding) {
-        (recyclerView.adapter as TrackAdapter).saveData(historyPrefs.getHistoryList())
         if (checkHistory()) {
             hideHistoryViews()
         } else {
+            (recyclerView.adapter as TrackAdapter).saveData(historyPrefs.getHistoryList())
             historyButton.visibility = View.VISIBLE
             historyTextView.visibility = View.VISIBLE
             errorLinear.visibility = View.GONE

@@ -83,7 +83,16 @@ class FindActivity : AppCompatActivity() {
                     searchHistory.showList()
                     binding.progressBar.visibility = View.GONE
                 } else searchHistory.hideHistoryViews()
-                trackAdapter.saveData(emptyList())
+
+                if (s?.isEmpty() == true) {
+                    val historyPrefs = HistoryPrefs(
+                        getSharedPreferences(
+                            PrefKeys.PREFS, MODE_PRIVATE
+                        )
+                    )
+
+                    trackAdapter.saveData(historyPrefs.getHistoryList())
+                } else trackAdapter.saveData(emptyList())
                 searchDebounce()
             }
 
@@ -177,8 +186,11 @@ class FindActivity : AppCompatActivity() {
                     when (response.code()) {
                         200 -> {
                             if (response.body()?.results?.isNotEmpty() == true) {
-                                if (editText.text.isNotBlank())
-                                trackAdapter.saveData(ArrayList(response.body()?.results!!))
+                                if (editText.text.isNotBlank()) trackAdapter.saveData(
+                                    ArrayList(
+                                        response.body()?.results!!
+                                    )
+                                )
                             } else {
                                 notFoundError()
                             }
@@ -215,6 +227,7 @@ class FindActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        hideKeyboard()
         binding.progressBar.visibility = View.GONE
         if (binding.historyButton.visibility == View.VISIBLE) {
             val historyPrefs = HistoryPrefs(
@@ -231,7 +244,7 @@ class FindActivity : AppCompatActivity() {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
-
+// TODO: баг с историей после удаления
 // TODO: баг с неизвестными символами
 
 
