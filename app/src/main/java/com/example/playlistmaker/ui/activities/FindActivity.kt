@@ -244,7 +244,5 @@ class FindActivity : AppCompatActivity() {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
-// TODO: баг с историей после удаления
-// TODO: баг с неизвестными символами
 
 
