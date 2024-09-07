@@ -219,4 +219,8 @@ class FindActivity : AppCompatActivity() {
     }
 }
 
+// TODO: Баг с прогресс баром
+// TODO: Debounce задержка
+// TODO: Повторное открытие трека не переносит его на первое место в истории.
+
 

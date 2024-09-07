@@ -4,7 +4,6 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -19,7 +18,7 @@ class TrackActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTrackBinding
     private var playerState = STATE_DEFAULT
     private val mediaPlayer = MediaPlayer()
-    private lateinit var timerThread: Runnable
+    private var timerThread: Runnable? = null
     private val mainThreadHandler = Handler(Looper.getMainLooper())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,14 +69,14 @@ class TrackActivity : AppCompatActivity() {
         playerState = STATE_PLAYING
         binding.playButton.setImageResource(R.drawable.ic_pause)
         timerThread = createUpdateTimerTask()
-        timerThread.run()
+        timerThread!!.run()
     }
 
     private fun pausePlayer() {
         mediaPlayer.pause()
         playerState = STATE_PAUSED
         binding.playButton.setImageResource(R.drawable.ic_play)
-        mainThreadHandler.removeCallbacks(timerThread)
+        mainThreadHandler.removeCallbacks(timerThread!!)
     }
 
     private fun playbackControl() {
@@ -100,7 +99,9 @@ class TrackActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayer.release()
-        mainThreadHandler.removeCallbacks(timerThread)
+        if (timerThread != null) {
+            mainThreadHandler.removeCallbacks(timerThread!!)
+        }
     }
 
     private fun createUpdateTimerTask(): Runnable {
@@ -132,3 +133,6 @@ class TrackActivity : AppCompatActivity() {
         private const val DELAY = 1000L
     }
 }
+
+// TODO: Поменять таймер
+// TODO: Системная кнопка назад
