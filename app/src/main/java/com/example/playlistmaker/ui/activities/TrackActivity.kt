@@ -4,6 +4,7 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -58,9 +59,13 @@ class TrackActivity : AppCompatActivity() {
         mediaPlayer.setOnPreparedListener {
             playButton.isEnabled = true
             playerState = STATE_PREPARED
+            binding.currentTimeTextView.text = getString(R.string.track_current_time)
         }
         mediaPlayer.setOnCompletionListener {
             playerState = STATE_PREPARED
+            mainThreadHandler.removeCallbacks(timerThread!!)
+            binding.currentTimeTextView.text = getString(R.string.track_current_time)
+            binding.playButton.setImageResource(R.drawable.ic_play)
         }
     }
 
@@ -68,6 +73,9 @@ class TrackActivity : AppCompatActivity() {
         mediaPlayer.start()
         playerState = STATE_PLAYING
         binding.playButton.setImageResource(R.drawable.ic_pause)
+        timerThread?.let {
+            mainThreadHandler.removeCallbacks(it)
+        }
         timerThread = createUpdateTimerTask()
         timerThread!!.run()
     }
@@ -111,30 +119,25 @@ class TrackActivity : AppCompatActivity() {
     private fun createUpdateTimerTask(): Runnable {
         return object : Runnable {
             override fun run() {
-                val remainingTime = mediaPlayer.duration - mediaPlayer.currentPosition
-                if (remainingTime > 0) {
-
                     val currTime =
                         SimpleDateFormat(
                             "mm:ss",
                             Locale.getDefault()
                         ).format(mediaPlayer.currentPosition)
+                Log.e("TIMER", mediaPlayer.currentPosition.toString())
                     binding.currentTimeTextView.text = currTime
                     mainThreadHandler.postDelayed(this, DELAY)
-                } else {
-                    binding.currentTimeTextView.text = getString(R.string.track_current_time)
-                    binding.playButton.setImageResource(R.drawable.ic_play)
                 }
             }
         }
-    }
+
 
     companion object {
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
-        private const val DELAY = 200L
+        private const val DELAY = 50L
     }
 }
 
