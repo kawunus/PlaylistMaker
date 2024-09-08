@@ -11,19 +11,23 @@ class SearchHistory(
 ) {
 
     fun showList() = with(binding) {
+        (historyRecyclerView.adapter as TrackAdapter).saveData(historyPrefs.getHistoryList())
         if (checkHistory()) {
             hideHistoryViews()
         } else {
-            (recyclerView.adapter as TrackAdapter).saveData(historyPrefs.getHistoryList())
             historyButton.visibility = View.VISIBLE
             historyTextView.visibility = View.VISIBLE
             errorLinear.visibility = View.GONE
+            historyRecyclerView.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
         }
     }
 
     fun hideHistoryViews() = with(binding) {
+        historyRecyclerView.visibility = View.GONE
         historyButton.visibility = View.GONE
         historyTextView.visibility = View.GONE
+        recyclerView.visibility = View.VISIBLE
     }
 
     fun clearHistory() = with(binding) {

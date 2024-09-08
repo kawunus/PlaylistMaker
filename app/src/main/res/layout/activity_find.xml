@@ -64,7 +64,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="140dp"
         android:indeterminateTint="@color/progressBarColor"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 
     <TextView
@@ -91,6 +91,14 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/track_view" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/historyRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

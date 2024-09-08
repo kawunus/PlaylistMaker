@@ -9,7 +9,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.data.track.Track
 
 class TrackAdapter(
-    private val onItemClick: ((track:Track) -> Unit)?
+    private val onItemClick: ((track: Track) -> Unit)?
 ) :
     RecyclerView.Adapter<TrackViewHolder>() {
     private val diffUtil = object : DiffUtil.ItemCallback<Track>() {
@@ -22,7 +22,7 @@ class TrackAdapter(
         }
 
     }
-    private val asyncListDiffer = AsyncListDiffer(this, diffUtil)
+    val asyncListDiffer = AsyncListDiffer(this, diffUtil)
 
     fun saveData(trackList: List<Track>) {
         asyncListDiffer.submitList(trackList)
@@ -41,8 +41,6 @@ class TrackAdapter(
             onItemClick?.invoke(track)
         }
     }
-
-    fun getItem(position: Int) = asyncListDiffer.currentList[position]
 
     override fun getItemCount() = asyncListDiffer.currentList.size
 }

@@ -40,12 +40,13 @@ class FindActivity : AppCompatActivity() {
     }
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
-
+    private lateinit var searchHistory: SearchHistory
+    private lateinit var historyAdapter: TrackAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFindBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val searchHistory = SearchHistory(
+        searchHistory = SearchHistory(
             historyPrefs = HistoryPrefs(
                 getSharedPreferences(
                     PrefKeys.PREFS, MODE_PRIVATE
@@ -65,6 +66,8 @@ class FindActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+        historyAdapter = trackAdapter
+        binding.historyRecyclerView.adapter = trackAdapter
         binding.recyclerView.adapter = trackAdapter
 
         searchHistory.showList()
@@ -91,8 +94,9 @@ class FindActivity : AppCompatActivity() {
                         )
                     )
 
-                    trackAdapter.saveData(historyPrefs.getHistoryList())
-                } else trackAdapter.saveData(emptyList())
+                    historyAdapter.saveData(historyPrefs.getHistoryList())
+                } else
+                    trackAdapter.saveData(emptyList())
                 searchDebounce()
             }
 
@@ -175,38 +179,47 @@ class FindActivity : AppCompatActivity() {
 
     private fun search() = with(binding) {
         deleteErrorViews()
-        if (editText.text.isNotBlank()) {
-            trackAdapter.saveData(emptyList())
-            binding.progressBar.visibility = View.VISIBLE
-            iTunesApiService.search("${editText.text}").enqueue(object : Callback<TrackResponce> {
-                override fun onResponse(
-                    call: Call<TrackResponce>, response: Response<TrackResponce>
-                ) {
-                    progressBar.visibility = View.GONE
-                    when (response.code()) {
-                        200 -> {
-                            if (response.body()?.results?.isNotEmpty() == true) {
-                                if (editText.text.isNotBlank()) trackAdapter.saveData(
-                                    ArrayList(
-                                        response.body()?.results!!
-                                    )
+        trackAdapter.saveData(emptyList())
+        binding.progressBar.visibility = View.VISIBLE
+        iTunesApiService.search("${editText.text}").enqueue(object : Callback<TrackResponce> {
+            override fun onResponse(
+                call: Call<TrackResponce>, response: Response<TrackResponce>
+            ) {
+                binding.progressBar.visibility = View.GONE
+                when (response.code()) {
+                    200 -> {
+                        if (response.body()?.results?.isNotEmpty() == true) {
+                            trackAdapter.saveData(
+                                ArrayList(
+                                    response.body()?.results!!
                                 )
-                            } else {
-                                notFoundError()
+                            )
+                            searchHistory.hideHistoryViews()
+                        } else {
+                            notFoundError()
+                            if (binding.editText.text.isEmpty()) {
+                                searchHistory.showList()
                             }
                         }
+                    }
 
-                        else -> noInternetError()
+                    else -> {
+                        noInternetError()
+                        if (binding.editText.text.isEmpty()) {
+                            searchHistory.showList()
+                        }
                     }
                 }
+            }
 
-                override fun onFailure(call: Call<TrackResponce>, t: Throwable) {
-                    progressBar.visibility = View.GONE
-                    noInternetError()
-                }
 
-            })
-        }
+            override fun onFailure(call: Call<TrackResponce>, t: Throwable) {
+                progressBar.visibility = View.GONE
+                noInternetError()
+            }
+
+        })
+
     }
 
     fun searchDebounce() {
@@ -235,7 +248,7 @@ class FindActivity : AppCompatActivity() {
                     PrefKeys.PREFS, MODE_PRIVATE
                 )
             )
-            trackAdapter.saveData(historyPrefs.getHistoryList())
+            historyAdapter.saveData(historyPrefs.getHistoryList())
         }
     }
 
