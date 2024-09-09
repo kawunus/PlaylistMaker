@@ -3,10 +3,11 @@ package com.example.playlistmaker.ui.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.API.ITunesApi
@@ -34,33 +35,41 @@ class FindActivity : AppCompatActivity() {
             .build()
     private val iTunesApiService = retrofit.create(ITunesApi::class.java)
     private lateinit var trackAdapter: TrackAdapter
-
+    private val searchRunnable = Runnable {
+        search()
+    }
+    private var isClickAllowed = true
+    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var searchHistory: SearchHistory
+    private lateinit var historyAdapter: TrackAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFindBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        trackAdapter = TrackAdapter { position ->
-            val model = trackAdapter.getItem(position)
-            val historyPrefs = HistoryPrefs(
-                getSharedPreferences(
-                    PrefKeys.PREFS, MODE_PRIVATE
-                )
-            )
-            historyPrefs.addToHistoryList(track = model)
-            val intent = Intent(this, TrackActivity::class.java)
-            intent.putExtra(IntentConsts.TRACK, model)
-            startActivity(intent)
-        }
-        binding.recyclerView.adapter = trackAdapter
-
-        val searchHistory = SearchHistory(
+        searchHistory = SearchHistory(
             historyPrefs = HistoryPrefs(
                 getSharedPreferences(
                     PrefKeys.PREFS, MODE_PRIVATE
                 )
             ), binding = binding
         )
+        trackAdapter = TrackAdapter { track ->
+            val historyPrefs = HistoryPrefs(
+                getSharedPreferences(
+                    PrefKeys.PREFS, MODE_PRIVATE
+                )
+            )
+            historyPrefs.addToHistoryList(track)
+            if (clickDebounce()) {
+                val intent = Intent(this, TrackActivity::class.java)
+                intent.putExtra(IntentConsts.TRACK, track)
+                startActivity(intent)
+            }
+        }
+        historyAdapter = trackAdapter
+        binding.historyRecyclerView.adapter = trackAdapter
+        binding.recyclerView.adapter = trackAdapter
+
         searchHistory.showList()
         binding.toolbar.setNavigationOnClickListener {
             finish()
@@ -75,7 +84,20 @@ class FindActivity : AppCompatActivity() {
                 editTextContext = binding.editText.text.toString()
                 if (binding.editText.hasFocus() && s?.isEmpty() == true) {
                     searchHistory.showList()
+                    binding.progressBar.visibility = View.GONE
                 } else searchHistory.hideHistoryViews()
+
+                if (s?.isEmpty() == true) {
+                    val historyPrefs = HistoryPrefs(
+                        getSharedPreferences(
+                            PrefKeys.PREFS, MODE_PRIVATE
+                        )
+                    )
+
+                    historyAdapter.saveData(historyPrefs.getHistoryList())
+                } else
+                    trackAdapter.saveData(emptyList())
+                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -90,13 +112,7 @@ class FindActivity : AppCompatActivity() {
             searchHistory.showList()
             hideKeyboard()
         }
-        binding.editText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                search()
-                true
-            }
-            false
-        }
+
         binding.updateButton.setOnClickListener {
             search()
         }
@@ -164,32 +180,81 @@ class FindActivity : AppCompatActivity() {
     private fun search() = with(binding) {
         deleteErrorViews()
         trackAdapter.saveData(emptyList())
-        if (editText.text.toString() != "") {
-            iTunesApiService.search("${editText.text}").enqueue(object : Callback<TrackResponce> {
-                override fun onResponse(
-                    call: Call<TrackResponce>, response: Response<TrackResponce>
-                ) {
-                    when (response.code()) {
-                        200 -> {
-                            if (response.body()?.results?.isNotEmpty() == true) {
-                                trackAdapter.saveData(ArrayList(response.body()?.results!!))
-                            } else {
-                                notFoundError()
+        binding.progressBar.visibility = View.VISIBLE
+        iTunesApiService.search("${editText.text}").enqueue(object : Callback<TrackResponce> {
+            override fun onResponse(
+                call: Call<TrackResponce>, response: Response<TrackResponce>
+            ) {
+                binding.progressBar.visibility = View.GONE
+                when (response.code()) {
+                    200 -> {
+                        if (response.body()?.results?.isNotEmpty() == true) {
+                            trackAdapter.saveData(
+                                ArrayList(
+                                    response.body()?.results!!
+                                )
+                            )
+                            searchHistory.hideHistoryViews()
+                        } else {
+                            notFoundError()
+                            if (binding.editText.text.isEmpty()) {
+                                searchHistory.showList()
                             }
                         }
+                    }
 
-                        else -> noInternetError()
+                    else -> {
+                        noInternetError()
+                        if (binding.editText.text.isEmpty()) {
+                            searchHistory.showList()
+                        }
                     }
                 }
+            }
 
-                override fun onFailure(call: Call<TrackResponce>, t: Throwable) {
-                    noInternetError()
-                }
 
-            })
-        } else {
+            override fun onFailure(call: Call<TrackResponce>, t: Throwable) {
+                progressBar.visibility = View.GONE
+                noInternetError()
+            }
 
+        })
+
+    }
+
+    fun searchDebounce() {
+        if (binding.editText.text.isNotBlank()) {
+            handler.removeCallbacks(searchRunnable)
+            handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
         }
+    }
+
+    fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideKeyboard()
+        binding.progressBar.visibility = View.GONE
+        if (binding.historyButton.visibility == View.VISIBLE) {
+            val historyPrefs = HistoryPrefs(
+                getSharedPreferences(
+                    PrefKeys.PREFS, MODE_PRIVATE
+                )
+            )
+            historyAdapter.saveData(historyPrefs.getHistoryList())
+        }
+    }
+
+    companion object {
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
 

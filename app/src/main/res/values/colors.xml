@@ -20,4 +20,5 @@
     <color name="findUpdateButtonTextColor">#FFFFFF</color>
     <color name="textViewTrackInfoColor">#AEAFB4</color>
     <color name="playIconColor">#000000</color>
+    <color name="progressBarColor">#3772E7</color>
 </resources>

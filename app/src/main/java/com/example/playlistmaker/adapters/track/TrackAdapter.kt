@@ -1,6 +1,5 @@
 package com.example.playlistmaker.adapters.track
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -10,7 +9,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.data.track.Track
 
 class TrackAdapter(
-    private val onItemClick: ((position:Int) -> Unit)?
+    private val onItemClick: ((track: Track) -> Unit)?
 ) :
     RecyclerView.Adapter<TrackViewHolder>() {
     private val diffUtil = object : DiffUtil.ItemCallback<Track>() {
@@ -23,7 +22,7 @@ class TrackAdapter(
         }
 
     }
-    private val asyncListDiffer = AsyncListDiffer(this, diffUtil)
+    val asyncListDiffer = AsyncListDiffer(this, diffUtil)
 
     fun saveData(trackList: List<Track>) {
         asyncListDiffer.submitList(trackList)
@@ -35,14 +34,13 @@ class TrackAdapter(
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
+        val track = asyncListDiffer.currentList[position]
         holder.bind(asyncListDiffer.currentList[position])
 
         holder.itemView.setOnClickListener {
-            onItemClick?.invoke(position)
+            onItemClick?.invoke(track)
         }
     }
-
-    fun getItem(position: Int) = asyncListDiffer.currentList[position]
 
     override fun getItemCount() = asyncListDiffer.currentList.size
 }
