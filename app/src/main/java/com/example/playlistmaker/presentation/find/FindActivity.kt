@@ -1,7 +1,9 @@
-package com.example.playlistmaker.ui.activities
+package com.example.playlistmaker.presentation.find
 
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,34 +12,28 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import com.example.playlistmaker.API.ITunesApi
-import com.example.playlistmaker.API.responces.TrackResponce
+import com.example.playlistmaker.Creator
 import com.example.playlistmaker.IntentConsts
 import com.example.playlistmaker.R
-import com.example.playlistmaker.adapters.track.TrackAdapter
-import com.example.playlistmaker.data.track.prefs.PrefKeys
-import com.example.playlistmaker.data.track.prefs.historyprefs.HistoryPrefs
 import com.example.playlistmaker.databinding.ActivityFindBinding
-import com.example.playlistmaker.utils.SearchHistory
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.example.playlistmaker.domain.api.TrackInteractor
+import com.example.playlistmaker.domain.models.track.Track
+import com.example.playlistmaker.domain.models.track.prefs.PrefKeys
+import com.example.playlistmaker.domain.models.track.prefs.historyprefs.HistoryPrefs
+import com.example.playlistmaker.presentation.SearchHistory
+import com.example.playlistmaker.presentation.track.TrackActivity
 
 class FindActivity : AppCompatActivity() {
 
     private var editTextContext = ""
-    private var baseUrl = "https://itunes.apple.com"
     lateinit var binding: ActivityFindBinding
-    private val retrofit =
-        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
-            .build()
-    private val iTunesApiService = retrofit.create(ITunesApi::class.java)
     private lateinit var trackAdapter: TrackAdapter
     private val searchRunnable = Runnable {
         search()
     }
+
+    private val creator = Creator()
+    private val trackInteractor = creator.provideTrackInteractor()
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var searchHistory: SearchHistory
@@ -95,8 +91,7 @@ class FindActivity : AppCompatActivity() {
                     )
 
                     historyAdapter.saveData(historyPrefs.getHistoryList())
-                } else
-                    trackAdapter.saveData(emptyList())
+                } else trackAdapter.saveData(emptyList())
                 searchDebounce()
             }
 
@@ -159,16 +154,24 @@ class FindActivity : AppCompatActivity() {
     private fun noInternetError() = with(binding) {
         errorLinear.visibility = View.VISIBLE
         updateButton.visibility = View.VISIBLE
+        errorText.visibility = View.VISIBLE
+        errorImage.visibility = View.VISIBLE
         errorText.setText(R.string.no_internet)
         errorImage.setImageResource(R.drawable.ic_no_internet)
         recyclerView.visibility = View.GONE
+        historyRecyclerView.visibility = View.GONE
+        progressBar.visibility = View.GONE
     }
 
     private fun notFoundError() = with(binding) {
+        errorText.visibility = View.VISIBLE
+        errorImage.visibility = View.VISIBLE
         errorLinear.visibility = View.VISIBLE
         errorText.setText(R.string.not_found)
         errorImage.setImageResource(R.drawable.ic_not_found)
         recyclerView.visibility = View.GONE
+        historyRecyclerView.visibility = View.GONE
+        progressBar.visibility = View.GONE
     }
 
     private fun deleteErrorViews() = with(binding) {
@@ -181,45 +184,34 @@ class FindActivity : AppCompatActivity() {
         deleteErrorViews()
         trackAdapter.saveData(emptyList())
         binding.progressBar.visibility = View.VISIBLE
-        iTunesApiService.search("${editText.text}").enqueue(object : Callback<TrackResponce> {
-            override fun onResponse(
-                call: Call<TrackResponce>, response: Response<TrackResponce>
-            ) {
-                binding.progressBar.visibility = View.GONE
-                when (response.code()) {
-                    200 -> {
-                        if (response.body()?.results?.isNotEmpty() == true) {
-                            trackAdapter.saveData(
-                                ArrayList(
-                                    response.body()?.results!!
-                                )
-                            )
-                            searchHistory.hideHistoryViews()
-                        } else {
-                            notFoundError()
-                            if (binding.editText.text.isEmpty()) {
-                                searchHistory.showList()
+        if (isNetworkAvailable(this@FindActivity))
+            trackInteractor.searchTracks(
+                editText.text.toString(),
+                object : TrackInteractor.TrackConsumer {
+                    override fun consume(foundTracks: List<Track>, resultCode: Int) {
+                        runOnUiThread {
+                            progressBar.visibility = View.GONE
+                            when (resultCode) {
+                                200 -> {
+                                    if (foundTracks.isNotEmpty()) {
+                                        searchHistory.hideHistoryViews()
+                                        trackAdapter.saveData(foundTracks)
+                                    } else {
+                                        notFoundError()
+                                    }
+                                }
+
+                                else -> {
+                                    noInternetError()
+                                }
                             }
                         }
                     }
-
-                    else -> {
-                        noInternetError()
-                        if (binding.editText.text.isEmpty()) {
-                            searchHistory.showList()
-                        }
-                    }
-                }
-            }
-
-
-            override fun onFailure(call: Call<TrackResponce>, t: Throwable) {
-                progressBar.visibility = View.GONE
-                noInternetError()
-            }
-
-        })
-
+                })
+        else {
+            progressBar.visibility = View.GONE
+            noInternetError()
+        }
     }
 
     fun searchDebounce() {
@@ -229,7 +221,7 @@ class FindActivity : AppCompatActivity() {
         }
     }
 
-    fun clickDebounce(): Boolean {
+    private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
@@ -255,6 +247,15 @@ class FindActivity : AppCompatActivity() {
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val CLICK_DEBOUNCE_DELAY = 1000L
+    }
+
+    private fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork ?: return false
+        val networkCapabilities =
+            connectivityManager.getNetworkCapabilities(network) ?: return false
+        return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 }
 

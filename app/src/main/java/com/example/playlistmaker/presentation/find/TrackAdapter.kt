@@ -1,4 +1,4 @@
-package com.example.playlistmaker.adapters.track
+package com.example.playlistmaker.presentation.find
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.data.track.Track
+import com.example.playlistmaker.domain.models.track.Track
 
 class TrackAdapter(
     private val onItemClick: ((track: Track) -> Unit)?
@@ -22,6 +22,7 @@ class TrackAdapter(
         }
 
     }
+
     val asyncListDiffer = AsyncListDiffer(this, diffUtil)
 
     fun saveData(trackList: List<Track>) {

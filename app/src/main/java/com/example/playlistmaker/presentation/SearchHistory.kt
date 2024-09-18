@@ -1,9 +1,9 @@
-package com.example.playlistmaker.utils
+package com.example.playlistmaker.presentation
 
 import android.view.View
-import com.example.playlistmaker.adapters.track.TrackAdapter
-import com.example.playlistmaker.data.track.prefs.historyprefs.HistoryPrefs
 import com.example.playlistmaker.databinding.ActivityFindBinding
+import com.example.playlistmaker.domain.models.track.prefs.historyprefs.HistoryPrefs
+import com.example.playlistmaker.presentation.find.TrackAdapter
 
 class SearchHistory(
     private val binding: ActivityFindBinding,

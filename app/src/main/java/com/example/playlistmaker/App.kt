@@ -2,8 +2,8 @@ package com.example.playlistmaker
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.playlistmaker.data.track.prefs.PrefKeys
-import com.example.playlistmaker.data.track.prefs.ThemePrefs
+import com.example.playlistmaker.domain.models.track.prefs.PrefKeys
+import com.example.playlistmaker.domain.models.track.prefs.ThemePrefs
 
 class App : Application() {
     private var darkTheme = false

@@ -1,7 +1,7 @@
-package com.example.playlistmaker.ui.activities
+package com.example.playlistmaker.presentation.library
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.R
 
 class LibraryActivity : AppCompatActivity() {

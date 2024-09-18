@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.activities
+package com.example.playlistmaker.presentation.track
 
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.IntentConsts
 import com.example.playlistmaker.R
-import com.example.playlistmaker.data.track.Track
 import com.example.playlistmaker.databinding.ActivityTrackBinding
+import com.example.playlistmaker.domain.models.track.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -33,7 +33,7 @@ class TrackActivity : AppCompatActivity() {
 
         binding.trackNameTextView.text = model?.trackName
         binding.artistNameTextView.text = model?.artistName
-        binding.trackTimeTextView.text = dateFormatter.format(model?.trackTime)
+        binding.trackTimeTextView.text = dateFormatter.format(model?.trackTimeMillis)
         Glide.with(this).load(model?.artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg"))
             .placeholder(R.drawable.placeholder).into(binding.imageView)
         binding.trackCountryTextView.text = model?.country
@@ -106,10 +106,11 @@ class TrackActivity : AppCompatActivity() {
         }
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
-        if (playerState!= STATE_DEFAULT)
-        mediaPlayer.release()
+        if (playerState != STATE_DEFAULT)
+            mediaPlayer.release()
         timerThread?.let {
             mainThreadHandler.removeCallbacks(it)
         }
@@ -119,17 +120,17 @@ class TrackActivity : AppCompatActivity() {
     private fun createUpdateTimerTask(): Runnable {
         return object : Runnable {
             override fun run() {
-                    val currTime =
-                        SimpleDateFormat(
-                            "mm:ss",
-                            Locale.getDefault()
-                        ).format(mediaPlayer.currentPosition)
+                val currTime =
+                    SimpleDateFormat(
+                        "mm:ss",
+                        Locale.getDefault()
+                    ).format(mediaPlayer.currentPosition)
                 Log.e("TIMER", mediaPlayer.currentPosition.toString())
-                    binding.currentTimeTextView.text = currTime
-                    mainThreadHandler.postDelayed(this, DELAY)
-                }
+                binding.currentTimeTextView.text = currTime
+                mainThreadHandler.postDelayed(this, DELAY)
             }
         }
+    }
 
 
     companion object {

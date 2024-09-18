@@ -1,12 +1,12 @@
-package com.example.playlistmaker.adapters.track
+package com.example.playlistmaker.presentation.find
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.data.track.Track
 import com.example.playlistmaker.databinding.TrackViewBinding
+import com.example.playlistmaker.domain.models.track.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -20,6 +20,6 @@ class TrackViewHolder(trackView: View) :
         binding.artistNameTextView.text = model.artistName
 
         val dateFormatter = SimpleDateFormat("mm:ss", Locale.getDefault())
-        binding.trackTimeTextView.text = dateFormatter.format(model.trackTime)
+        binding.trackTimeTextView.text = dateFormatter.format(model.trackTimeMillis)
     }
 }

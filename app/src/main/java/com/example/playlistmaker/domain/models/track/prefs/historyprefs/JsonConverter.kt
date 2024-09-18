@@ -1,6 +1,6 @@
-package com.example.playlistmaker.data.track.prefs.historyprefs
+package com.example.playlistmaker.domain.models.track.prefs.historyprefs
 
-import com.example.playlistmaker.data.track.Track
+import com.example.playlistmaker.domain.models.track.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
