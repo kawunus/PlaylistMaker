@@ -29,7 +29,7 @@ class TrackActivity : AppCompatActivity() {
             finish()
         }
         val dateFormatter = SimpleDateFormat("mm:ss", Locale.getDefault())
-        val model = intent.getParcelableExtra<Track>(IntentConsts.TRACK)
+        val model = intent.getParcelableExtra<Track>(IntentConsts.TRACK.name)
 
         binding.trackNameTextView.text = model?.trackName
         binding.artistNameTextView.text = model?.artistName

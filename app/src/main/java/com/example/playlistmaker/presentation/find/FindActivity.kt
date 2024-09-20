@@ -55,7 +55,7 @@ class FindActivity : AppCompatActivity() {
             historyInteractor.addToHistory(track)
             if (clickDebounce()) {
                 val intent = Intent(this, TrackActivity::class.java)
-                intent.putExtra(IntentConsts.TRACK, track)
+                intent.putExtra(IntentConsts.TRACK.name, track)
                 startActivity(intent)
             }
         }

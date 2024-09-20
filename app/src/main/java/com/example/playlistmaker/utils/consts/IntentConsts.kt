@@ -1,5 +1,5 @@
 package com.example.playlistmaker.utils.consts
 
-object IntentConsts {
-    const val TRACK = "track"
+enum class IntentConsts(key: String) {
+    TRACK("track")
 }
