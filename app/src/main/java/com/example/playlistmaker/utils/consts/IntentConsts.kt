@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.utils.consts
 
 object IntentConsts {
     const val TRACK = "track"

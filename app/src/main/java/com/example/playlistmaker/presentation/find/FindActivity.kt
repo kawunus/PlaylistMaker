@@ -12,8 +12,6 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import com.example.playlistmaker.Creator
-import com.example.playlistmaker.IntentConsts
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityFindBinding
 import com.example.playlistmaker.domain.api.track.TrackInteractor
@@ -22,6 +20,8 @@ import com.example.playlistmaker.domain.prefs.HistoryPrefs
 import com.example.playlistmaker.domain.prefs.PrefKeys
 import com.example.playlistmaker.presentation.SearchHistory
 import com.example.playlistmaker.presentation.track.TrackActivity
+import com.example.playlistmaker.utils.consts.IntentConsts
+import com.example.playlistmaker.utils.creator.Creator
 
 class FindActivity : AppCompatActivity() {
 

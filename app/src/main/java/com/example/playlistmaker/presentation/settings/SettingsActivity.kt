@@ -5,11 +5,11 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.App
-import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
 import com.example.playlistmaker.domain.impl.settings.SettingsInteractorImpl
 import com.example.playlistmaker.domain.prefs.PrefKeys
+import com.example.playlistmaker.utils.creator.Creator
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var settingsInteractor: SettingsInteractorImpl

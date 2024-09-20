@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.domain.prefs.PrefKeys
 import com.example.playlistmaker.utils.consts.SettingsPrefs
+import com.example.playlistmaker.utils.creator.Creator
 
 class App : Application() {
     private var darkTheme = false
