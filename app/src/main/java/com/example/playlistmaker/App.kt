@@ -1,21 +1,29 @@
 package com.example.playlistmaker
 
 import android.app.Application
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.playlistmaker.domain.models.track.prefs.PrefKeys
-import com.example.playlistmaker.domain.models.track.prefs.ThemePrefs
+import com.example.playlistmaker.domain.prefs.PrefKeys
+import com.example.playlistmaker.utils.consts.SettingsPrefs
 
 class App : Application() {
     private var darkTheme = false
-    private lateinit var themePrefs: ThemePrefs
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate() {
         super.onCreate()
-        themePrefs = ThemePrefs(
+        sharedPreferences = getSharedPreferences(
+            PrefKeys.PREFS, MODE_PRIVATE
+        )
+
+        val creator = Creator()
+
+        val settingsInteractor = creator.provideSettingsInteractor(
             getSharedPreferences(
                 PrefKeys.PREFS, MODE_PRIVATE
             )
         )
-        darkTheme = themePrefs.getTheme()
+
+        darkTheme = settingsInteractor.getTheme().isNight
         AppCompatDelegate.setDefaultNightMode(
             if (darkTheme) AppCompatDelegate.MODE_NIGHT_YES
             else AppCompatDelegate.MODE_NIGHT_NO
@@ -24,7 +32,7 @@ class App : Application() {
 
     fun switchTheme(darkThemeEnabled: Boolean) {
         darkTheme = darkThemeEnabled
-        themePrefs.setTheme(darkTheme)
+        sharedPreferences.edit().putBoolean(SettingsPrefs.THEME, darkTheme).apply()
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {
                 AppCompatDelegate.MODE_NIGHT_YES

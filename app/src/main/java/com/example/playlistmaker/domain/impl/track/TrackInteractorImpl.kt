@@ -1,9 +1,9 @@
-package com.example.playlistmaker.domain.impl
+package com.example.playlistmaker.domain.impl.track
 
 import com.example.playlistmaker.data.dto.TrackDto
-import com.example.playlistmaker.domain.api.TrackInteractor
-import com.example.playlistmaker.domain.api.TrackRepository
-import com.example.playlistmaker.domain.models.track.Track
+import com.example.playlistmaker.domain.api.track.TrackInteractor
+import com.example.playlistmaker.domain.api.track.TrackRepository
+import com.example.playlistmaker.domain.model.track.Track
 import java.util.concurrent.Executors
 
 class TrackInteractorImpl(private val repository: TrackRepository) : TrackInteractor {

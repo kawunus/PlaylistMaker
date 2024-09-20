@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.models.track.prefs
+package com.example.playlistmaker.domain.prefs
 
 object PrefKeys {
     const val DARK_THEME = "darkTheme"

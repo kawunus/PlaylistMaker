@@ -1,8 +1,8 @@
-package com.example.playlistmaker.domain.models.track.prefs.historyprefs
+package com.example.playlistmaker.domain.prefs
 
 import android.content.SharedPreferences
-import com.example.playlistmaker.domain.models.track.Track
-import com.example.playlistmaker.domain.models.track.prefs.PrefKeys
+import com.example.playlistmaker.domain.model.track.Track
+import com.example.playlistmaker.domain.prefs.historyprefs.JsonConverter
 
 class HistoryPrefs(private val prefs: SharedPreferences) {
 

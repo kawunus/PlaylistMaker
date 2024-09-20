@@ -16,10 +16,10 @@ import com.example.playlistmaker.Creator
 import com.example.playlistmaker.IntentConsts
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityFindBinding
-import com.example.playlistmaker.domain.api.TrackInteractor
-import com.example.playlistmaker.domain.models.track.Track
-import com.example.playlistmaker.domain.models.track.prefs.PrefKeys
-import com.example.playlistmaker.domain.models.track.prefs.historyprefs.HistoryPrefs
+import com.example.playlistmaker.domain.api.track.TrackInteractor
+import com.example.playlistmaker.domain.model.track.Track
+import com.example.playlistmaker.domain.prefs.HistoryPrefs
+import com.example.playlistmaker.domain.prefs.PrefKeys
 import com.example.playlistmaker.presentation.SearchHistory
 import com.example.playlistmaker.presentation.track.TrackActivity
 
@@ -184,30 +184,29 @@ class FindActivity : AppCompatActivity() {
         deleteErrorViews()
         trackAdapter.saveData(emptyList())
         binding.progressBar.visibility = View.VISIBLE
-        if (isNetworkAvailable(this@FindActivity))
-            trackInteractor.searchTracks(
-                editText.text.toString(),
-                object : TrackInteractor.TrackConsumer {
-                    override fun consume(foundTracks: List<Track>, resultCode: Int) {
-                        runOnUiThread {
-                            progressBar.visibility = View.GONE
-                            when (resultCode) {
-                                200 -> {
-                                    if (foundTracks.isNotEmpty()) {
-                                        searchHistory.hideHistoryViews()
-                                        trackAdapter.saveData(foundTracks)
-                                    } else {
-                                        notFoundError()
-                                    }
+        if (isNetworkAvailable(this@FindActivity)) trackInteractor.searchTracks(
+            editText.text.toString(),
+            object : TrackInteractor.TrackConsumer {
+                override fun consume(foundTracks: List<Track>, resultCode: Int) {
+                    runOnUiThread {
+                        progressBar.visibility = View.GONE
+                        when (resultCode) {
+                            200 -> {
+                                if (foundTracks.isNotEmpty()) {
+                                    searchHistory.hideHistoryViews()
+                                    trackAdapter.saveData(foundTracks)
+                                } else {
+                                    notFoundError()
                                 }
+                            }
 
-                                else -> {
-                                    noInternetError()
-                                }
+                            else -> {
+                                noInternetError()
                             }
                         }
                     }
-                })
+                }
+            })
         else {
             progressBar.visibility = View.GONE
             noInternetError()

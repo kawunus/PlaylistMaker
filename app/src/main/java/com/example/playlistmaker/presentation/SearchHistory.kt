@@ -2,12 +2,12 @@ package com.example.playlistmaker.presentation
 
 import android.view.View
 import com.example.playlistmaker.databinding.ActivityFindBinding
-import com.example.playlistmaker.domain.models.track.prefs.historyprefs.HistoryPrefs
+import com.example.playlistmaker.domain.prefs.HistoryPrefs
 import com.example.playlistmaker.presentation.find.TrackAdapter
 
 class SearchHistory(
     private val binding: ActivityFindBinding,
-    private val historyPrefs: HistoryPrefs
+    private val historyPrefs: HistoryPrefs,
 ) {
 
     fun showList() = with(binding) {
