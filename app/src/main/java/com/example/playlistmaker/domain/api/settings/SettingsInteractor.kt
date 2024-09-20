@@ -5,4 +5,6 @@ import com.example.playlistmaker.domain.model.settings.Theme
 interface SettingsInteractor {
 
     fun getTheme(): Theme
+
+    fun setTheme(theme: Theme)
 }
