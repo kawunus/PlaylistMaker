@@ -16,7 +16,6 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityFindBinding
 import com.example.playlistmaker.domain.api.track.TrackInteractor
 import com.example.playlistmaker.domain.model.track.Track
-import com.example.playlistmaker.domain.prefs.HistoryPrefs
 import com.example.playlistmaker.domain.prefs.PrefKeys
 import com.example.playlistmaker.presentation.SearchHistory
 import com.example.playlistmaker.presentation.track.TrackActivity
@@ -42,20 +41,18 @@ class FindActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFindBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val historyInteractor = creator.provideHistoryInteractor(
+            getSharedPreferences(
+                PrefKeys.PREFS, MODE_PRIVATE
+            )
+        )
+
         searchHistory = SearchHistory(
-            historyPrefs = HistoryPrefs(
-                getSharedPreferences(
-                    PrefKeys.PREFS, MODE_PRIVATE
-                )
-            ), binding = binding
+            historyInteractor = historyInteractor, binding = binding
         )
         trackAdapter = TrackAdapter { track ->
-            val historyPrefs = HistoryPrefs(
-                getSharedPreferences(
-                    PrefKeys.PREFS, MODE_PRIVATE
-                )
-            )
-            historyPrefs.addToHistoryList(track)
+            historyInteractor.addToHistory(track)
             if (clickDebounce()) {
                 val intent = Intent(this, TrackActivity::class.java)
                 intent.putExtra(IntentConsts.TRACK, track)
@@ -84,13 +81,7 @@ class FindActivity : AppCompatActivity() {
                 } else searchHistory.hideHistoryViews()
 
                 if (s?.isEmpty() == true) {
-                    val historyPrefs = HistoryPrefs(
-                        getSharedPreferences(
-                            PrefKeys.PREFS, MODE_PRIVATE
-                        )
-                    )
-
-                    historyAdapter.saveData(historyPrefs.getHistoryList())
+                    historyAdapter.saveData(searchHistory.getHistory())
                 } else trackAdapter.saveData(emptyList())
                 searchDebounce()
             }
@@ -234,12 +225,7 @@ class FindActivity : AppCompatActivity() {
         hideKeyboard()
         binding.progressBar.visibility = View.GONE
         if (binding.historyButton.visibility == View.VISIBLE) {
-            val historyPrefs = HistoryPrefs(
-                getSharedPreferences(
-                    PrefKeys.PREFS, MODE_PRIVATE
-                )
-            )
-            historyAdapter.saveData(historyPrefs.getHistoryList())
+            historyAdapter.saveData(searchHistory.getHistory())
         }
     }
 

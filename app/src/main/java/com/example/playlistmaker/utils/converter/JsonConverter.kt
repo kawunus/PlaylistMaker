@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.prefs.historyprefs
+package com.example.playlistmaker.utils.converter
 
 import com.example.playlistmaker.domain.model.track.Track
 import com.google.gson.Gson

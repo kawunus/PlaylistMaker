@@ -1,9 +1,11 @@
 package com.example.playlistmaker.utils.creator
 
 import android.content.SharedPreferences
+import com.example.playlistmaker.data.HistoryRepositoryImpl
 import com.example.playlistmaker.data.SettingsRepositoryImpl
 import com.example.playlistmaker.data.TrackRepositoryImpl
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
+import com.example.playlistmaker.domain.impl.history.HistoryInteractorImpl
 import com.example.playlistmaker.domain.impl.settings.SettingsInteractorImpl
 import com.example.playlistmaker.domain.impl.track.TrackInteractorImpl
 
@@ -17,4 +19,10 @@ class Creator {
 
     fun provideSettingsInteractor(sharedPreferences: SharedPreferences) =
         SettingsInteractorImpl(getSettingsRepository(sharedPreferences))
+
+    private fun getHistoryRepository(sharedPreferences: SharedPreferences) =
+        HistoryRepositoryImpl(sharedPreferences)
+
+    fun provideHistoryInteractor(sharedPreferences: SharedPreferences) =
+        HistoryInteractorImpl(getHistoryRepository(sharedPreferences))
 }

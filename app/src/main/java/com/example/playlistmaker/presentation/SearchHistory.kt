@@ -2,16 +2,18 @@ package com.example.playlistmaker.presentation
 
 import android.view.View
 import com.example.playlistmaker.databinding.ActivityFindBinding
-import com.example.playlistmaker.domain.prefs.HistoryPrefs
+import com.example.playlistmaker.domain.api.history.HistoryInteractor
+import com.example.playlistmaker.domain.model.history.History
+import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.presentation.find.TrackAdapter
 
 class SearchHistory(
     private val binding: ActivityFindBinding,
-    private val historyPrefs: HistoryPrefs,
+    private val historyInteractor: HistoryInteractor,
 ) {
 
     fun showList() = with(binding) {
-        (historyRecyclerView.adapter as TrackAdapter).saveData(historyPrefs.getHistoryList())
+        (historyRecyclerView.adapter as TrackAdapter).saveData(historyInteractor.getHistory().trackList)
         if (checkHistory()) {
             hideHistoryViews()
         } else {
@@ -31,11 +33,19 @@ class SearchHistory(
     }
 
     fun clearHistory() = with(binding) {
-        historyPrefs.setHistoryList(emptyList())
-        (recyclerView.adapter as TrackAdapter).saveData(historyPrefs.getHistoryList())
+        setHistory(emptyList())
+        (recyclerView.adapter as TrackAdapter).saveData(historyInteractor.getHistory().trackList)
     }
 
     private fun checkHistory(): Boolean {
-        return historyPrefs.getHistoryList().isEmpty()
+        return historyInteractor.getHistory().trackList.isEmpty()
+    }
+
+    fun setHistory(trackList: List<Track>) {
+        historyInteractor.setHistory(History(trackList))
+    }
+
+    fun getHistory(): List<Track> {
+        return historyInteractor.getHistory().trackList
     }
 }
