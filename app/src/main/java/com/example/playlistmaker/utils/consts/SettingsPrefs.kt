@@ -1,5 +1,5 @@
 package com.example.playlistmaker.utils.consts
 
-object SettingsPrefs {
-    const val THEME = "theme"
+enum class SettingsPrefs(key: String) {
+    THEME("theme")
 }

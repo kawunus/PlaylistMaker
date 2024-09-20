@@ -10,10 +10,10 @@ class SettingsRepositoryImpl(
 
     ) : SettingsRepository {
     override fun getTheme(): Theme {
-        return Theme(sharedPreferences.getBoolean(SettingsPrefs.THEME, false))
+        return Theme(sharedPreferences.getBoolean(SettingsPrefs.THEME.name, false))
     }
 
     override fun setTheme(theme: Theme) {
-        sharedPreferences.edit().putBoolean(SettingsPrefs.THEME, theme.isNight).apply()
+        sharedPreferences.edit().putBoolean(SettingsPrefs.THEME.name, theme.isNight).apply()
     }
 }
