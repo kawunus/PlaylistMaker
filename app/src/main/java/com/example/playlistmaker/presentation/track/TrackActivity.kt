@@ -12,13 +12,18 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityTrackBinding
 import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.utils.consts.IntentConsts
+import com.example.playlistmaker.utils.consts.MediaPlayerConsts
+import com.example.playlistmaker.utils.creator.Creator
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TrackActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTrackBinding
-    private var playerState = STATE_DEFAULT
-    private val mediaPlayer = MediaPlayer()
+
+    private var creator = Creator()
+    private val mediaPlayerInteractor =
+        creator.provideMediaPlayerInteractor(mediaPlayer = MediaPlayer())
+
     private var timerThread: Runnable? = null
     private val mainThreadHandler = Handler(Looper.getMainLooper())
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,31 +52,28 @@ class TrackActivity : AppCompatActivity() {
         } else {
             binding.trackAlbumTextView.text = model?.collectionName
         }
-        preparePlayer(model!!.previewUrl)
+        preparePlayer(model!!)
         binding.playButton.setOnClickListener {
             playbackControl()
         }
     }
 
-    private fun preparePlayer(url: String) = with(binding) {
-        mediaPlayer.setDataSource(url)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playButton.isEnabled = true
-            playerState = STATE_PREPARED
-            binding.currentTimeTextView.text = getString(R.string.track_current_time)
-        }
-        mediaPlayer.setOnCompletionListener {
-            playerState = STATE_PREPARED
-            mainThreadHandler.removeCallbacks(timerThread!!)
-            binding.currentTimeTextView.text = getString(R.string.track_current_time)
-            binding.playButton.setImageResource(R.drawable.ic_play)
-        }
+    private fun preparePlayer(track: Track) = with(binding) {
+
+        mediaPlayerInteractor.preparePlayer(track = track)
+        /*onPrepared = {
+                playButton.isEnabled = true
+                binding.currentTimeTextView.text = getString(R.string.track_current_time)
+            },
+            onCompletion = {
+                mainThreadHandler.removeCallbacks(timerThread!!)
+                binding.currentTimeTextView.text = getString(R.string.track_current_time)
+                binding.playButton.setImageResource(R.drawable.ic_play)
+            }*/
     }
 
     private fun startPlayer() {
-        mediaPlayer.start()
-        playerState = STATE_PLAYING
+        mediaPlayerInteractor.startPlayer()
         binding.playButton.setImageResource(R.drawable.ic_pause)
         timerThread?.let {
             mainThreadHandler.removeCallbacks(it)
@@ -81,27 +83,35 @@ class TrackActivity : AppCompatActivity() {
     }
 
     private fun pausePlayer() {
-        mediaPlayer.pause()
-        playerState = STATE_PAUSED
+        mediaPlayerInteractor.pausePlayer()
         binding.playButton.setImageResource(R.drawable.ic_play)
         mainThreadHandler.removeCallbacks(timerThread!!)
     }
 
     private fun playbackControl() {
-        when (playerState) {
-            STATE_PLAYING -> {
+        when (mediaPlayerInteractor.getPlayerState()) {
+
+            MediaPlayerConsts.STATE_DEFAULT -> {
+
+            }
+
+            MediaPlayerConsts.STATE_PLAYING -> {
                 pausePlayer()
             }
 
-            STATE_PREPARED, STATE_PAUSED -> {
+            MediaPlayerConsts.STATE_PREPARED, MediaPlayerConsts.STATE_PAUSED -> {
                 startPlayer()
+            }
+
+            else -> {
+                Log.d("MediaPlayer", "State error")
             }
         }
     }
 
     override fun onPause() {
         super.onPause()
-        if (playerState == STATE_PLAYING) {
+        if (mediaPlayerInteractor.getPlayerState() == MediaPlayerConsts.STATE_PLAYING) {
             pausePlayer()
         }
     }
@@ -109,8 +119,7 @@ class TrackActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (playerState != STATE_DEFAULT)
-            mediaPlayer.release()
+        if (mediaPlayerInteractor.getPlayerState() != MediaPlayerConsts.STATE_DEFAULT) mediaPlayerInteractor.closePlayer()
         timerThread?.let {
             mainThreadHandler.removeCallbacks(it)
         }
@@ -120,12 +129,10 @@ class TrackActivity : AppCompatActivity() {
     private fun createUpdateTimerTask(): Runnable {
         return object : Runnable {
             override fun run() {
-                val currTime =
-                    SimpleDateFormat(
-                        "mm:ss",
-                        Locale.getDefault()
-                    ).format(mediaPlayer.currentPosition)
-                Log.e("TIMER", mediaPlayer.currentPosition.toString())
+                val currTime = SimpleDateFormat(
+                    "mm:ss", Locale.getDefault()
+                ).format(mediaPlayerInteractor.getPosition())
+                Log.e("TIMER", mediaPlayerInteractor.getPosition().toString())
                 binding.currentTimeTextView.text = currTime
                 mainThreadHandler.postDelayed(this, DELAY)
             }
@@ -134,10 +141,6 @@ class TrackActivity : AppCompatActivity() {
 
 
     companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
         private const val DELAY = 50L
     }
 }

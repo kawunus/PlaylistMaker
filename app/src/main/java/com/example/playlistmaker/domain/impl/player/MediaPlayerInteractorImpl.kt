@@ -1,5 +1,6 @@
 package com.example.playlistmaker.domain.impl.player
 
+import com.example.playlistmaker.data.MediaPlayerRepositoryImpl
 import com.example.playlistmaker.domain.api.player.MediaPlayerInteractor
 import com.example.playlistmaker.domain.api.player.MediaPlayerRepository
 import com.example.playlistmaker.domain.model.track.Track
@@ -26,4 +27,6 @@ class MediaPlayerInteractorImpl(private val mediaPlayerRepository: MediaPlayerRe
     override fun getPlayerState(): MediaPlayerConsts {
         return mediaPlayerRepository.getPlayerState()
     }
+
+    fun getPosition() = (mediaPlayerRepository as MediaPlayerRepositoryImpl).getPosition()
 }

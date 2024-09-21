@@ -21,6 +21,9 @@ class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPla
         mediaPlayer.setOnPreparedListener {
             playerState = MediaPlayerConsts.STATE_PREPARED
         }
+        mediaPlayer.setOnCompletionListener {
+            playerState = MediaPlayerConsts.STATE_PREPARED
+        }
     }
 
     override fun pausePlayer() {
@@ -42,4 +45,6 @@ class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPla
     override fun getPlayerState(): MediaPlayerConsts {
         return playerState
     }
+
+    fun getPosition() = mediaPlayer.currentPosition
 }
