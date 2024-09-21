@@ -68,7 +68,7 @@ class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPla
             override fun run() {
                 val trackTime = mediaPlayer.currentPosition
 
-                mediaPlayer.setOnSeekCompleteListener {
+                mediaPlayer.setOnCompletionListener {
                     pausePlayer()
                     mainThreadHandler.removeCallbacks(this)
                     onSetTimer.invoke("00:00")
