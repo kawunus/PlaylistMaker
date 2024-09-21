@@ -71,6 +71,7 @@ class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPla
                 mediaPlayer.setOnCompletionListener {
                     pausePlayer()
                     mainThreadHandler.removeCallbacks(this)
+                    onPauseButton.invoke()
                     onSetTimer.invoke("00:00")
                 }
 
