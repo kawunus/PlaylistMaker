@@ -58,15 +58,7 @@ class TrackActivity : AppCompatActivity() {
         mediaPlayerInteractor.setResources(onPlayButton = { playButton.setImageResource(R.drawable.ic_pause) },
             onPauseButton = { playButton.setImageResource(R.drawable.ic_play) },
             onSetTimer = { trackTime: String -> currentTimeTextView.text = trackTime })
-        mediaPlayerInteractor.preparePlayer(track = track)/*onPrepared = {
-                playButton.isEnabled = true
-                binding.currentTimeTextView.text = getString(R.string.track_current_time)
-            },
-            onCompletion = {
-                mainThreadHandler.removeCallbacks(timerThread!!)
-                binding.currentTimeTextView.text = getString(R.string.track_current_time)
-                binding.playButton.setImageResource(R.drawable.ic_play)
-            }*/
+        mediaPlayerInteractor.preparePlayer(track = track)
     }
 
     private fun startPlayer() {
