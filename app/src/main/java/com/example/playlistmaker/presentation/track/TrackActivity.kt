@@ -2,8 +2,6 @@ package com.example.playlistmaker.presentation.track
 
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -24,8 +22,6 @@ class TrackActivity : AppCompatActivity() {
     private val mediaPlayerInteractor =
         creator.provideMediaPlayerInteractor(mediaPlayer = MediaPlayer())
 
-    private var timerThread: Runnable? = null
-    private val mainThreadHandler = Handler(Looper.getMainLooper())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTrackBinding.inflate(layoutInflater)
@@ -52,6 +48,7 @@ class TrackActivity : AppCompatActivity() {
         } else {
             binding.trackAlbumTextView.text = model?.collectionName
         }
+
         preparePlayer(model!!)
         binding.playButton.setOnClickListener {
             playbackControl()
@@ -59,9 +56,10 @@ class TrackActivity : AppCompatActivity() {
     }
 
     private fun preparePlayer(track: Track) = with(binding) {
-
-        mediaPlayerInteractor.preparePlayer(track = track)
-        /*onPrepared = {
+        mediaPlayerInteractor.setResources(onPlayButton = { playButton.setImageResource(R.drawable.ic_pause) },
+            onPauseButton = { playButton.setImageResource(R.drawable.ic_play) },
+            onSetTimer = { trackTime: String -> currentTimeTextView.text = trackTime })
+        mediaPlayerInteractor.preparePlayer(track = track)/*onPrepared = {
                 playButton.isEnabled = true
                 binding.currentTimeTextView.text = getString(R.string.track_current_time)
             },
@@ -75,24 +73,18 @@ class TrackActivity : AppCompatActivity() {
     private fun startPlayer() {
         mediaPlayerInteractor.startPlayer()
         binding.playButton.setImageResource(R.drawable.ic_pause)
-        timerThread?.let {
-            mainThreadHandler.removeCallbacks(it)
-        }
-        timerThread = createUpdateTimerTask()
-        timerThread!!.run()
+
     }
 
     private fun pausePlayer() {
         mediaPlayerInteractor.pausePlayer()
         binding.playButton.setImageResource(R.drawable.ic_play)
-        mainThreadHandler.removeCallbacks(timerThread!!)
     }
 
     private fun playbackControl() {
         when (mediaPlayerInteractor.getPlayerState()) {
 
             MediaPlayerConsts.STATE_DEFAULT -> {
-
             }
 
             MediaPlayerConsts.STATE_PLAYING -> {
@@ -120,28 +112,7 @@ class TrackActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         if (mediaPlayerInteractor.getPlayerState() != MediaPlayerConsts.STATE_DEFAULT) mediaPlayerInteractor.closePlayer()
-        timerThread?.let {
-            mainThreadHandler.removeCallbacks(it)
-        }
 
-    }
-
-    private fun createUpdateTimerTask(): Runnable {
-        return object : Runnable {
-            override fun run() {
-                val currTime = SimpleDateFormat(
-                    "mm:ss", Locale.getDefault()
-                ).format(mediaPlayerInteractor.getPosition())
-                Log.e("TIMER", mediaPlayerInteractor.getPosition().toString())
-                binding.currentTimeTextView.text = currTime
-                mainThreadHandler.postDelayed(this, DELAY)
-            }
-        }
-    }
-
-
-    companion object {
-        private const val DELAY = 50L
     }
 }
 

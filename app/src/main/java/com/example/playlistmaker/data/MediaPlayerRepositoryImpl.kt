@@ -1,6 +1,8 @@
 package com.example.playlistmaker.data
 
 import android.media.MediaPlayer
+import android.os.Handler
+import android.os.Looper
 import com.example.playlistmaker.domain.api.player.MediaPlayerRepository
 import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.utils.consts.MediaPlayerConsts
@@ -11,9 +13,11 @@ class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPla
 
     private var playerState: MediaPlayerConsts = MediaPlayerConsts.STATE_DEFAULT
 
-    private val currentTimePlayer = SimpleDateFormat(
-        "mm:ss", Locale.getDefault()
-    ).format(mediaPlayer.currentPosition)
+    private lateinit var onPlayButton: () -> Unit
+    private lateinit var onPauseButton: () -> Unit
+    private lateinit var onSetTimer: (time: String) -> Unit
+
+    private val mainThreadHandler = Handler(Looper.getMainLooper())
 
     override fun preparePlayer(track: Track) {
         mediaPlayer.setDataSource(track.previewUrl)
@@ -29,11 +33,14 @@ class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPla
     override fun pausePlayer() {
         mediaPlayer.pause()
         playerState = MediaPlayerConsts.STATE_PAUSED
+        onPlayButton.invoke()
     }
 
     override fun startPlayer() {
         mediaPlayer.start()
         playerState = MediaPlayerConsts.STATE_PLAYING
+        mainThreadHandler.post(createUpdateTimerTask())
+        onPauseButton.invoke()
     }
 
     override fun closePlayer() {
@@ -46,5 +53,40 @@ class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPla
         return playerState
     }
 
-    fun getPosition() = mediaPlayer.currentPosition
+    override fun setResources(
+        onPlayButton: () -> Unit,
+        onPauseButton: () -> Unit,
+        onSetTimer: (time: String) -> Unit
+    ) {
+        this.onPlayButton = onPlayButton
+        this.onPauseButton = onPauseButton
+        this.onSetTimer = onSetTimer
+    }
+
+    private fun createUpdateTimerTask(): Runnable {
+        return object : Runnable {
+            override fun run() {
+                val trackTime = mediaPlayer.currentPosition
+
+                mediaPlayer.setOnSeekCompleteListener {
+                    pausePlayer()
+                    mainThreadHandler.removeCallbacks(this)
+                    onSetTimer.invoke("00:00")
+                }
+
+                if (playerState == MediaPlayerConsts.STATE_PLAYING) {
+                    onSetTimer.invoke(
+                        SimpleDateFormat("mm:ss", Locale.getDefault()).format(
+                            trackTime
+                        )
+                    )
+                    mainThreadHandler.postDelayed(this, DELAY)
+                }
+            }
+        }
+    }
+
+    companion object {
+        const val DELAY = 50L
+    }
 }

@@ -14,4 +14,10 @@ interface MediaPlayerInteractor {
     fun closePlayer()
 
     fun getPlayerState(): MediaPlayerConsts
+
+    fun setResources(
+        onPlayButton: () -> Unit,
+        onPauseButton: () -> Unit,
+        onSetTimer: (time: String) -> Unit
+    )
 }
