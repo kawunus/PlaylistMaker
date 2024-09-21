@@ -2,7 +2,6 @@ package com.example.playlistmaker.presentation.track
 
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -93,10 +92,6 @@ class TrackActivity : AppCompatActivity() {
 
             MediaPlayerConsts.STATE_PREPARED, MediaPlayerConsts.STATE_PAUSED -> {
                 startPlayer()
-            }
-
-            else -> {
-                Log.d("MediaPlayer", "State error")
             }
         }
     }
