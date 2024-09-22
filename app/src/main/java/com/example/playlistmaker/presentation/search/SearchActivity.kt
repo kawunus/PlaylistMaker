@@ -2,8 +2,6 @@ package com.example.playlistmaker.presentation.search
 
 import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,7 +10,6 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.getSystemService
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.api.track.TrackInteractor
@@ -175,7 +172,7 @@ class SearchActivity : AppCompatActivity() {
         deleteErrorViews()
         trackAdapter.saveData(emptyList())
         binding.progressBar.visibility = View.VISIBLE
-        if (isNetworkAvailable()) trackInteractor.searchTracks(
+        trackInteractor.searchTracks(
             editText.text.toString(),
             object : TrackInteractor.TrackConsumer {
                 override fun consume(foundTracks: List<Track>, resultCode: Int) {
@@ -183,14 +180,11 @@ class SearchActivity : AppCompatActivity() {
                         progressBar.visibility = View.GONE
                         when (resultCode) {
                             200 -> {
-                                if (isNetworkAvailable()) {
                                     if (foundTracks.isNotEmpty()) {
                                         searchHistory.hideHistoryViews()
                                         trackAdapter.saveData(foundTracks)
-                                    } else noInternetError()
-                                } else {
-                                    notFoundError()
-                                }
+                                    } else notFoundError()
+
                             }
 
                             400 -> {
@@ -204,10 +198,6 @@ class SearchActivity : AppCompatActivity() {
                     }
                 }
             })
-        else {
-            progressBar.visibility = View.GONE
-            noInternetError()
-        }
     }
 
     fun searchDebounce() {
@@ -238,15 +228,6 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
-
-    private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = getSystemService<ConnectivityManager>() ?: return false
-        val network = connectivityManager.activeNetwork ?: return false
-        val networkCapabilities =
-            connectivityManager.getNetworkCapabilities(network) ?: return false
-        return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
-                networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
     }
 }
 
