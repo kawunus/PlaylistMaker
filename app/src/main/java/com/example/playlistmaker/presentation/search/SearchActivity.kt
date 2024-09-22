@@ -12,12 +12,12 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.getSystemService
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.api.track.TrackInteractor
 import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.domain.prefs.PrefKeys
-import com.example.playlistmaker.presentation.SearchHistory
 import com.example.playlistmaker.presentation.track.TrackActivity
 import com.example.playlistmaker.utils.consts.IntentConsts
 import com.example.playlistmaker.utils.creator.Creator
@@ -175,7 +175,7 @@ class SearchActivity : AppCompatActivity() {
         deleteErrorViews()
         trackAdapter.saveData(emptyList())
         binding.progressBar.visibility = View.VISIBLE
-        if (isNetworkAvailable(this@SearchActivity)) trackInteractor.searchTracks(
+        if (isNetworkAvailable()) trackInteractor.searchTracks(
             editText.text.toString(),
             object : TrackInteractor.TrackConsumer {
                 override fun consume(foundTracks: List<Track>, resultCode: Int) {
@@ -183,12 +183,18 @@ class SearchActivity : AppCompatActivity() {
                         progressBar.visibility = View.GONE
                         when (resultCode) {
                             200 -> {
-                                if (foundTracks.isNotEmpty()) {
-                                    searchHistory.hideHistoryViews()
-                                    trackAdapter.saveData(foundTracks)
+                                if (isNetworkAvailable()) {
+                                    if (foundTracks.isNotEmpty()) {
+                                        searchHistory.hideHistoryViews()
+                                        trackAdapter.saveData(foundTracks)
+                                    } else noInternetError()
                                 } else {
                                     notFoundError()
                                 }
+                            }
+
+                            400 -> {
+                                noInternetError()
                             }
 
                             else -> {
@@ -234,14 +240,13 @@ class SearchActivity : AppCompatActivity() {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
-    private fun isNetworkAvailable(context: Context): Boolean {
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = getSystemService<ConnectivityManager>() ?: return false
         val network = connectivityManager.activeNetwork ?: return false
         val networkCapabilities =
             connectivityManager.getNetworkCapabilities(network) ?: return false
-        return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+                networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
     }
 }
-
 
