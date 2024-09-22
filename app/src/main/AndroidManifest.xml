@@ -26,7 +26,7 @@
             android:name=".presentation.library.LibraryActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.find.FindActivity"
+            android:name=".presentation.search.SearchActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.main.MainActivity"

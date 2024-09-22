@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.find
+package com.example.playlistmaker.presentation.search
 
 import android.content.Context
 import android.content.Intent
@@ -13,7 +13,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivityFindBinding
+import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.api.track.TrackInteractor
 import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.domain.prefs.PrefKeys
@@ -22,10 +22,10 @@ import com.example.playlistmaker.presentation.track.TrackActivity
 import com.example.playlistmaker.utils.consts.IntentConsts
 import com.example.playlistmaker.utils.creator.Creator
 
-class FindActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity() {
 
     private var editTextContext = ""
-    lateinit var binding: ActivityFindBinding
+    lateinit var binding: ActivitySearchBinding
     private lateinit var trackAdapter: TrackAdapter
     private val searchRunnable = Runnable {
         search()
@@ -39,7 +39,7 @@ class FindActivity : AppCompatActivity() {
     private lateinit var historyAdapter: TrackAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityFindBinding.inflate(layoutInflater)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val historyInteractor = creator.provideHistoryInteractor(
@@ -175,7 +175,7 @@ class FindActivity : AppCompatActivity() {
         deleteErrorViews()
         trackAdapter.saveData(emptyList())
         binding.progressBar.visibility = View.VISIBLE
-        if (isNetworkAvailable(this@FindActivity)) trackInteractor.searchTracks(
+        if (isNetworkAvailable(this@SearchActivity)) trackInteractor.searchTracks(
             editText.text.toString(),
             object : TrackInteractor.TrackConsumer {
                 override fun consume(foundTracks: List<Track>, resultCode: Int) {

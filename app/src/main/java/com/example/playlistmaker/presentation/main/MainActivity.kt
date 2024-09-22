@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.databinding.ActivityMainBinding
-import com.example.playlistmaker.presentation.find.FindActivity
 import com.example.playlistmaker.presentation.library.LibraryActivity
+import com.example.playlistmaker.presentation.search.SearchActivity
 import com.example.playlistmaker.presentation.settings.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.buttonFind.setOnClickListener {
-            val findIntent = Intent(this@MainActivity, FindActivity::class.java)
+            val findIntent = Intent(this@MainActivity, SearchActivity::class.java)
             startActivity(findIntent)
         }
 
