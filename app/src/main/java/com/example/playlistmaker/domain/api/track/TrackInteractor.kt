@@ -5,7 +5,7 @@ import com.example.playlistmaker.domain.model.track.Track
 interface TrackInteractor {
     fun searchTracks(expression: String, consumer: TrackConsumer)
 
-    interface TrackConsumer {
+    fun interface TrackConsumer {
         fun consume(foundTracks: List<Track>, resultCode: Int)
     }
 }

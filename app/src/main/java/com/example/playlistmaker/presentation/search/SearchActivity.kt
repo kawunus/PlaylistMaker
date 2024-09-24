@@ -13,8 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
-import com.example.playlistmaker.domain.api.track.TrackInteractor
-import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.domain.prefs.PrefKeys
 import com.example.playlistmaker.presentation.track.TrackActivity
 import com.example.playlistmaker.utils.consts.IntentConsts
@@ -186,35 +184,33 @@ class SearchActivity : AppCompatActivity() {
             recyclerView.visibility = View.VISIBLE
 
             trackInteractor.searchTracks(
-                request,
-                object : TrackInteractor.TrackConsumer {
-                    override fun consume(foundTracks: List<Track>, resultCode: Int) {
-                        runOnUiThread {
-                            progressBar.visibility = View.GONE
-                            if (editText.text.toString() == request) {
-                                when (resultCode) {
-                                    200 -> {
-                                        if (foundTracks.isNotEmpty()) {
+                request
+            ) { foundTracks, resultCode ->
+                runOnUiThread {
+                    progressBar.visibility = View.GONE
+                    if (editText.text.toString() == request) {
+                        when (resultCode) {
+                            200 -> {
+                                if (foundTracks.isNotEmpty()) {
 
-                                            searchHistory.hideHistoryViews()
-                                            trackAdapter.saveData(foundTracks)
+                                    searchHistory.hideHistoryViews()
+                                    trackAdapter.saveData(foundTracks)
 
-                                        } else notFoundError()
+                                } else notFoundError()
 
-                                    }
+                            }
 
-                                    400 -> {
-                                        noInternetError()
-                                    }
+                            400 -> {
+                                noInternetError()
+                            }
 
-                                    else -> {
-                                        noInternetError()
-                                    }
-                                }
+                            else -> {
+                                noInternetError()
                             }
                         }
                     }
-                })
+                }
+            }
         }
     }
 
