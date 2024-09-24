@@ -147,31 +147,31 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun noInternetError() = with(binding) {
-        updateButton.visibility = View.VISIBLE
-        errorText.visibility = View.VISIBLE
-        errorImage.visibility = View.VISIBLE
+        updateButton.isVisible = true
+        errorText.isVisible = true
+        errorImage.isVisible = true
         errorText.setText(R.string.no_internet)
         errorImage.setImageResource(R.drawable.ic_no_internet)
-        recyclerView.visibility = View.GONE
-        historyRecyclerView.visibility = View.GONE
-        progressBar.visibility = View.GONE
+        recyclerView.isVisible = false
+        historyRecyclerView.isVisible = false
+        progressBar.isVisible = false
     }
 
     private fun notFoundError() = with(binding) {
-        errorText.visibility = View.VISIBLE
-        errorImage.visibility = View.VISIBLE
+        errorText.isVisible = true
+        errorImage.isVisible = true
         errorText.setText(R.string.not_found)
         errorImage.setImageResource(R.drawable.ic_not_found)
-        recyclerView.visibility = View.GONE
-        historyRecyclerView.visibility = View.GONE
-        progressBar.visibility = View.GONE
+        recyclerView.isVisible = false
+        historyRecyclerView.isVisible = false
+        progressBar.isVisible = false
     }
 
     private fun deleteErrorViews() = with(binding) {
         errorLinear.isVisible = false
         errorText.isVisible = false
         errorImage.isVisible = false
-        updateButton.visibility = View.GONE
+        updateButton.isVisible = false
     }
 
     private fun search() = with(binding) {
@@ -180,8 +180,8 @@ class SearchActivity : AppCompatActivity() {
             deleteErrorViews()
             errorLinear.isVisible = true
             trackAdapter.saveData(emptyList())
-            binding.progressBar.visibility = View.VISIBLE
-            recyclerView.visibility = View.VISIBLE
+            binding.progressBar.isVisible = true
+            recyclerView.isVisible = true
 
             trackInteractor.searchTracks(
                 request
