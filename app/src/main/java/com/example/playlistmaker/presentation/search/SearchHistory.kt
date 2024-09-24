@@ -1,6 +1,6 @@
 package com.example.playlistmaker.presentation.search
 
-import android.view.View
+import androidx.core.view.isVisible
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.api.history.HistoryInteractor
 import com.example.playlistmaker.domain.model.history.History
@@ -16,19 +16,19 @@ class SearchHistory(
         if (checkHistory()) {
             hideHistoryViews()
         } else {
-            historyButton.visibility = View.VISIBLE
-            historyTextView.visibility = View.VISIBLE
-            errorLinear.visibility = View.GONE
-            historyRecyclerView.visibility = View.VISIBLE
-            recyclerView.visibility = View.GONE
+            historyButton.isVisible = true
+            historyTextView.isVisible = true
+            errorLinear.isVisible = false
+            historyRecyclerView.isVisible = true
+            recyclerView.isVisible = false
         }
     }
 
     fun hideHistoryViews() = with(binding) {
-        historyRecyclerView.visibility = View.GONE
-        historyButton.visibility = View.GONE
-        historyTextView.visibility = View.GONE
-        recyclerView.visibility = View.VISIBLE
+        historyRecyclerView.isVisible = false
+        historyButton.isVisible = false
+        historyTextView.isVisible = false
+        recyclerView.isVisible = true
     }
 
     fun clearHistory() = with(binding) {
@@ -40,7 +40,7 @@ class SearchHistory(
         return historyInteractor.getHistory().trackList.isEmpty()
     }
 
-    fun setHistory(trackList: List<Track>) {
+    private fun setHistory(trackList: List<Track>) {
         historyInteractor.setHistory(History(trackList))
     }
 
