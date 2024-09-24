@@ -10,6 +10,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.api.track.TrackInteractor
@@ -79,8 +80,13 @@ class SearchActivity : AppCompatActivity() {
 
                 if (s?.isEmpty() == true) {
                     historyAdapter.saveData(searchHistory.getHistory())
-                } else trackAdapter.saveData(emptyList())
+                    binding.recyclerView.isVisible = false
+                } else {
+                    trackAdapter.saveData(emptyList())
+                    binding.historyRecyclerView.isVisible = false
+                }
                 searchDebounce()
+                deleteErrorViews()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -89,10 +95,13 @@ class SearchActivity : AppCompatActivity() {
 
         }
         binding.editText.addTextChangedListener(editTextWatcher)
+
         binding.clearIcon.setOnClickListener {
             binding.editText.text.clear()
             binding.editText.clearFocus()
+            binding.recyclerView.isVisible = false
             searchHistory.showList()
+            deleteErrorViews()
             hideKeyboard()
         }
 
@@ -140,7 +149,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun noInternetError() = with(binding) {
-        errorLinear.visibility = View.VISIBLE
         updateButton.visibility = View.VISIBLE
         errorText.visibility = View.VISIBLE
         errorImage.visibility = View.VISIBLE
@@ -154,7 +162,6 @@ class SearchActivity : AppCompatActivity() {
     private fun notFoundError() = with(binding) {
         errorText.visibility = View.VISIBLE
         errorImage.visibility = View.VISIBLE
-        errorLinear.visibility = View.VISIBLE
         errorText.setText(R.string.not_found)
         errorImage.setImageResource(R.drawable.ic_not_found)
         recyclerView.visibility = View.GONE
@@ -163,41 +170,52 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun deleteErrorViews() = with(binding) {
-        errorLinear.visibility = View.GONE
+        errorLinear.isVisible = false
+        errorText.isVisible = false
+        errorImage.isVisible = false
         updateButton.visibility = View.GONE
-        recyclerView.visibility = View.VISIBLE
     }
 
     private fun search() = with(binding) {
-        deleteErrorViews()
-        trackAdapter.saveData(emptyList())
-        binding.progressBar.visibility = View.VISIBLE
-        trackInteractor.searchTracks(
-            editText.text.toString(),
-            object : TrackInteractor.TrackConsumer {
-                override fun consume(foundTracks: List<Track>, resultCode: Int) {
-                    runOnUiThread {
-                        progressBar.visibility = View.GONE
-                        when (resultCode) {
-                            200 -> {
-                                    if (foundTracks.isNotEmpty()) {
-                                        searchHistory.hideHistoryViews()
-                                        trackAdapter.saveData(foundTracks)
-                                    } else notFoundError()
+        val request = editText.text.toString()
+        if (request.isNotEmpty()) {
+            deleteErrorViews()
+            errorLinear.isVisible = true
+            trackAdapter.saveData(emptyList())
+            binding.progressBar.visibility = View.VISIBLE
+            recyclerView.visibility = View.VISIBLE
 
-                            }
+            trackInteractor.searchTracks(
+                request,
+                object : TrackInteractor.TrackConsumer {
+                    override fun consume(foundTracks: List<Track>, resultCode: Int) {
+                        runOnUiThread {
+                            progressBar.visibility = View.GONE
+                            if (editText.text.toString() == request) {
+                                when (resultCode) {
+                                    200 -> {
+                                        if (foundTracks.isNotEmpty()) {
 
-                            400 -> {
-                                noInternetError()
-                            }
+                                            searchHistory.hideHistoryViews()
+                                            trackAdapter.saveData(foundTracks)
 
-                            else -> {
-                                noInternetError()
+                                        } else notFoundError()
+
+                                    }
+
+                                    400 -> {
+                                        noInternetError()
+                                    }
+
+                                    else -> {
+                                        noInternetError()
+                                    }
+                                }
                             }
                         }
                     }
-                }
-            })
+                })
+        }
     }
 
     fun searchDebounce() {
