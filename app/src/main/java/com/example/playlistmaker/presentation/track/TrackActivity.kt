@@ -17,9 +17,8 @@ import java.util.Locale
 class TrackActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTrackBinding
 
-    private var creator = Creator()
     private val mediaPlayerInteractor =
-        creator.provideMediaPlayerInteractor(mediaPlayer = MediaPlayer())
+        Creator.provideMediaPlayerInteractor(mediaPlayer = MediaPlayer())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -18,9 +18,8 @@ class SettingsActivity : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
 
-        val creator = Creator()
         settingsInteractor =
-            creator.provideSettingsInteractor(getSharedPreferences(PrefKeys.PREFS, MODE_PRIVATE))
+            Creator.provideSettingsInteractor(getSharedPreferences(PrefKeys.PREFS, MODE_PRIVATE))
 
         binding.themeSwitcher.isChecked = settingsInteractor.getTheme().isNight
 

@@ -26,9 +26,7 @@ class SearchActivity : AppCompatActivity() {
     private val searchRunnable = Runnable {
         search()
     }
-
-    private val creator = Creator()
-    private val trackInteractor = creator.provideTrackInteractor()
+    private val trackInteractor = Creator.provideTrackInteractor()
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var searchHistory: SearchHistory
@@ -38,7 +36,7 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val historyInteractor = creator.provideHistoryInteractor(
+        val historyInteractor = Creator.provideHistoryInteractor(
             getSharedPreferences(
                 PrefKeys.PREFS, MODE_PRIVATE
             )

@@ -12,7 +12,7 @@ import com.example.playlistmaker.domain.impl.player.MediaPlayerInteractorImpl
 import com.example.playlistmaker.domain.impl.settings.SettingsInteractorImpl
 import com.example.playlistmaker.domain.impl.track.TrackInteractorImpl
 
-class Creator {
+object Creator {
     private fun getTrackRepository() = TrackRepositoryImpl(RetrofitNetworkClient())
 
     fun provideTrackInteractor() = TrackInteractorImpl(getTrackRepository())

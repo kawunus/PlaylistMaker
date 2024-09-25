@@ -18,9 +18,7 @@ class App : Application() {
             PrefKeys.PREFS, MODE_PRIVATE
         )
 
-        val creator = Creator()
-
-        settingsInteractor = creator.provideSettingsInteractor(
+        settingsInteractor = Creator.provideSettingsInteractor(
             getSharedPreferences(
                 PrefKeys.PREFS, MODE_PRIVATE
             )
