@@ -14,6 +14,7 @@ class App : Application() {
     private lateinit var settingsInteractor: SettingsInteractor
     override fun onCreate() {
         super.onCreate()
+
         sharedPreferences = getSharedPreferences(
             PrefKeys.PREFS, MODE_PRIVATE
         )

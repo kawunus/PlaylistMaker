@@ -13,6 +13,7 @@ import com.example.playlistmaker.domain.impl.settings.SettingsInteractorImpl
 import com.example.playlistmaker.domain.impl.track.TrackInteractorImpl
 
 object Creator {
+
     private fun getTrackRepository() = TrackRepositoryImpl(RetrofitNetworkClient())
 
     fun provideTrackInteractor() = TrackInteractorImpl(getTrackRepository())
@@ -29,9 +30,9 @@ object Creator {
     fun provideHistoryInteractor(sharedPreferences: SharedPreferences) =
         HistoryInteractorImpl(getHistoryRepository(sharedPreferences))
 
-    private fun getMediaPlayerRepository(mediaPlayer: MediaPlayer) =
-        MediaPlayerRepositoryImpl(mediaPlayer)
+    private fun getMediaPlayerRepository() =
+        MediaPlayerRepositoryImpl(mediaPlayer = MediaPlayer())
 
-    fun provideMediaPlayerInteractor(mediaPlayer: MediaPlayer) =
-        MediaPlayerInteractorImpl(getMediaPlayerRepository(mediaPlayer))
+    fun provideMediaPlayerInteractor() =
+        MediaPlayerInteractorImpl(getMediaPlayerRepository())
 }

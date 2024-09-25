@@ -1,6 +1,5 @@
 package com.example.playlistmaker.presentation.track
 
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +17,7 @@ class TrackActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTrackBinding
 
     private val mediaPlayerInteractor =
-        Creator.provideMediaPlayerInteractor(mediaPlayer = MediaPlayer())
+        Creator.provideMediaPlayerInteractor()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
