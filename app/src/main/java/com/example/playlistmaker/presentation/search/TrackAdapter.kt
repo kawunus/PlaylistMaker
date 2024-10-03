@@ -23,7 +23,7 @@ class TrackAdapter(
 
     }
 
-    val asyncListDiffer = AsyncListDiffer(this, diffUtil)
+    private val asyncListDiffer = AsyncListDiffer(this, diffUtil)
 
     fun saveData(trackList: List<Track>) {
         asyncListDiffer.submitList(trackList)
