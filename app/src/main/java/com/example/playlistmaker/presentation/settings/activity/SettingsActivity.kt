@@ -2,25 +2,25 @@ package com.example.playlistmaker.presentation.settings.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.App
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
-import com.example.playlistmaker.domain.impl.settings.SettingsInteractorImpl
-import com.example.playlistmaker.domain.impl.sharing.SharingInteractorImpl
-import com.example.playlistmaker.domain.prefs.PrefKeys
-import com.example.playlistmaker.utils.creator.Creator
+import com.example.playlistmaker.presentation.settings.view_model.SettingsViewModel
 
 class SettingsActivity : AppCompatActivity() {
-    private lateinit var settingsInteractor: SettingsInteractorImpl
     private lateinit var binding: ActivitySettingsBinding
-    private lateinit var sharingInteractor: SharingInteractorImpl
+    private lateinit var viewModel: SettingsViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(
+            this, SettingsViewModel.getViewModelFactory(context = this)
+        )[SettingsViewModel::class]
 
-        settingsInteractor =
-            Creator.provideSettingsInteractor(getSharedPreferences(PrefKeys.PREFS, MODE_PRIVATE))
-        sharingInteractor = Creator.provideSharingInteractor(this)
-        binding.themeSwitcher.isChecked = settingsInteractor.getTheme().isNight
+        viewModel.observeThemeLiveData().observe(this) { isNight ->
+            binding.themeSwitcher.isChecked = isNight
+            (applicationContext as App).switchTheme(isNight)
+        }
 
         setContentView(binding.root)
         binding.themeSwitcher.isChecked
@@ -29,20 +29,20 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.shareView.setOnClickListener {
-            sharingInteractor.shareApp()
+            viewModel.shareApp()
         }
 
         binding.supportView.setOnClickListener {
-            sharingInteractor.shareApp()
+            viewModel.openSupport()
         }
 
 
         binding.agreementView.setOnClickListener {
-            sharingInteractor.openTerms()
+            viewModel.openTerms()
         }
 
         binding.themeSwitcher.setOnCheckedChangeListener { _, checked ->
-            (applicationContext as App).switchTheme(checked)
+            viewModel.switchTheme(checked)
         }
     }
 
