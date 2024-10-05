@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.search
+package com.example.playlistmaker.presentation.search.activity
 
 import android.content.Context
 import android.content.Intent
@@ -14,7 +14,8 @@ import androidx.core.view.isVisible
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.prefs.PrefKeys
-import com.example.playlistmaker.presentation.track.TrackActivity
+import com.example.playlistmaker.presentation.search.SearchHistory
+import com.example.playlistmaker.presentation.track.activity.TrackActivity
 import com.example.playlistmaker.utils.consts.IntentConsts
 import com.example.playlistmaker.utils.creator.Creator
 

@@ -1,8 +1,8 @@
-package com.example.playlistmaker.presentation.track
+package com.example.playlistmaker.presentation.track.activity
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityTrackBinding
@@ -13,11 +13,10 @@ import com.example.playlistmaker.utils.creator.Creator
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class TrackActivity : AppCompatActivity() {
+class TrackActivity : ComponentActivity() {
     private lateinit var binding: ActivityTrackBinding
 
-    private val mediaPlayerInteractor =
-        Creator.provideMediaPlayerInteractor()
+    private val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

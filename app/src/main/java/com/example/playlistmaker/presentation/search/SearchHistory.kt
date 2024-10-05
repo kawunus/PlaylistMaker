@@ -5,6 +5,7 @@ import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.api.history.HistoryInteractor
 import com.example.playlistmaker.domain.model.history.History
 import com.example.playlistmaker.domain.model.track.Track
+import com.example.playlistmaker.presentation.search.activity.TrackAdapter
 
 class SearchHistory(
     private val binding: ActivitySearchBinding,
