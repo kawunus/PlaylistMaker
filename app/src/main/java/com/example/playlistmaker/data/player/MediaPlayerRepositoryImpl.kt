@@ -3,7 +3,6 @@ package com.example.playlistmaker.data.player
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import com.example.playlistmaker.domain.api.player.MediaPlayerRepository
 import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.utils.consts.MediaPlayerConsts
@@ -27,7 +26,6 @@ class MediaPlayerRepositoryImpl(
         mediaPlayer.setOnPreparedListener {
             playerState = MediaPlayerConsts.STATE_PREPARED
             onPrepared.invoke()
-            Log.e("AAA", "Подготовлен")
         }
         mediaPlayer.setOnCompletionListener {
             playerState = MediaPlayerConsts.STATE_PREPARED

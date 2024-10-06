@@ -1,6 +1,5 @@
 package com.example.playlistmaker.presentation.track.view_model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -61,7 +60,6 @@ class TrackViewModel(private val track: Track) : ViewModel() {
     }
 
     fun playbackControl() {
-        Log.e("AAA", "${playerStateLiveData.value}")
         when (playerStateLiveData.value!!) {
             MediaPlayerConsts.STATE_DEFAULT -> {
             }

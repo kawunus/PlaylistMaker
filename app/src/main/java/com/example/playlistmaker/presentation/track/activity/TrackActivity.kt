@@ -1,7 +1,6 @@
 package com.example.playlistmaker.presentation.track.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -54,7 +53,6 @@ class TrackActivity : ComponentActivity() {
         }
 
         viewModel.observePlayerState().observe(this) { playerState ->
-            Log.e("AAA", "Activity: $playerState")
             when (playerState!!) {
                 MediaPlayerConsts.STATE_DEFAULT -> {
                     binding.playButton.setImageResource(R.drawable.ic_play)
