@@ -17,7 +17,7 @@ class SettingsActivity : AppCompatActivity() {
             this, SettingsViewModel.getViewModelFactory(context = this)
         )[SettingsViewModel::class]
 
-        viewModel.observeThemeLiveData().observe(this) { isNight ->
+        viewModel.observeTheme().observe(this) { isNight ->
             binding.themeSwitcher.isChecked = isNight
             (applicationContext as App).switchTheme(isNight)
         }

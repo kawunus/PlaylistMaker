@@ -35,7 +35,7 @@ class SettingsViewModel(
 
     private val themeLiveData = MutableLiveData<Boolean>()
 
-    fun observeThemeLiveData(): LiveData<Boolean> = themeLiveData
+    fun observeTheme(): LiveData<Boolean> = themeLiveData
 
     init {
         themeLiveData.value = settingsInteractor.getTheme().isNight

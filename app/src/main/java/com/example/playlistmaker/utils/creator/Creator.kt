@@ -33,11 +33,24 @@ object Creator {
     fun provideHistoryInteractor(sharedPreferences: SharedPreferences) =
         HistoryInteractorImpl(getHistoryRepository(sharedPreferences))
 
-    private fun getMediaPlayerRepository() =
-        MediaPlayerRepositoryImpl(mediaPlayer = MediaPlayer())
+    private fun getMediaPlayerRepository(
+        onCompletion: () -> Unit,
+        onPrepared: () -> Unit,
+        onSetTimer: (time: String) -> Unit
+    ) =
+        MediaPlayerRepositoryImpl(
+            mediaPlayer = MediaPlayer(),
+            onCompletion = onCompletion,
+            onPrepared = onPrepared,
+            onSetTimer = onSetTimer
+        )
 
-    fun provideMediaPlayerInteractor() =
-        MediaPlayerInteractorImpl(getMediaPlayerRepository())
+    fun provideMediaPlayerInteractor(
+        onCompletion: () -> Unit,
+        onPrepared: () -> Unit,
+        onSetTimer: (time: String) -> Unit
+    ) =
+        MediaPlayerInteractorImpl(getMediaPlayerRepository(onCompletion, onPrepared, onSetTimer))
 
     fun provideSharingInteractor(context: Context) =
         SharingInteractorImpl(getExternalNavigator(context))

@@ -1,102 +1,106 @@
 package com.example.playlistmaker.presentation.track.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.ComponentActivity
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityTrackBinding
 import com.example.playlistmaker.domain.model.track.Track
+import com.example.playlistmaker.presentation.track.view_model.TrackViewModel
 import com.example.playlistmaker.utils.consts.IntentConsts
 import com.example.playlistmaker.utils.consts.MediaPlayerConsts
-import com.example.playlistmaker.utils.creator.Creator
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TrackActivity : ComponentActivity() {
     private lateinit var binding: ActivityTrackBinding
-
-    private val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
-
+    private lateinit var viewModel: TrackViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTrackBinding.inflate(layoutInflater)
+        val model = intent.getParcelableExtra<Track>(IntentConsts.TRACK.name)!!
+        viewModel = ViewModelProvider(
+            this,
+            TrackViewModel.getViewModelFactory(model)
+        )[TrackViewModel::class]
         setContentView(binding.root)
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
         val dateFormatter = SimpleDateFormat("mm:ss", Locale.getDefault())
-        val model = intent.getParcelableExtra<Track>(IntentConsts.TRACK.name)
 
-        binding.trackNameTextView.text = model?.trackName
-        binding.artistNameTextView.text = model?.artistName
-        binding.trackTimeTextView.text = dateFormatter.format(model?.trackTimeMillis)
-        Glide.with(this).load(model?.artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg"))
+        binding.trackNameTextView.text = model.trackName
+        binding.artistNameTextView.text = model.artistName
+        binding.trackTimeTextView.text = dateFormatter.format(model.trackTimeMillis)
+        Glide.with(this).load(model.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
             .placeholder(R.drawable.placeholder).into(binding.imageView)
-        binding.trackCountryTextView.text = model?.country
-        binding.trackGenreTextView.text = model?.primaryGenreName
-        binding.trackYearTextView.text = model?.releaseDate?.substring(0, 4)
+        binding.trackCountryTextView.text = model.country
+        binding.trackGenreTextView.text = model.primaryGenreName
+        binding.trackYearTextView.text = model.releaseDate.substring(0, 4)
         binding.currentTimeTextView.text = getString(R.string.track_current_time)
 
-        if (model?.collectionName?.isEmpty() == true) {
+        if (model.collectionName.isEmpty()) {
             binding.yearTextView.visibility = View.GONE
             binding.trackYearTextView.visibility = View.GONE
         } else {
-            binding.trackAlbumTextView.text = model?.collectionName
+            binding.trackAlbumTextView.text = model.collectionName
         }
 
-        preparePlayer(model!!)
         binding.playButton.setOnClickListener {
-            playbackControl()
+            viewModel.playbackControl()
         }
-    }
 
-    private fun preparePlayer(track: Track) = with(binding) {
-        mediaPlayerInteractor.setResources(onPlayButton = { playButton.setImageResource(R.drawable.ic_pause) },
-            onPauseButton = { playButton.setImageResource(R.drawable.ic_play) },
-            onSetTimer = { trackTime: String -> currentTimeTextView.text = trackTime })
-        mediaPlayerInteractor.preparePlayer(track = track)
-    }
+        viewModel.observePlayerState().observe(this) { playerState ->
+            Log.e("AAA", "Activity: $playerState")
+            when (playerState!!) {
+                MediaPlayerConsts.STATE_DEFAULT -> {
+                    binding.playButton.setImageResource(R.drawable.ic_play)
+                    binding.playButton.isEnabled = false
+                }
 
-    private fun startPlayer() {
-        mediaPlayerInteractor.startPlayer()
-        binding.playButton.setImageResource(R.drawable.ic_pause)
+                MediaPlayerConsts.STATE_PAUSED -> {
+                    binding.playButton.setImageResource(R.drawable.ic_play)
+                    binding.playButton.isEnabled = true
+                }
 
-    }
+                MediaPlayerConsts.STATE_PLAYING -> {
+                    binding.playButton.setImageResource(R.drawable.ic_pause)
+                    binding.playButton.isEnabled = true
+                }
 
-    private fun pausePlayer() {
-        mediaPlayerInteractor.pausePlayer()
-        binding.playButton.setImageResource(R.drawable.ic_play)
-    }
-
-    private fun playbackControl() {
-        when (mediaPlayerInteractor.getPlayerState()) {
-
-            MediaPlayerConsts.STATE_DEFAULT -> {
-            }
-
-            MediaPlayerConsts.STATE_PLAYING -> {
-                pausePlayer()
-            }
-
-            MediaPlayerConsts.STATE_PREPARED, MediaPlayerConsts.STATE_PAUSED -> {
-                startPlayer()
+                MediaPlayerConsts.STATE_PREPARED -> {
+                    binding.playButton.setImageResource(R.drawable.ic_play)
+                    binding.playButton.isEnabled = true
+                }
             }
         }
+        viewModel.preparePlayer()
+        viewModel.observeTimer().observe(this) { time ->
+            binding.currentTimeTextView.text = time
+        }
     }
+    /*
+        private fun preparePlayer(track: Track) = with(binding) {
+
+            mediaPlayerInteractor.setResources(onPlayButton = { playButton.setImageResource(R.drawable.ic_pause) },
+                onPauseButton = { playButton.setImageResource(R.drawable.ic_play) },
+                onSetTimer = { trackTime: String -> currentTimeTextView.text = trackTime })
+            mediaPlayerInteractor.preparePlayer(track = track)
+        }*/
+
 
     override fun onPause() {
         super.onPause()
-        if (mediaPlayerInteractor.getPlayerState() == MediaPlayerConsts.STATE_PLAYING) {
-            pausePlayer()
-        }
+        viewModel.pausePlayer()
     }
 
 
     override fun onDestroy() {
         super.onDestroy()
-        if (mediaPlayerInteractor.getPlayerState() != MediaPlayerConsts.STATE_DEFAULT) mediaPlayerInteractor.closePlayer()
-
+        viewModel.destroyPlayer()
     }
 }
 
