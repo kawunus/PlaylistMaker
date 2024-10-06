@@ -80,15 +80,6 @@ class TrackActivity : ComponentActivity() {
             binding.currentTimeTextView.text = time
         }
     }
-    /*
-        private fun preparePlayer(track: Track) = with(binding) {
-
-            mediaPlayerInteractor.setResources(onPlayButton = { playButton.setImageResource(R.drawable.ic_pause) },
-                onPauseButton = { playButton.setImageResource(R.drawable.ic_play) },
-                onSetTimer = { trackTime: String -> currentTimeTextView.text = trackTime })
-            mediaPlayerInteractor.preparePlayer(track = track)
-        }*/
-
 
     override fun onPause() {
         super.onPause()
