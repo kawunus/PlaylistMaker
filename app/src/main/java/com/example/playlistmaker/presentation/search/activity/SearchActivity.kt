@@ -11,10 +11,13 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.domain.model.search.SearchState
+import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.domain.prefs.PrefKeys
-import com.example.playlistmaker.presentation.search.SearchHistory
+import com.example.playlistmaker.presentation.search.view_model.SearchViewModel
 import com.example.playlistmaker.presentation.track.activity.TrackActivity
 import com.example.playlistmaker.utils.consts.IntentConsts
 import com.example.playlistmaker.utils.creator.Creator
@@ -24,44 +27,80 @@ class SearchActivity : AppCompatActivity() {
     private var editTextContext = ""
     lateinit var binding: ActivitySearchBinding
     private lateinit var trackAdapter: TrackAdapter
-    private val searchRunnable = Runnable {
-        search()
-    }
-    private val trackInteractor = Creator.provideTrackInteractor()
+
+
+    private lateinit var viewModel: SearchViewModel
+
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
-    private lateinit var searchHistory: SearchHistory
+
     private lateinit var historyAdapter: TrackAdapter
+
+    private var currentHistory: List<Track> = emptyList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val historyInteractor = Creator.provideHistoryInteractor(
-            getSharedPreferences(
-                PrefKeys.PREFS, MODE_PRIVATE
+        viewModel = ViewModelProvider(
+            this, SearchViewModel.getViewModelFactory(
+                historyInteractor = Creator.provideHistoryInteractor(
+                    getSharedPreferences(
+                        PrefKeys.PREFS, MODE_PRIVATE
+                    )
+                )
             )
-        )
+        )[SearchViewModel::class]
 
-        searchHistory = SearchHistory(
-            historyInteractor = historyInteractor, binding = binding
-        )
+        viewModel.observeState().observe(this) { state ->
+            when (state) {
+                is SearchState.Content -> {
+                    showContent()
+                }
+
+                SearchState.Empty -> {
+                    notFoundError()
+                }
+
+                SearchState.Error -> {
+                    noInternetError()
+                }
+
+                SearchState.History -> {
+                    showHistory()
+                }
+
+                SearchState.Loading -> {
+                    showLoading()
+                }
+            }
+        }
+
         trackAdapter = TrackAdapter { track ->
-            historyInteractor.addToHistory(track)
+            viewModel.addToHistory(track)
             if (clickDebounce()) {
                 val intent = Intent(this, TrackActivity::class.java)
                 intent.putExtra(IntentConsts.TRACK.name, track)
                 startActivity(intent)
             }
         }
+
         historyAdapter = trackAdapter
         binding.historyRecyclerView.adapter = trackAdapter
         binding.recyclerView.adapter = trackAdapter
 
-        searchHistory.showList()
+        viewModel.observeHistory().observe(this) { historyList ->
+            historyAdapter.saveData(historyList)
+            currentHistory = historyList
+        }
+
+        viewModel.observeTrackList().observe(this) { trackList ->
+            trackAdapter.saveData(trackList)
+        }
+
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
+
         val editTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
@@ -71,25 +110,23 @@ class SearchActivity : AppCompatActivity() {
                 binding.clearIcon.visibility = clearButtonVisibility(s)
                 editTextContext = binding.editText.text.toString()
                 if (binding.editText.hasFocus() && s?.isEmpty() == true) {
-                    searchHistory.showList()
+                    viewModel.showHistory()
                     binding.progressBar.visibility = View.GONE
-                } else searchHistory.hideHistoryViews()
+                } else hideHistory()
 
                 if (s?.isEmpty() == true) {
-                    historyAdapter.saveData(searchHistory.getHistory())
+                    viewModel.getHistory()
                     binding.recyclerView.isVisible = false
                 } else {
                     trackAdapter.saveData(emptyList())
                     binding.historyRecyclerView.isVisible = false
                 }
-                searchDebounce()
+                viewModel.searchDebounce(binding.editText.text.toString())
                 deleteErrorViews()
             }
 
             override fun afterTextChanged(s: Editable?) {
             }
-
-
         }
         binding.editText.addTextChangedListener(editTextWatcher)
 
@@ -97,25 +134,24 @@ class SearchActivity : AppCompatActivity() {
             binding.editText.text.clear()
             binding.editText.clearFocus()
             binding.recyclerView.isVisible = false
-            searchHistory.showList()
+            viewModel.showHistory()
             deleteErrorViews()
             hideKeyboard()
         }
 
         binding.updateButton.setOnClickListener {
-            search()
+            viewModel.search(binding.editText.text.toString())
         }
 
         binding.editText.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && binding.editText.text.isEmpty()) {
-                searchHistory.showList()
+                showHistory()
             }
-
         }
 
         binding.historyButton.setOnClickListener {
-            searchHistory.clearHistory()
-            searchHistory.hideHistoryViews()
+            viewModel.clearHistory()
+            hideHistory()
         }
 
     }
@@ -145,7 +181,42 @@ class SearchActivity : AppCompatActivity() {
         imm.hideSoftInputFromWindow(editText.windowToken, 0)
     }
 
+    private val trackInteractor = Creator.provideTrackInteractor()
+
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideKeyboard()
+        binding.progressBar.visibility = View.GONE
+    }
+
+    companion object {
+
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+    }
+
+    // Функции для состояний экрана
+
+    private fun showLoading() = with(binding) {
+        hideHistory()
+        deleteErrorViews()
+        errorLinear.isVisible = true
+        trackAdapter.saveData(emptyList())
+        binding.progressBar.isVisible = true
+        recyclerView.isVisible = true
+    }
+
     private fun noInternetError() = with(binding) {
+        hideHistory()
         updateButton.isVisible = true
         errorText.isVisible = true
         errorImage.isVisible = true
@@ -157,6 +228,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun notFoundError() = with(binding) {
+        hideHistory()
         errorText.isVisible = true
         errorImage.isVisible = true
         errorText.setText(R.string.not_found)
@@ -173,74 +245,30 @@ class SearchActivity : AppCompatActivity() {
         updateButton.isVisible = false
     }
 
-    private fun search() = with(binding) {
-        val request = editText.text.toString()
-        if (request.isNotEmpty()) {
-            deleteErrorViews()
-            errorLinear.isVisible = true
-            trackAdapter.saveData(emptyList())
-            binding.progressBar.isVisible = true
-            recyclerView.isVisible = true
-
-            trackInteractor.searchTracks(
-                request
-            ) { foundTracks, resultCode ->
-                runOnUiThread {
-                    progressBar.visibility = View.GONE
-                    if (editText.text.toString() == request) {
-                        when (resultCode) {
-                            200 -> {
-                                if (foundTracks.isNotEmpty()) {
-
-                                    searchHistory.hideHistoryViews()
-                                    trackAdapter.saveData(foundTracks)
-
-                                } else notFoundError()
-
-                            }
-
-                            400 -> {
-                                noInternetError()
-                            }
-
-                            else -> {
-                                noInternetError()
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    private fun showHistory() = with(binding) {
+        deleteErrorViews()
+        recyclerView.isVisible = false
+        if (currentHistory.isNotEmpty()) {
+            historyButton.isVisible = true
+            historyTextView.isVisible = true
+            errorLinear.isVisible = false
+            historyRecyclerView.isVisible = true
+        } else hideHistory()
     }
 
-    fun searchDebounce() {
-        if (binding.editText.text.isNotBlank()) {
-            handler.removeCallbacks(searchRunnable)
-            handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
-        }
+    private fun hideHistory() = with(binding) {
+        historyRecyclerView.isVisible = false
+        historyButton.isVisible = false
+        historyTextView.isVisible = false
     }
 
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
+    private fun showContent() = with(binding) {
+        progressBar.isVisible = false
+        recyclerView.isVisible = true
+        hideHistory()
+        deleteErrorViews()
     }
 
-    override fun onResume() {
-        super.onResume()
-        hideKeyboard()
-        binding.progressBar.visibility = View.GONE
-        if (binding.historyButton.visibility == View.VISIBLE) {
-            historyAdapter.saveData(searchHistory.getHistory())
-        }
-    }
-
-    companion object {
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
+    // TODO: Ошибка при быстром вводе
+    // TODO: Не показывается история при входе
 }
-
