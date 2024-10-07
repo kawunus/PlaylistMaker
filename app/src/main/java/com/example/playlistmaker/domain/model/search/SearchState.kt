@@ -8,9 +8,9 @@ sealed interface SearchState {
 
     data class Content(val trackList: List<Track>) : SearchState
 
-    data class Error(val errorMessage: String) : SearchState
+    data object Error : SearchState
 
-    data class Empty(val message: String) : SearchState
+    data object Empty : SearchState
 
     data object History : SearchState
 
