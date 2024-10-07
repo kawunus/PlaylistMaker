@@ -181,7 +181,6 @@ class SearchActivity : AppCompatActivity() {
         imm.hideSoftInputFromWindow(editText.windowToken, 0)
     }
 
-    private val trackInteractor = Creator.provideTrackInteractor()
 
 
     private fun clickDebounce(): Boolean {
