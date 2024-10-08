@@ -2,7 +2,7 @@ package com.example.playlistmaker.presentation.track.activity
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
@@ -14,7 +14,7 @@ import com.example.playlistmaker.utils.consts.MediaPlayerConsts
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class TrackActivity : ComponentActivity() {
+class TrackActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTrackBinding
     private lateinit var viewModel: TrackViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
