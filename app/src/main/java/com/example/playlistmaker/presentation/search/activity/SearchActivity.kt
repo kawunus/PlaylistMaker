@@ -71,7 +71,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.clearIcon.visibility = clearButtonVisibility(s)
                 if (s?.isNotEmpty() == true && s.isNotBlank()) {
-                    viewModel.onTextChanged(text = s.toString() ?: "")
+                    viewModel.onTextChanged(text = s.toString())
                 } else {
                     viewModel.showHistory()
                 }
