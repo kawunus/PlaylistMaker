@@ -2,6 +2,7 @@ package com.example.playlistmaker.presentation.search.view_model
 
 import android.os.Handler
 import android.os.Looper
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -42,6 +43,7 @@ class SearchViewModel(private val historyInteractor: HistoryInteractor) : ViewMo
             }
     }
 
+    fun observeState(): LiveData<SearchState> = stateLiveData
 
     private fun renderState(state: SearchState) {
         stateLiveData.postValue(state)
