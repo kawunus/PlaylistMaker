@@ -3,8 +3,6 @@ package com.example.playlistmaker.presentation.search.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -25,22 +23,28 @@ import com.example.playlistmaker.utils.creator.Creator
 class SearchActivity : AppCompatActivity() {
 
     private var editTextContext = ""
-    lateinit var binding: ActivitySearchBinding
+    private lateinit var binding: ActivitySearchBinding
     private lateinit var trackAdapter: TrackAdapter
-
-
+    private lateinit var historyAdapter: TrackAdapter
     private lateinit var viewModel: SearchViewModel
 
-    private var isClickAllowed = true
-    private val handler = Handler(Looper.getMainLooper())
-
-    private lateinit var historyAdapter: TrackAdapter
-
-    private var currentHistory: List<Track> = emptyList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        trackAdapter = TrackAdapter { track ->
+            if (viewModel.clickDebounce()) {
+                viewModel.addToHistory(track)
+                val intent = Intent(this, TrackActivity::class.java)
+                intent.putExtra(IntentConsts.TRACK.name, track)
+                startActivity(intent)
+            }
+        }
+        historyAdapter = trackAdapter
+        binding.historyRecyclerView.adapter = trackAdapter
+        binding.recyclerView.adapter = trackAdapter
+
         viewModel = ViewModelProvider(
             this, SearchViewModel.getViewModelFactory(
                 historyInteractor = Creator.provideHistoryInteractor(
@@ -52,49 +56,7 @@ class SearchActivity : AppCompatActivity() {
         )[SearchViewModel::class]
 
         viewModel.observeState().observe(this) { state ->
-            when (state) {
-                is SearchState.Content -> {
-                    showContent()
-                }
-
-                SearchState.Empty -> {
-                    notFoundError()
-                }
-
-                SearchState.Error -> {
-                    noInternetError()
-                }
-
-                SearchState.History -> {
-                    showHistory()
-                }
-
-                SearchState.Loading -> {
-                    showLoading()
-                }
-            }
-        }
-
-        trackAdapter = TrackAdapter { track ->
-            viewModel.addToHistory(track)
-            if (clickDebounce()) {
-                val intent = Intent(this, TrackActivity::class.java)
-                intent.putExtra(IntentConsts.TRACK.name, track)
-                startActivity(intent)
-            }
-        }
-
-        historyAdapter = trackAdapter
-        binding.historyRecyclerView.adapter = trackAdapter
-        binding.recyclerView.adapter = trackAdapter
-
-        viewModel.observeHistory().observe(this) { historyList ->
-            historyAdapter.saveData(historyList)
-            currentHistory = historyList
-        }
-
-        viewModel.observeTrackList().observe(this) { trackList ->
-            trackAdapter.saveData(trackList)
+            render(state)
         }
 
         binding.toolbar.setNavigationOnClickListener {
@@ -108,21 +70,11 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.clearIcon.visibility = clearButtonVisibility(s)
-                editTextContext = binding.editText.text.toString()
-                if (binding.editText.hasFocus() && s?.isEmpty() == true) {
-                    viewModel.showHistory()
-                    binding.progressBar.visibility = View.GONE
-                } else hideHistory()
-
-                if (s?.isEmpty() == true) {
-                    viewModel.getHistory()
-                    binding.recyclerView.isVisible = false
+                if (s?.isNotEmpty() == true && s.isNotBlank()) {
+                    viewModel.onTextChanged(text = s.toString() ?: "")
                 } else {
-                    trackAdapter.saveData(emptyList())
-                    binding.historyRecyclerView.isVisible = false
+                    viewModel.showHistory()
                 }
-                viewModel.searchDebounce(binding.editText.text.toString())
-                deleteErrorViews()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -131,22 +83,12 @@ class SearchActivity : AppCompatActivity() {
         binding.editText.addTextChangedListener(editTextWatcher)
 
         binding.clearIcon.setOnClickListener {
-            binding.editText.text.clear()
-            binding.editText.clearFocus()
-            binding.recyclerView.isVisible = false
-            viewModel.showHistory()
-            deleteErrorViews()
-            hideKeyboard()
+            viewModel.clearRequestText()
+            binding.editText.setText("")
         }
 
         binding.updateButton.setOnClickListener {
             viewModel.search(binding.editText.text.toString())
-        }
-
-        binding.editText.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus && binding.editText.text.isEmpty()) {
-                showHistory()
-            }
         }
 
         binding.historyButton.setOnClickListener {
@@ -154,6 +96,7 @@ class SearchActivity : AppCompatActivity() {
             hideHistory()
         }
 
+        viewModel.showHistory()
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
@@ -176,58 +119,75 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    private fun hideKeyboard() = with(binding) {
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(editText.windowToken, 0)
-    }
-
-
-
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
-    }
-
     override fun onResume() {
         super.onResume()
         hideKeyboard()
-        binding.progressBar.visibility = View.GONE
-    }
-
-    companion object {
-
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        binding.progressBar.isVisible = false
     }
 
     // Функции для состояний экрана
 
-    private fun showLoading() = with(binding) {
-        hideHistory()
-        deleteErrorViews()
-        errorLinear.isVisible = true
-        trackAdapter.saveData(emptyList())
-        binding.progressBar.isVisible = true
-        recyclerView.isVisible = true
+    private fun render(state: SearchState) {
+        when (state) {
+            is SearchState.Content -> showContent(state.trackList)
+            SearchState.Empty -> showEmpty()
+            SearchState.Error -> showError()
+            is SearchState.History -> showHistory(state.historyList)
+            SearchState.Loading -> showLoading()
+            SearchState.PreLoading -> showPreLoading()
+        }
     }
 
-    private fun noInternetError() = with(binding) {
+    private fun showPreLoading() = with(binding) {
+        binding.progressBar.isVisible = false
+        hideErrorViews()
+        clearIcon.isVisible = true
+    }
+
+    private fun showLoading() = with(binding) {
+        hideErrorViews()
+        progressBar.isVisible = true
+        recyclerView.isVisible = false
+        trackAdapter.saveData(emptyList())
+        hideHistory()
+    }
+
+    private fun showHistory(historyList: List<Track>) = with(binding) {
+        progressBar.isVisible = false
+        hideErrorViews()
+        if (historyList.isNotEmpty()) {
+            historyAdapter.saveData(historyList)
+            historyRecyclerView.isVisible = true
+            historyButton.isVisible = true
+            historyTextView.isVisible = true
+            clearIcon.isVisible = false
+        } else {
+            hideHistory()
+        }
+    }
+
+    private fun hideHistory() = with(binding) {
+        historyRecyclerView.isVisible = false
+        historyButton.isVisible = false
+        historyTextView.isVisible = false
+    }
+
+    private fun showError() = with(binding) {
         hideHistory()
         updateButton.isVisible = true
         errorText.isVisible = true
         errorImage.isVisible = true
         errorText.setText(R.string.no_internet)
         errorImage.setImageResource(R.drawable.ic_no_internet)
+        errorLinear.isVisible = true
         recyclerView.isVisible = false
         historyRecyclerView.isVisible = false
         progressBar.isVisible = false
     }
 
-    private fun notFoundError() = with(binding) {
+    private fun showEmpty() = with(binding) {
         hideHistory()
+        errorLinear.isVisible = true
         errorText.isVisible = true
         errorImage.isVisible = true
         errorText.setText(R.string.not_found)
@@ -237,37 +197,24 @@ class SearchActivity : AppCompatActivity() {
         progressBar.isVisible = false
     }
 
-    private fun deleteErrorViews() = with(binding) {
+    private fun hideErrorViews() = with(binding) {
         errorLinear.isVisible = false
         errorText.isVisible = false
         errorImage.isVisible = false
         updateButton.isVisible = false
     }
 
-    private fun showHistory() = with(binding) {
-        deleteErrorViews()
-        recyclerView.isVisible = false
-        if (currentHistory.isNotEmpty()) {
-            historyButton.isVisible = true
-            historyTextView.isVisible = true
-            errorLinear.isVisible = false
-            historyRecyclerView.isVisible = true
-        } else hideHistory()
-    }
 
-    private fun hideHistory() = with(binding) {
-        historyRecyclerView.isVisible = false
-        historyButton.isVisible = false
-        historyTextView.isVisible = false
-    }
-
-    private fun showContent() = with(binding) {
+    private fun showContent(trackList: List<Track>) = with(binding) {
+        trackAdapter.saveData(trackList)
+        hideHistory()
         progressBar.isVisible = false
         recyclerView.isVisible = true
-        hideHistory()
-        deleteErrorViews()
+        hideErrorViews()
     }
 
-    // TODO: Ошибка при быстром вводе
-    // TODO: Не показывается история при входе
+    private fun hideKeyboard() = with(binding) {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(editText.windowToken, 0)
+    }
 }

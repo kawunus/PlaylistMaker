@@ -2,6 +2,7 @@ package com.example.playlistmaker.presentation.search.view_model
 
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,7 +20,7 @@ class SearchViewModel(private val historyInteractor: HistoryInteractor) : ViewMo
     private val trackInteractor = Creator.provideTrackInteractor()
     private val handler = Handler(Looper.getMainLooper())
 
-    private val latestRequest: String? = null
+    private var latestRequest: String? = null
     private var isClickAllowed = true
 
     private val stateLiveData = MutableLiveData<SearchState>()
@@ -53,20 +54,21 @@ class SearchViewModel(private val historyInteractor: HistoryInteractor) : ViewMo
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
     }
 
-    fun onTextChanged(text: String, isFocus: Boolean) {
-        if (latestRequest == text || !isFocus || text.isEmpty()) {
+    fun onTextChanged(text: String) {
+        if (latestRequest == text || text.isEmpty()) {
+            handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
             return
         }
 
-        // render
-
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+        latestRequest = text
 
         val searchRunnable = Runnable {
             search(text)
         }
-
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
+        renderState(SearchState.PreLoading)
+        handler.postAtTime(searchRunnable, SEARCH_REQUEST_TOKEN, postTime)
     }
 
     fun clickDebounce(): Boolean {
@@ -74,36 +76,41 @@ class SearchViewModel(private val historyInteractor: HistoryInteractor) : ViewMo
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
+            handler.postAtTime({ isClickAllowed = true }, SEARCH_REQUEST_TOKEN, postTime)
         }
         return current
     }
 
     fun search(request: String) {
-        if (request.isNotEmpty()) {
+        if (request.isNotBlank() && request.isNotEmpty() && stateLiveData.value == SearchState.PreLoading) {
             renderState(SearchState.Loading)
             trackInteractor.searchTracks(request) { foundTracks, resultCode ->
                 run {
-                    when (resultCode) {
-                        200 -> {
-                            if (foundTracks.isNotEmpty()) {
-                                renderState(SearchState.Content(foundTracks))
+                    if (stateLiveData.value == SearchState.Loading) {
+                        when (resultCode) {
+                            200 -> {
+                                if (foundTracks.isNotEmpty()) {
+                                    renderState(SearchState.Content(foundTracks))
 
-                            } else renderState(SearchState.Empty)
+                                } else renderState(SearchState.Empty)
 
+                            }
+
+                            400 -> {
+                                renderState(SearchState.Error)
+                            }
+
+                            else -> {
+                                renderState(SearchState.Error)
+                            }
                         }
-
-                        400 -> {
-                            renderState(SearchState.Error)
-                        }
-
-                        else -> {
-                            renderState(SearchState.Error)
-                        }
+                    } else {
+                        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
                     }
                 }
             }
-        }
+        } else showHistory()
     }
 
     private fun getHistory(): List<Track> {
@@ -111,10 +118,12 @@ class SearchViewModel(private val historyInteractor: HistoryInteractor) : ViewMo
     }
 
     fun showHistory() {
+        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
         renderState(SearchState.History(getHistory()))
     }
 
     fun clearHistory() {
+        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
         historyInteractor.setHistory(History(emptyList()))
         showHistory()
     }
@@ -124,8 +133,6 @@ class SearchViewModel(private val historyInteractor: HistoryInteractor) : ViewMo
     }
 
     fun addToHistory(track: Track) {
-        if (clickDebounce()) {
-            historyInteractor.addToHistory(track)
-        }
+        historyInteractor.addToHistory(track)
     }
 }

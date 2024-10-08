@@ -14,4 +14,6 @@ sealed interface SearchState {
 
     data class History(val historyList: List<Track>) : SearchState
 
+    data object PreLoading : SearchState
+
 }
