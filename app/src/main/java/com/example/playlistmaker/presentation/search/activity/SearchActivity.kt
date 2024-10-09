@@ -125,7 +125,6 @@ class SearchActivity : AppCompatActivity() {
         binding.progressBar.isVisible = false
     }
 
-    // Функции для состояний экрана
 
     private fun render(state: SearchState) {
         when (state) {
@@ -214,7 +213,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun hideKeyboard() = with(binding) {
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(editText.windowToken, 0)
+        val inputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(editText.windowToken, 0)
     }
 }

@@ -1,8 +1,8 @@
 package com.example.playlistmaker.presentation.track.activity
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
@@ -42,8 +42,8 @@ class TrackActivity : AppCompatActivity() {
         binding.currentTimeTextView.text = getString(R.string.track_current_time)
 
         if (model.collectionName.isEmpty()) {
-            binding.yearTextView.visibility = View.GONE
-            binding.trackYearTextView.visibility = View.GONE
+            binding.yearTextView.isVisible = false
+            binding.trackYearTextView.isVisible = false
         } else {
             binding.trackAlbumTextView.text = model.collectionName
         }
