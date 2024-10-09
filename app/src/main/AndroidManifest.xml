@@ -17,19 +17,19 @@
         android:theme="@style/Base.Theme.PlaylistMaker"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.track.TrackActivity"
+            android:name=".presentation.track.activity.TrackActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.settings.SettingsActivity"
+            android:name=".presentation.settings.activity.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.library.LibraryActivity"
+            android:name=".presentation.library.activity.LibraryActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.search.SearchActivity"
+            android:name=".presentation.search.activity.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.main.MainActivity"
+            android:name=".presentation.main.activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

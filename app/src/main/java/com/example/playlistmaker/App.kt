@@ -3,7 +3,12 @@ package com.example.playlistmaker
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.playlistmaker.data.network.RetrofitNetworkClient
+import com.example.playlistmaker.data.track.TrackRepositoryImpl
 import com.example.playlistmaker.domain.api.settings.SettingsInteractor
+import com.example.playlistmaker.domain.api.track.TrackInteractor
+import com.example.playlistmaker.domain.api.track.TrackRepository
+import com.example.playlistmaker.domain.impl.track.TrackInteractorImpl
 import com.example.playlistmaker.domain.model.settings.Theme
 import com.example.playlistmaker.domain.prefs.PrefKeys
 import com.example.playlistmaker.utils.creator.Creator
@@ -42,5 +47,13 @@ class App : Application() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
+    }
+
+    private fun getRepository(): TrackRepository {
+        return TrackRepositoryImpl(RetrofitNetworkClient())
+    }
+
+    fun provideTracksInteractor(): TrackInteractor {
+        return TrackInteractorImpl(getRepository())
     }
 }

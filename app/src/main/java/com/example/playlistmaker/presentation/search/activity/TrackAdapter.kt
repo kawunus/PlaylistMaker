@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.search
+package com.example.playlistmaker.presentation.search.activity
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -23,7 +23,7 @@ class TrackAdapter(
 
     }
 
-    val asyncListDiffer = AsyncListDiffer(this, diffUtil)
+    private val asyncListDiffer = AsyncListDiffer(this, diffUtil)
 
     fun saveData(trackList: List<Track>) {
         asyncListDiffer.submitList(trackList)

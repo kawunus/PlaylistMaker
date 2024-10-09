@@ -1,4 +1,4 @@
-package com.example.playlistmaker.data
+package com.example.playlistmaker.data.player
 
 import android.media.MediaPlayer
 import android.os.Handler
@@ -9,13 +9,14 @@ import com.example.playlistmaker.utils.consts.MediaPlayerConsts
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPlayerRepository {
+class MediaPlayerRepositoryImpl(
+    private val mediaPlayer: MediaPlayer,
+    private val onPrepared: () -> Unit,
+    private val onCompletion: () -> Unit,
+    private val onSetTimer: (time: String) -> Unit
+) : MediaPlayerRepository {
 
     private var playerState: MediaPlayerConsts = MediaPlayerConsts.STATE_DEFAULT
-
-    private lateinit var onPlayButton: () -> Unit
-    private lateinit var onPauseButton: () -> Unit
-    private lateinit var onSetTimer: (time: String) -> Unit
 
     private val mainThreadHandler = Handler(Looper.getMainLooper())
 
@@ -24,23 +25,23 @@ class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPla
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
             playerState = MediaPlayerConsts.STATE_PREPARED
+            onPrepared.invoke()
         }
         mediaPlayer.setOnCompletionListener {
             playerState = MediaPlayerConsts.STATE_PREPARED
+            onCompletion.invoke()
         }
     }
 
     override fun pausePlayer() {
         mediaPlayer.pause()
         playerState = MediaPlayerConsts.STATE_PAUSED
-        onPlayButton.invoke()
     }
 
     override fun startPlayer() {
         mediaPlayer.start()
         playerState = MediaPlayerConsts.STATE_PLAYING
         mainThreadHandler.post(createUpdateTimerTask())
-        onPauseButton.invoke()
     }
 
     override fun closePlayer() {
@@ -49,19 +50,6 @@ class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPla
         playerState = MediaPlayerConsts.STATE_DEFAULT
     }
 
-    override fun getPlayerState(): MediaPlayerConsts {
-        return playerState
-    }
-
-    override fun setResources(
-        onPlayButton: () -> Unit,
-        onPauseButton: () -> Unit,
-        onSetTimer: (time: String) -> Unit
-    ) {
-        this.onPlayButton = onPlayButton
-        this.onPauseButton = onPauseButton
-        this.onSetTimer = onSetTimer
-    }
 
     private fun createUpdateTimerTask(): Runnable {
         return object : Runnable {
@@ -71,8 +59,8 @@ class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPla
                 mediaPlayer.setOnCompletionListener {
                     pausePlayer()
                     mainThreadHandler.removeCallbacks(this)
-                    onPauseButton.invoke()
                     onSetTimer.invoke("00:00")
+                    onCompletion.invoke()
                 }
 
                 if (playerState == MediaPlayerConsts.STATE_PLAYING) {

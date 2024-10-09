@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.search
+package com.example.playlistmaker.presentation.search.activity
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
@@ -10,8 +10,7 @@ import com.example.playlistmaker.domain.model.track.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class TrackViewHolder(trackView: View) :
-    RecyclerView.ViewHolder(trackView) {
+class TrackViewHolder(trackView: View) : RecyclerView.ViewHolder(trackView) {
     private val binding: TrackViewBinding = TrackViewBinding.bind(trackView)
     fun bind(model: Track) {
         Glide.with(itemView).load(model.artworkUrl100).transform(RoundedCorners(2))
