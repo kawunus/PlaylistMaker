@@ -2,13 +2,12 @@ package com.example.playlistmaker.data.network
 
 import com.example.playlistmaker.data.dto.Response
 import com.example.playlistmaker.data.dto.TrackSearchRequest
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.net.UnknownHostException
 
-class RetrofitNetworkClient : NetworkClient {
+class RetrofitNetworkClient(private val iTunesService: ITunesApiService) : NetworkClient {
 
+    /*
     private val iTunesBaseUrl = "https://itunes.apple.com"
 
     private val retrofit = Retrofit.Builder()
@@ -17,7 +16,7 @@ class RetrofitNetworkClient : NetworkClient {
         .build()
 
     private val iTunesService = retrofit.create(ITunesApiService::class.java)
-
+*/
     override fun doRequest(dto: Any): Response {
         if (dto is TrackSearchRequest) {
             try {
