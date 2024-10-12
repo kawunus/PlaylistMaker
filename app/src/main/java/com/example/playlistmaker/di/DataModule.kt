@@ -1,6 +1,7 @@
 package com.example.playlistmaker.di
 
 import android.content.Context
+import android.media.MediaPlayer
 import com.example.playlistmaker.data.network.ITunesApiService
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -20,5 +21,9 @@ val dataModule = module {
 
     single {
         androidContext().getSharedPreferences("local_storage", Context.MODE_PRIVATE)
+    }
+
+    factory {
+        MediaPlayer()
     }
 }

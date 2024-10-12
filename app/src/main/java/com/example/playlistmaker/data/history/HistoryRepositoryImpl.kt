@@ -7,9 +7,11 @@ import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.utils.consts.HistoryPrefs
 import com.example.playlistmaker.utils.converter.JsonConverter
 
-class HistoryRepositoryImpl(private val sharedPreferences: SharedPreferences) : HistoryRepository {
+class HistoryRepositoryImpl(
+    private val sharedPreferences: SharedPreferences,
+    private val converter: JsonConverter
+) : HistoryRepository {
 
-    private val converter = JsonConverter()
 
     override fun getHistory(): History {
         val json = sharedPreferences.getString(HistoryPrefs.HISTORY.name, null)
