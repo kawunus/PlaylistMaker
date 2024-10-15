@@ -1,6 +1,8 @@
 package com.example.playlistmaker.di
 
 import com.example.playlistmaker.data.history.HistoryRepositoryImpl
+import com.example.playlistmaker.data.network.NetworkClient
+import com.example.playlistmaker.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.player.MediaPlayerRepositoryImpl
 import com.example.playlistmaker.data.settings.SettingsRepositoryImpl
 import com.example.playlistmaker.data.sharing.ExternalNavigatorIml
@@ -25,16 +27,17 @@ val repositoryModule = module {
         HistoryRepositoryImpl(get(), get())
     }
 
-    factory<MediaPlayerRepository> { (onPrepared: () -> Unit, onCompletion: () -> Unit, onSetTimer: (time: String) -> Unit) ->
+    factory<MediaPlayerRepository> {
         MediaPlayerRepositoryImpl(
-            mediaPlayer = get(),
-            onPrepared = onPrepared,
-            onCompletion = onCompletion,
-            onSetTimer = onSetTimer
+            mediaPlayer = get()
         )
     }
 
     single<ExternalNavigator> {
         ExternalNavigatorIml(get())
+    }
+
+    single<NetworkClient> {
+        RetrofitNetworkClient(get())
     }
 }

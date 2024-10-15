@@ -13,7 +13,7 @@ import com.example.playlistmaker.domain.impl.track.TrackInteractorImpl
 import org.koin.dsl.module
 
 val interactorModule = module {
-    single<TrackInteractor> {
+    factory<TrackInteractor> {
         TrackInteractorImpl(get())
     }
 

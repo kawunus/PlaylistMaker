@@ -7,16 +7,6 @@ import java.net.UnknownHostException
 
 class RetrofitNetworkClient(private val iTunesService: ITunesApiService) : NetworkClient {
 
-    /*
-    private val iTunesBaseUrl = "https://itunes.apple.com"
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(iTunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val iTunesService = retrofit.create(ITunesApiService::class.java)
-*/
     override fun doRequest(dto: Any): Response {
         if (dto is TrackSearchRequest) {
             try {

@@ -12,4 +12,10 @@ interface MediaPlayerRepository {
 
     fun closePlayer()
 
+    fun setLambdas(
+        onPrepared: () -> Unit,
+        onCompletion: () -> Unit,
+        onSetTimer: (time: String) -> Unit
+    )
+
 }

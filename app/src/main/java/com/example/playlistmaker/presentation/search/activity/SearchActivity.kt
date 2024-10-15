@@ -9,16 +9,14 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.model.search.SearchState
 import com.example.playlistmaker.domain.model.track.Track
-import com.example.playlistmaker.domain.prefs.PrefKeys
 import com.example.playlistmaker.presentation.search.view_model.SearchViewModel
 import com.example.playlistmaker.presentation.track.activity.TrackActivity
 import com.example.playlistmaker.utils.consts.IntentConsts
-import com.example.playlistmaker.utils.creator.Creator
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
@@ -26,7 +24,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var historyAdapter: TrackAdapter
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,16 +42,6 @@ class SearchActivity : AppCompatActivity() {
         historyAdapter = trackAdapter
         binding.historyRecyclerView.adapter = trackAdapter
         binding.recyclerView.adapter = trackAdapter
-
-        viewModel = ViewModelProvider(
-            this, SearchViewModel.getViewModelFactory(
-                historyInteractor = Creator.provideHistoryInteractor(
-                    getSharedPreferences(
-                        PrefKeys.PREFS, MODE_PRIVATE
-                    )
-                )
-            )
-        )[SearchViewModel::class]
 
         viewModel.observeState().observe(this) { state ->
             render(state)
@@ -73,6 +61,7 @@ class SearchActivity : AppCompatActivity() {
                 if (s?.isNotEmpty() == true && s.isNotBlank()) {
                     viewModel.onTextChanged(text = s.toString())
                 } else {
+
                     viewModel.showHistory()
                 }
             }
@@ -154,6 +143,7 @@ class SearchActivity : AppCompatActivity() {
     private fun showHistory(historyList: List<Track>) = with(binding) {
         progressBar.isVisible = false
         hideErrorViews()
+        historyAdapter.saveData(emptyList())
         if (historyList.isNotEmpty()) {
             historyAdapter.saveData(historyList)
             historyRecyclerView.isVisible = true
