@@ -126,5 +126,6 @@ class SearchViewModel(
 
     fun addToHistory(track: Track) {
         historyInteractor.addToHistory(track)
+        renderState(SearchState.History(getHistory()))
     }
 }
