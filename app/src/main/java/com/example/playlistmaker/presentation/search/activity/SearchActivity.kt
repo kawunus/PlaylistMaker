@@ -143,6 +143,7 @@ class SearchActivity : AppCompatActivity() {
     private fun showHistory(historyList: List<Track>) = with(binding) {
         progressBar.isVisible = false
         hideErrorViews()
+        recyclerView.isVisible = false
         historyAdapter.saveData(emptyList())
         if (historyList.isNotEmpty()) {
             historyAdapter.saveData(historyList)
