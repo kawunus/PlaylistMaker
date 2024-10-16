@@ -196,8 +196,8 @@ class SearchActivity : AppCompatActivity() {
 
 
     private fun showContent(trackList: List<Track>) = with(binding) {
-        trackAdapter.saveData(trackList)
         hideHistory()
+        trackAdapter.saveData(trackList)
         progressBar.isVisible = false
         recyclerView.isVisible = true
         hideErrorViews()
