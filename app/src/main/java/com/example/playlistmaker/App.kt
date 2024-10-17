@@ -3,31 +3,30 @@ package com.example.playlistmaker
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.playlistmaker.data.network.RetrofitNetworkClient
-import com.example.playlistmaker.data.track.TrackRepositoryImpl
+import com.example.playlistmaker.di.dataModule
+import com.example.playlistmaker.di.interactorModule
+import com.example.playlistmaker.di.repositoryModule
+import com.example.playlistmaker.di.utilModule
+import com.example.playlistmaker.di.viewModelModule
 import com.example.playlistmaker.domain.api.settings.SettingsInteractor
-import com.example.playlistmaker.domain.api.track.TrackInteractor
-import com.example.playlistmaker.domain.api.track.TrackRepository
-import com.example.playlistmaker.domain.impl.track.TrackInteractorImpl
 import com.example.playlistmaker.domain.model.settings.Theme
 import com.example.playlistmaker.domain.prefs.PrefKeys
-import com.example.playlistmaker.utils.creator.Creator
+import org.koin.android.ext.android.inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 class App : Application() {
     private var darkTheme = false
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var settingsInteractor: SettingsInteractor
+    private val settingsInteractor: SettingsInteractor by inject()
     override fun onCreate() {
         super.onCreate()
-
+        startKoin {
+            androidContext(this@App)
+            modules(repositoryModule, interactorModule, utilModule, viewModelModule, dataModule)
+        }
         sharedPreferences = getSharedPreferences(
             PrefKeys.PREFS, MODE_PRIVATE
-        )
-
-        settingsInteractor = Creator.provideSettingsInteractor(
-            getSharedPreferences(
-                PrefKeys.PREFS, MODE_PRIVATE
-            )
         )
 
         darkTheme = settingsInteractor.getTheme().isNight
@@ -47,13 +46,5 @@ class App : Application() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
-    }
-
-    private fun getRepository(): TrackRepository {
-        return TrackRepositoryImpl(RetrofitNetworkClient())
-    }
-
-    fun provideTracksInteractor(): TrackInteractor {
-        return TrackInteractorImpl(getRepository())
     }
 }

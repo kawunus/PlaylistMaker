@@ -6,18 +6,17 @@ import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.domain.api.history.HistoryInteractor
+import com.example.playlistmaker.domain.api.track.TrackInteractor
 import com.example.playlistmaker.domain.model.history.History
 import com.example.playlistmaker.domain.model.search.SearchState
 import com.example.playlistmaker.domain.model.track.Track
-import com.example.playlistmaker.utils.creator.Creator
 
-class SearchViewModel(private val historyInteractor: HistoryInteractor) : ViewModel() {
+class SearchViewModel(
+    private val historyInteractor: HistoryInteractor,
+    private val trackInteractor: TrackInteractor
+) : ViewModel() {
 
-    private val trackInteractor = Creator.provideTrackInteractor()
     private val handler = Handler(Looper.getMainLooper())
 
     private var latestRequest: String? = null
@@ -35,13 +34,6 @@ class SearchViewModel(private val historyInteractor: HistoryInteractor) : ViewMo
         private const val CLICK_DEBOUNCE_DELAY = 1000L
 
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
-
-        fun getViewModelFactory(historyInteractor: HistoryInteractor): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    SearchViewModel(historyInteractor)
-                }
-            }
     }
 
     fun observeState(): LiveData<SearchState> = stateLiveData
@@ -134,5 +126,9 @@ class SearchViewModel(private val historyInteractor: HistoryInteractor) : ViewMo
 
     fun addToHistory(track: Track) {
         historyInteractor.addToHistory(track)
+
+        if (stateLiveData.value is SearchState.History) {
+            renderState(SearchState.History(getHistory()))
+        }
     }
 }

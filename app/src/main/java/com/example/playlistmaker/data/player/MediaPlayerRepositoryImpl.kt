@@ -11,10 +11,11 @@ import java.util.Locale
 
 class MediaPlayerRepositoryImpl(
     private val mediaPlayer: MediaPlayer,
-    private val onPrepared: () -> Unit,
-    private val onCompletion: () -> Unit,
-    private val onSetTimer: (time: String) -> Unit
 ) : MediaPlayerRepository {
+
+    private lateinit var onPrepared: () -> Unit
+    private lateinit var onCompletion: () -> Unit
+    private lateinit var onSetTimer: (time: String) -> Unit
 
     private var playerState: MediaPlayerConsts = MediaPlayerConsts.STATE_DEFAULT
 
@@ -50,6 +51,16 @@ class MediaPlayerRepositoryImpl(
         playerState = MediaPlayerConsts.STATE_DEFAULT
     }
 
+    override fun setLambdas(
+        onPrepared: () -> Unit,
+        onCompletion: () -> Unit,
+        onSetTimer: (time: String) -> Unit
+    ) {
+        this.onPrepared = onPrepared
+        this.onCompletion = onCompletion
+        this.onSetTimer = onSetTimer
+    }
+
 
     private fun createUpdateTimerTask(): Runnable {
         return object : Runnable {
@@ -78,4 +89,5 @@ class MediaPlayerRepositoryImpl(
     companion object {
         const val DELAY = 50L
     }
+
 }

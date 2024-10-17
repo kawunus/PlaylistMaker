@@ -3,35 +3,14 @@ package com.example.playlistmaker.presentation.track.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.playlistmaker.domain.api.player.MediaPlayerInteractor
 import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.utils.consts.MediaPlayerConsts
-import com.example.playlistmaker.utils.creator.Creator
 
-class TrackViewModel(private val track: Track) : ViewModel() {
-
-    companion object {
-        fun getViewModelFactory(track: Track): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    TrackViewModel(track)
-                }
-            }
-    }
-
-    private val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor(
-        onCompletion = {
-            playerStateLiveData.value = MediaPlayerConsts.STATE_PREPARED
-        },
-        onPrepared = {
-            playerStateLiveData.value = MediaPlayerConsts.STATE_PREPARED
-        },
-        onSetTimer = { trackTime: String ->
-            timerLiveData.value = trackTime
-        }
-    )
+class TrackViewModel(
+    private val track: Track,
+    private val mediaPlayerInteractor: MediaPlayerInteractor
+) : ViewModel() {
 
     private val playerStateLiveData = MutableLiveData<MediaPlayerConsts>()
     private val timerLiveData = MutableLiveData<String>()
@@ -39,6 +18,17 @@ class TrackViewModel(private val track: Track) : ViewModel() {
     init {
         playerStateLiveData.value = MediaPlayerConsts.STATE_DEFAULT
         timerLiveData.value = "0:00"
+        mediaPlayerInteractor.setLambdas(
+            onCompletion = {
+                playerStateLiveData.value = MediaPlayerConsts.STATE_PREPARED
+            },
+            onPrepared = {
+                playerStateLiveData.value = MediaPlayerConsts.STATE_PREPARED
+            },
+            onSetTimer = { trackTime: String ->
+                timerLiveData.value = trackTime
+            }
+        )
     }
 
     fun observePlayerState(): LiveData<MediaPlayerConsts> = playerStateLiveData

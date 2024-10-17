@@ -3,7 +3,6 @@ package com.example.playlistmaker.presentation.track.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityTrackBinding
@@ -11,20 +10,22 @@ import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.presentation.track.view_model.TrackViewModel
 import com.example.playlistmaker.utils.consts.IntentConsts
 import com.example.playlistmaker.utils.consts.MediaPlayerConsts
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TrackActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTrackBinding
-    private lateinit var viewModel: TrackViewModel
+    private val viewModel: TrackViewModel by viewModel {
+        parametersOf(intent.getParcelableExtra<Track>(IntentConsts.TRACK.name)!!)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTrackBinding.inflate(layoutInflater)
         val model = intent.getParcelableExtra<Track>(IntentConsts.TRACK.name)!!
-        viewModel = ViewModelProvider(
-            this,
-            TrackViewModel.getViewModelFactory(model)
-        )[TrackViewModel::class]
+
         setContentView(binding.root)
         binding.toolbar.setNavigationOnClickListener {
             finish()

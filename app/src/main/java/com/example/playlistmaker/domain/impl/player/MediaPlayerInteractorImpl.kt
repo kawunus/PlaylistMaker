@@ -23,4 +23,16 @@ class MediaPlayerInteractorImpl(
     override fun closePlayer() {
         mediaPlayerRepository.closePlayer()
     }
+
+    override fun setLambdas(
+        onPrepared: () -> Unit,
+        onCompletion: () -> Unit,
+        onSetTimer: (time: String) -> Unit
+    ) {
+        mediaPlayerRepository.setLambdas(
+            onPrepared = onPrepared,
+            onCompletion = onCompletion,
+            onSetTimer = onSetTimer
+        )
+    }
 }
