@@ -36,4 +36,7 @@
     <string name="track_genre">Жанр</string>
     <string name="track_country">Страна</string>
     <string name="track_current_time">0:00</string>
+
+    <!-- Library Screen -->
+    <string name="library_empty">Ваша медиатека пуста</string>
 </resources>
