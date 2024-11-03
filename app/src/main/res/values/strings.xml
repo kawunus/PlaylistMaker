@@ -38,9 +38,11 @@
     <string name="track_current_time">0:00</string>
 
     <!-- Favorites Screen -->
+    <string name="favorites">Избранные треки</string>
     <string name="favorites_empty">Ваша медиатека пуста</string>
 
     <!-- Playlist Screen -->
+    <string name="playlists">Плейлисты</string>
     <string name="playlists_empty">Вы не создали\nни одного плейлиста</string>
     <string name="new_playlist">Новый плейлист</string>
 </resources>
