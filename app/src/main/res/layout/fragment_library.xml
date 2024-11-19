@@ -5,13 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSecondary"
-    tools:context=".presentation.library.activity.LibraryActivity">
+    tools:context=".presentation.library.ui.LibraryFragment">
 
     <Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:navigationIcon="@drawable/ic_arrow"
         android:title="@string/main_library"
         android:titleTextAppearance="@style/settingsToolbarTitleText"
         app:layout_constraintTop_toTopOf="parent" />
