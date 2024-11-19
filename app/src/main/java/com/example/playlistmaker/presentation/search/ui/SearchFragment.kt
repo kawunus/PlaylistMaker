@@ -1,55 +1,64 @@
-package com.example.playlistmaker.presentation.search.activity
+package com.example.playlistmaker.presentation.search.ui
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.model.search.SearchState
 import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.presentation.search.view_model.SearchViewModel
-import com.example.playlistmaker.presentation.track.activity.TrackActivity
 import com.example.playlistmaker.utils.consts.IntentConsts
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
 
     private var editTextContext = ""
-    private lateinit var binding: ActivitySearchBinding
+    private lateinit var binding: FragmentSearchBinding
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var historyAdapter: TrackAdapter
 
     private val viewModel: SearchViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
 
         trackAdapter = TrackAdapter { track ->
             if (viewModel.clickDebounce()) {
                 viewModel.addToHistory(track)
-                val intent = Intent(this, TrackActivity::class.java)
-                intent.putExtra(IntentConsts.TRACK.name, track)
-                startActivity(intent)
+
+                findNavController().navigate(
+                    R.id.action_searchFragment_to_trackActivity,
+                    Bundle().apply {
+                        putParcelable(IntentConsts.TRACK.name, track)
+                    })
             }
         }
         historyAdapter = trackAdapter
         binding.historyRecyclerView.adapter = trackAdapter
         binding.recyclerView.adapter = trackAdapter
 
-        viewModel.observeState().observe(this) { state ->
-            render(state)
-        }
 
-        binding.toolbar.setNavigationOnClickListener {
-            finish()
+        viewModel.observeState().observe(viewLifecycleOwner) { state ->
+            render(state)
         }
 
         val editTextWatcher = object : TextWatcher {
@@ -89,6 +98,7 @@ class SearchActivity : AppCompatActivity() {
         viewModel.showHistory()
     }
 
+
     private fun clearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
             View.GONE
@@ -102,11 +112,12 @@ class SearchActivity : AppCompatActivity() {
         outState.putString("EDIT_TEXT_CONTEXT", editTextContext)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) = with(binding) {
-        super.onRestoreInstanceState(savedInstanceState)
-        editTextContext = savedInstanceState.getString("EDIT_TEXT_CONTEXT", "")
-        editText.setText(editTextContext)
-
+    override fun onViewStateRestored(savedInstanceState: Bundle?): Unit = with(binding) {
+        super.onViewStateRestored(savedInstanceState)
+        savedInstanceState?.let {
+            val editTextContext = it.getString("EDIT_TEXT_CONTEXT", "")
+            binding.editText.setText(editTextContext)
+        }
     }
 
     override fun onResume() {
@@ -206,7 +217,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun hideKeyboard() = with(binding) {
         val inputMethodManager =
-            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(editText.windowToken, 0)
     }
 }

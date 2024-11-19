@@ -16,7 +16,9 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TrackActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityTrackBinding
+
     private val viewModel: TrackViewModel by viewModel {
         parametersOf(intent.getParcelableExtra<Track>(IntentConsts.TRACK.name)!!)
     }
