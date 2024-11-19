@@ -11,4 +11,5 @@
     <color name="findUpdateButtonTextColor">#000000</color>
     <color name="playIconColor">#ffffff</color>
     <color name="mainMenuBackgroundColor">#1A1B22</color>
+    <color name="dividerColor">#E6E8EB</color>
 </resources>
