@@ -16,4 +16,12 @@ class SettingsRepositoryImpl(
     override fun setTheme(theme: Theme) {
         sharedPreferences.edit().putBoolean(SettingsPrefs.THEME.name, theme.isNight).apply()
     }
+
+    override fun isFirstLaunch(): Boolean {
+        return sharedPreferences.getBoolean(SettingsPrefs.FIRST_LAUNCH.name, true)
+    }
+
+    override fun setFirstLaunchCompleted() {
+        sharedPreferences.edit().putBoolean(SettingsPrefs.FIRST_LAUNCH.name, false).apply()
+    }
 }

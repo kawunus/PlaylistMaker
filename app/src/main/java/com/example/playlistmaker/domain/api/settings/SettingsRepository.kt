@@ -6,4 +6,8 @@ interface SettingsRepository {
     fun getTheme(): Theme
 
     fun setTheme(theme: Theme)
+
+    fun isFirstLaunch(): Boolean
+
+    fun setFirstLaunchCompleted()
 }
