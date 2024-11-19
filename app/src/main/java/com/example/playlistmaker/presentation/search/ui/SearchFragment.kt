@@ -23,7 +23,19 @@ class SearchFragment : Fragment() {
 
     private var editTextContext = ""
     private lateinit var binding: FragmentSearchBinding
-    private lateinit var trackAdapter: TrackAdapter
+    private val trackAdapter: TrackAdapter by lazy {
+        TrackAdapter { track ->
+            if (viewModel.clickDebounce()) {
+                viewModel.addToHistory(track)
+
+                findNavController().navigate(
+                    R.id.action_searchFragment_to_trackActivity,
+                    Bundle().apply {
+                        putParcelable(IntentConsts.TRACK.name, track)
+                    })
+            }
+        }
+    }
     private lateinit var historyAdapter: TrackAdapter
 
     private val viewModel: SearchViewModel by viewModel()
@@ -40,18 +52,6 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        trackAdapter = TrackAdapter { track ->
-            if (viewModel.clickDebounce()) {
-                viewModel.addToHistory(track)
-
-                findNavController().navigate(
-                    R.id.action_searchFragment_to_trackActivity,
-                    Bundle().apply {
-                        putParcelable(IntentConsts.TRACK.name, track)
-                    })
-            }
-        }
         historyAdapter = trackAdapter
         binding.historyRecyclerView.adapter = trackAdapter
         binding.recyclerView.adapter = trackAdapter
