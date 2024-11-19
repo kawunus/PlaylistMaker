@@ -13,10 +13,19 @@
         <action
             android:id="@+id/action_mainFragment_to_libraryFragment"
             app:destination="@id/libraryFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/libraryFragment"
         android:name="com.example.playlistmaker.presentation.library.ui.LibraryFragment"
         android:label="LibraryFragment"
         tools:layout="@layout/fragment_library" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.playlistmaker.presentation.settings.ui.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings" />
+
 </navigation>

@@ -10,7 +10,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMainBinding
 import com.example.playlistmaker.presentation.search.activity.SearchActivity
-import com.example.playlistmaker.presentation.settings.activity.SettingsActivity
 
 class MainFragment : Fragment() {
 
@@ -38,8 +37,7 @@ class MainFragment : Fragment() {
         }
 
         binding.buttonSettings.setOnClickListener {
-            val settingsIntent = Intent(requireContext(), SettingsActivity::class.java)
-            startActivity(settingsIntent)
+            findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
         }
     }
 }

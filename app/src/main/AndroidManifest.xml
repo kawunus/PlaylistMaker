@@ -20,9 +20,6 @@
             android:name=".presentation.track.activity.TrackActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.settings.activity.SettingsActivity"
-            android:exported="false" />
-        <activity
             android:name=".presentation.search.activity.SearchActivity"
             android:exported="false" />
         <activity
