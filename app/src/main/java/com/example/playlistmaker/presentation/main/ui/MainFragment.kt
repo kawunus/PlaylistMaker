@@ -6,8 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMainBinding
-import com.example.playlistmaker.presentation.library.activity.LibraryActivity
 import com.example.playlistmaker.presentation.search.activity.SearchActivity
 import com.example.playlistmaker.presentation.settings.activity.SettingsActivity
 
@@ -33,8 +34,7 @@ class MainFragment : Fragment() {
         }
 
         binding.buttonLibrary.setOnClickListener {
-            val libraryIntent = Intent(requireContext(), LibraryActivity::class.java)
-            startActivity(libraryIntent)
+            findNavController().navigate(R.id.action_mainFragment_to_libraryFragment)
         }
 
         binding.buttonSettings.setOnClickListener {

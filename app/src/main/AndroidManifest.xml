@@ -23,9 +23,6 @@
             android:name=".presentation.settings.activity.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.library.activity.LibraryActivity"
-            android:exported="false" />
-        <activity
             android:name=".presentation.search.activity.SearchActivity"
             android:exported="false" />
         <activity
