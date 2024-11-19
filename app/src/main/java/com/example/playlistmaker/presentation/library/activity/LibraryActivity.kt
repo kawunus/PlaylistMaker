@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityLibraryBinding
 import com.example.playlistmaker.databinding.CustomTabBinding
+import com.example.playlistmaker.presentation.library.ui.LibraryViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
 class LibraryActivity : AppCompatActivity() {
