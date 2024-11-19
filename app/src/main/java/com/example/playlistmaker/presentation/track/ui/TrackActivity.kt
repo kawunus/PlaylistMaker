@@ -1,9 +1,10 @@
-package com.example.playlistmaker.presentation.track.activity
+package com.example.playlistmaker.presentation.track.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityTrackBinding
 import com.example.playlistmaker.domain.model.track.Track
@@ -37,8 +38,9 @@ class TrackActivity : AppCompatActivity() {
         binding.trackNameTextView.text = model.trackName
         binding.artistNameTextView.text = model.artistName
         binding.trackTimeTextView.text = dateFormatter.format(model.trackTimeMillis)
-        Glide.with(this).load(model.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
-            .placeholder(R.drawable.placeholder).into(binding.imageView)
+        Glide.with(this).load(model.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")).transform(
+            RoundedCorners(8)
+        ).placeholder(R.drawable.placeholder).into(binding.imageView)
         binding.trackCountryTextView.text = model.country
         binding.trackGenreTextView.text = model.primaryGenreName
         binding.trackYearTextView.text = model.releaseDate.substring(0, 4)
