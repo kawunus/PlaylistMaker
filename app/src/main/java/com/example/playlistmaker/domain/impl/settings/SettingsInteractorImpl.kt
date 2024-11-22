@@ -14,4 +14,12 @@ class SettingsInteractorImpl(private val settingsRepository: SettingsRepository)
         settingsRepository.setTheme(theme)
     }
 
+    override fun isFirstLaunch(): Boolean {
+        return settingsRepository.isFirstLaunch()
+    }
+
+    override fun setFirstLaunchCompleted() {
+        settingsRepository.setFirstLaunchCompleted()
+    }
+
 }
