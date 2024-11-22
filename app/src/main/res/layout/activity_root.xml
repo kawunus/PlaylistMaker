@@ -24,13 +24,13 @@
         app:itemPaddingTop="20dp"
         app:itemTextAppearanceActive="@style/BottomNavigationViewTextStyle"
         app:itemTextAppearanceInactive="@style/BottomNavigationViewTextStyle"
+        app:itemTextColor="@color/bottom_nav_colors"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:itemTextColor="@color/bottom_nav_colors"
         app:menu="@menu/navigation_items">
 
-        <FrameLayout
+        <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/dividerColor"
