@@ -12,6 +12,7 @@ import com.example.playlistmaker.domain.api.track.TrackInteractor
 import com.example.playlistmaker.domain.model.history.History
 import com.example.playlistmaker.domain.model.search.SearchState
 import com.example.playlistmaker.domain.model.track.Track
+import com.example.playlistmaker.utils.debounce.debounce
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
@@ -21,7 +22,11 @@ class SearchViewModel(
     private val handler = Handler(Looper.getMainLooper())
 
     private var latestRequest: String? = null
-    private var isClickAllowed = true
+
+    private val trackSearchDebounce =
+        debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText ->
+            search(changedText)
+        }
 
     private val stateLiveData = MutableLiveData<SearchState>()
 
@@ -31,8 +36,6 @@ class SearchViewModel(
 
     companion object {
         private val SEARCH_REQUEST_TOKEN = Any()
-
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
 
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
@@ -62,6 +65,14 @@ class SearchViewModel(
         val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
         renderState(SearchState.PreLoading)
         handler.postAtTime(searchRunnable, SEARCH_REQUEST_TOKEN, postTime)
+    }
+
+    fun searchDebounce(changedText: String) {
+        if (latestRequest == changedText) {
+            return
+        }
+        this.latestRequest = changedText
+        trackSearchDebounce(changedText)
     }
 
     fun search(request: String) {

@@ -95,7 +95,7 @@ class SearchFragment : Fragment() {
         }
 
         binding.updateButton.setOnClickListener {
-            viewModel.search(binding.editText.text.toString())
+            viewModel.searchDebounce(binding.editText.text.toString())
         }
 
         binding.historyButton.setOnClickListener {
