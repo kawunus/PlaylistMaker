@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
@@ -17,41 +18,48 @@ import com.example.playlistmaker.domain.model.search.SearchState
 import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.presentation.search.view_model.SearchViewModel
 import com.example.playlistmaker.utils.consts.IntentConsts
+import com.example.playlistmaker.utils.debounce.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
 
     private var editTextContext = ""
     private lateinit var binding: FragmentSearchBinding
-    private val trackAdapter: TrackAdapter by lazy {
-        TrackAdapter { track ->
-            if (viewModel.clickDebounce()) {
-                viewModel.addToHistory(track)
 
-                findNavController().navigate(
-                    R.id.action_searchFragment_to_trackActivity,
-                    Bundle().apply {
-                        putParcelable(IntentConsts.TRACK.name, track)
-                    })
-            }
-        }
-    }
-    private lateinit var historyAdapter: TrackAdapter
+    private lateinit var onTrackClickDebounce: (Track) -> Unit
+
+    private var trackAdapter: TrackAdapter? = null
+    private var historyAdapter: TrackAdapter? = null
 
     private val viewModel: SearchViewModel by viewModel()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        onTrackClickDebounce = debounce<Track>(
+            CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
+        ) { track: Track ->
+            viewModel.addToHistory(track)
+            findNavController().navigate(R.id.action_searchFragment_to_trackActivity,
+                Bundle().apply {
+                    putParcelable(IntentConsts.TRACK.name, track)
+                })
+        }
+
+        trackAdapter = TrackAdapter { track ->
+            onTrackClickDebounce(track)
+        }
         historyAdapter = trackAdapter
         binding.historyRecyclerView.adapter = trackAdapter
         binding.recyclerView.adapter = trackAdapter
@@ -148,7 +156,7 @@ class SearchFragment : Fragment() {
         hideErrorViews()
         progressBar.isVisible = true
         recyclerView.isVisible = false
-        trackAdapter.saveData(emptyList())
+        trackAdapter?.saveData(emptyList())
         hideHistory()
     }
 
@@ -156,9 +164,9 @@ class SearchFragment : Fragment() {
         progressBar.isVisible = false
         hideErrorViews()
         recyclerView.isVisible = false
-        historyAdapter.saveData(emptyList())
+        historyAdapter?.saveData(emptyList())
         if (historyList.isNotEmpty()) {
-            historyAdapter.saveData(historyList)
+            historyAdapter?.saveData(historyList)
             historyRecyclerView.isVisible = true
             historyButton.isVisible = true
             historyTextView.isVisible = true
@@ -209,7 +217,7 @@ class SearchFragment : Fragment() {
 
     private fun showContent(trackList: List<Track>) = with(binding) {
         hideHistory()
-        trackAdapter.saveData(trackList)
+        trackAdapter?.saveData(trackList)
         progressBar.isVisible = false
         recyclerView.isVisible = true
         hideErrorViews()
@@ -219,5 +227,13 @@ class SearchFragment : Fragment() {
         val inputMethodManager =
             requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(editText.windowToken, 0)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        trackAdapter = null
+        historyAdapter = null
+        binding.recyclerView.adapter = null
+        binding.historyRecyclerView.adapter = null
     }
 }

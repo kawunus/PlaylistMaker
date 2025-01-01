@@ -64,17 +64,6 @@ class SearchViewModel(
         handler.postAtTime(searchRunnable, SEARCH_REQUEST_TOKEN, postTime)
     }
 
-    fun clickDebounce(): Boolean {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
-            handler.postAtTime({ isClickAllowed = true }, SEARCH_REQUEST_TOKEN, postTime)
-        }
-        return current
-    }
-
     fun search(request: String) {
         if (request.isNotBlank() && request.isNotEmpty() && stateLiveData.value == SearchState.PreLoading) {
             renderState(SearchState.Loading)
