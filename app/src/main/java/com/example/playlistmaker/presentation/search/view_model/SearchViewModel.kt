@@ -6,15 +6,16 @@ import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.api.history.HistoryInteractor
 import com.example.playlistmaker.domain.api.track.TrackInteractor
 import com.example.playlistmaker.domain.model.history.History
 import com.example.playlistmaker.domain.model.search.SearchState
 import com.example.playlistmaker.domain.model.track.Track
+import kotlinx.coroutines.launch
 
 class SearchViewModel(
-    private val historyInteractor: HistoryInteractor,
-    private val trackInteractor: TrackInteractor
+    private val historyInteractor: HistoryInteractor, private val trackInteractor: TrackInteractor
 ) : ViewModel() {
 
     private val handler = Handler(Looper.getMainLooper())
@@ -77,32 +78,67 @@ class SearchViewModel(
     fun search(request: String) {
         if (request.isNotBlank() && request.isNotEmpty() && stateLiveData.value == SearchState.PreLoading) {
             renderState(SearchState.Loading)
-            trackInteractor.searchTracks(request) { foundTracks, resultCode ->
-                run {
-                    if (stateLiveData.value == SearchState.Loading) {
-                        when (resultCode) {
-                            200 -> {
-                                if (foundTracks.isNotEmpty()) {
-                                    renderState(SearchState.Content(foundTracks))
 
-                                } else renderState(SearchState.Empty)
-
-                            }
-
-                            400 -> {
-                                renderState(SearchState.Error)
-                            }
-
-                            else -> {
-                                renderState(SearchState.Error)
-                            }
-                        }
-                    } else {
-                        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-                    }
+            viewModelScope.launch {
+                trackInteractor.searchTracks(request).collect { pair ->
+                    processResult(pair.first, pair.second)
                 }
             }
         } else showHistory()
+
+
+        /*
+
+                    trackInteractor.searchTracks(request) { foundTracks, resultCode ->
+                        run {
+                            if (stateLiveData.value == SearchState.Loading) {
+                                when (resultCode) {
+                                    200 -> {
+                                        if (foundTracks.isNotEmpty()) {
+                                            renderState(SearchState.Content(foundTracks))
+
+                                        } else renderState(SearchState.Empty)
+
+                                    }
+
+                                    400 -> {
+                                        renderState(SearchState.Error)
+                                    }
+
+                                    else -> {
+                                        renderState(SearchState.Error)
+                                    }
+                                }
+                            } else {
+                                handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+                            }
+                        }
+                    }*/
+
+    }
+
+    private fun processResult(foundTracks: List<Track>?, resultCode: Int) {
+        if (stateLiveData.value == SearchState.Loading) {
+            when (resultCode) {
+                200 -> {
+                    if (foundTracks != null) {
+                        if (foundTracks.isNotEmpty()) {
+                            renderState(SearchState.Content(foundTracks))
+                        } else renderState(SearchState.Empty)
+                    } else renderState(SearchState.Empty)
+                }
+
+                400 -> {
+                    renderState(SearchState.Error)
+                }
+
+                else -> {
+                    renderState(SearchState.Error)
+                }
+            }
+        } else {
+            handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+        }
     }
 
     private fun getHistory(): List<Track> {

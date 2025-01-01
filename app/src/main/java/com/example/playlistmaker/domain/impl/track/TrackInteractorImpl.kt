@@ -1,20 +1,29 @@
 package com.example.playlistmaker.domain.impl.track
 
+import com.example.playlistmaker.data.dto.Resource
 import com.example.playlistmaker.data.dto.TrackDto
 import com.example.playlistmaker.domain.api.track.TrackInteractor
 import com.example.playlistmaker.domain.api.track.TrackRepository
 import com.example.playlistmaker.domain.model.track.Track
-import java.util.concurrent.Executors
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class TrackInteractorImpl(private val repository: TrackRepository) : TrackInteractor {
 
-    private val executor = Executors.newCachedThreadPool()
+    override fun searchTracks(expression: String): Flow<Pair<List<Track>?, Int>> {
 
-    override fun searchTracks(expression: String, consumer: TrackInteractor.TrackConsumer) {
-        executor.execute {
-            val response = repository.searchTracks(expression)
-            consumer.consume(dtoToModel(response.results), response.resultCode)
+        return repository.searchTracks(expression).map { result ->
+            when (result) {
+                is Resource.Success -> {
+                    Pair(dtoToModel(result.data.results), result.data.resultCode)
+                }
+
+                is Resource.Error -> {
+                    Pair(null, result.data.resultCode)
+                }
+            }
         }
+
     }
 
     private fun dtoToModel(resultList: List<TrackDto>): List<Track> {
