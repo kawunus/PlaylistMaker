@@ -85,36 +85,6 @@ class SearchViewModel(
                 }
             }
         } else showHistory()
-
-
-        /*
-
-                    trackInteractor.searchTracks(request) { foundTracks, resultCode ->
-                        run {
-                            if (stateLiveData.value == SearchState.Loading) {
-                                when (resultCode) {
-                                    200 -> {
-                                        if (foundTracks.isNotEmpty()) {
-                                            renderState(SearchState.Content(foundTracks))
-
-                                        } else renderState(SearchState.Empty)
-
-                                    }
-
-                                    400 -> {
-                                        renderState(SearchState.Error)
-                                    }
-
-                                    else -> {
-                                        renderState(SearchState.Error)
-                                    }
-                                }
-                            } else {
-                                handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-                            }
-                        }
-                    }*/
-
     }
 
     private fun processResult(foundTracks: List<Track>?, resultCode: Int) {
