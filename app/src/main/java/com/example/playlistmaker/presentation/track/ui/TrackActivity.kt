@@ -10,7 +10,7 @@ import com.example.playlistmaker.databinding.ActivityTrackBinding
 import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.presentation.track.view_model.TrackViewModel
 import com.example.playlistmaker.utils.consts.IntentConsts
-import com.example.playlistmaker.utils.consts.MediaPlayerConsts
+import com.example.playlistmaker.utils.consts.PlayerState
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
@@ -59,22 +59,22 @@ class TrackActivity : AppCompatActivity() {
 
         viewModel.observePlayerState().observe(this) { playerState ->
             when (playerState!!) {
-                MediaPlayerConsts.STATE_DEFAULT -> {
+                is PlayerState.Default -> {
                     binding.playButton.setImageResource(R.drawable.ic_play)
                     binding.playButton.isEnabled = false
                 }
 
-                MediaPlayerConsts.STATE_PAUSED -> {
+                is PlayerState.Paused -> {
                     binding.playButton.setImageResource(R.drawable.ic_play)
                     binding.playButton.isEnabled = true
                 }
 
-                MediaPlayerConsts.STATE_PLAYING -> {
+                is PlayerState.Playing -> {
                     binding.playButton.setImageResource(R.drawable.ic_pause)
                     binding.playButton.isEnabled = true
                 }
 
-                MediaPlayerConsts.STATE_PREPARED -> {
+                is PlayerState.Prepared -> {
                     binding.playButton.setImageResource(R.drawable.ic_play)
                     binding.playButton.isEnabled = true
                 }

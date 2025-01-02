@@ -5,33 +5,28 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.domain.api.player.MediaPlayerInteractor
 import com.example.playlistmaker.domain.model.track.Track
-import com.example.playlistmaker.utils.consts.MediaPlayerConsts
+import com.example.playlistmaker.utils.consts.PlayerState
 
 class TrackViewModel(
-    private val track: Track,
-    private val mediaPlayerInteractor: MediaPlayerInteractor
+    private val track: Track, private val mediaPlayerInteractor: MediaPlayerInteractor
 ) : ViewModel() {
 
-    private val playerStateLiveData = MutableLiveData<MediaPlayerConsts>()
+    private val playerStateLiveData = MutableLiveData<PlayerState>()
     private val timerLiveData = MutableLiveData<String>()
 
     init {
-        playerStateLiveData.value = MediaPlayerConsts.STATE_DEFAULT
+        playerStateLiveData.value = PlayerState.Default()
         timerLiveData.value = "0:00"
-        mediaPlayerInteractor.setLambdas(
-            onCompletion = {
-                playerStateLiveData.value = MediaPlayerConsts.STATE_PREPARED
-            },
-            onPrepared = {
-                playerStateLiveData.value = MediaPlayerConsts.STATE_PREPARED
-            },
-            onSetTimer = { trackTime: String ->
-                timerLiveData.value = trackTime
-            }
-        )
+        mediaPlayerInteractor.setLambdas(onCompletion = {
+            playerStateLiveData.value = PlayerState.Prepared()
+        }, onPrepared = {
+            playerStateLiveData.value = PlayerState.Prepared()
+        }, onSetTimer = { trackTime: String ->
+            timerLiveData.value = trackTime
+        })
     }
 
-    fun observePlayerState(): LiveData<MediaPlayerConsts> = playerStateLiveData
+    fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
 
     fun observeTimer(): LiveData<String> = timerLiveData
 
@@ -40,31 +35,35 @@ class TrackViewModel(
     }
 
     fun pausePlayer() {
-        playerStateLiveData.value = MediaPlayerConsts.STATE_PAUSED
+        playerStateLiveData.value = PlayerState.Paused()
         mediaPlayerInteractor.pausePlayer()
     }
 
     private fun startPlayer() {
         mediaPlayerInteractor.startPlayer()
-        playerStateLiveData.value = MediaPlayerConsts.STATE_PLAYING
+        playerStateLiveData.value = PlayerState.Playing()
     }
 
     fun playbackControl() {
         when (playerStateLiveData.value!!) {
-            MediaPlayerConsts.STATE_DEFAULT -> {
+            is PlayerState.Default -> {
             }
 
-            MediaPlayerConsts.STATE_PLAYING -> {
+            is PlayerState.Playing -> {
                 pausePlayer()
             }
 
-            MediaPlayerConsts.STATE_PREPARED, MediaPlayerConsts.STATE_PAUSED -> {
+            is PlayerState.Prepared -> {
+                startPlayer()
+            }
+
+            is PlayerState.Paused -> {
                 startPlayer()
             }
         }
     }
 
     fun destroyPlayer() {
-        if (playerStateLiveData.value != MediaPlayerConsts.STATE_DEFAULT) mediaPlayerInteractor.closePlayer()
+        if (playerStateLiveData.value != PlayerState.Default()) mediaPlayerInteractor.closePlayer()
     }
 }

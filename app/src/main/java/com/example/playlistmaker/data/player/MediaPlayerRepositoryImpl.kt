@@ -5,7 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import com.example.playlistmaker.domain.api.player.MediaPlayerRepository
 import com.example.playlistmaker.domain.model.track.Track
-import com.example.playlistmaker.utils.consts.MediaPlayerConsts
+import com.example.playlistmaker.utils.consts.PlayerState
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -17,7 +17,7 @@ class MediaPlayerRepositoryImpl(
     private lateinit var onCompletion: () -> Unit
     private lateinit var onSetTimer: (time: String) -> Unit
 
-    private var playerState: MediaPlayerConsts = MediaPlayerConsts.STATE_DEFAULT
+    private var playerState: PlayerState = PlayerState.Default()
 
     private val mainThreadHandler = Handler(Looper.getMainLooper())
 
@@ -25,30 +25,30 @@ class MediaPlayerRepositoryImpl(
         mediaPlayer.setDataSource(track.previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playerState = MediaPlayerConsts.STATE_PREPARED
+            playerState = PlayerState.Prepared()
             onPrepared.invoke()
         }
         mediaPlayer.setOnCompletionListener {
-            playerState = MediaPlayerConsts.STATE_PREPARED
+            playerState = PlayerState.Prepared()
             onCompletion.invoke()
         }
     }
 
     override fun pausePlayer() {
         mediaPlayer.pause()
-        playerState = MediaPlayerConsts.STATE_PAUSED
+        playerState = PlayerState.Paused()
     }
 
     override fun startPlayer() {
         mediaPlayer.start()
-        playerState = MediaPlayerConsts.STATE_PLAYING
+        playerState = PlayerState.Playing()
         mainThreadHandler.post(createUpdateTimerTask())
     }
 
     override fun closePlayer() {
-        if (playerState == MediaPlayerConsts.STATE_PLAYING) mediaPlayer.stop()
+        if (playerState == PlayerState.Playing()) mediaPlayer.stop()
         mediaPlayer.reset()
-        playerState = MediaPlayerConsts.STATE_DEFAULT
+        playerState = PlayerState.Default()
     }
 
     override fun setLambdas(
@@ -74,7 +74,7 @@ class MediaPlayerRepositoryImpl(
                     onCompletion.invoke()
                 }
 
-                if (playerState == MediaPlayerConsts.STATE_PLAYING) {
+                if (playerState == PlayerState.Playing()) {
                     onSetTimer.invoke(
                         SimpleDateFormat("mm:ss", Locale.getDefault()).format(
                             trackTime
