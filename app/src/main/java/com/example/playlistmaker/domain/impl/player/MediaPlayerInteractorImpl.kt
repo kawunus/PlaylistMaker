@@ -16,6 +16,7 @@ class MediaPlayerInteractorImpl(
         mediaPlayerRepository.pausePlayer()
     }
 
+
     override fun startPlayer() {
         mediaPlayerRepository.startPlayer()
     }
@@ -26,13 +27,15 @@ class MediaPlayerInteractorImpl(
 
     override fun setLambdas(
         onPrepared: () -> Unit,
-        onCompletion: () -> Unit,
-        onSetTimer: (time: String) -> Unit
+        onCompletion: () -> Unit
     ) {
         mediaPlayerRepository.setLambdas(
             onPrepared = onPrepared,
-            onCompletion = onCompletion,
-            onSetTimer = onSetTimer
+            onCompletion = onCompletion
         )
+    }
+
+    override fun getCurrentPlayerPosition(): String {
+        return mediaPlayerRepository.getCurrentPlayerPosition()
     }
 }

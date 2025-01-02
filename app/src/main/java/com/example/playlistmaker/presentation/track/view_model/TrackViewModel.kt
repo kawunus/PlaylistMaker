@@ -3,68 +3,85 @@ package com.example.playlistmaker.presentation.track.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.api.player.MediaPlayerInteractor
 import com.example.playlistmaker.domain.model.track.Track
-import com.example.playlistmaker.utils.consts.MediaPlayerConsts
+import com.example.playlistmaker.utils.consts.PlayerState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class TrackViewModel(
-    private val track: Track,
-    private val mediaPlayerInteractor: MediaPlayerInteractor
+    private val track: Track, private val mediaPlayerInteractor: MediaPlayerInteractor
 ) : ViewModel() {
 
-    private val playerStateLiveData = MutableLiveData<MediaPlayerConsts>()
-    private val timerLiveData = MutableLiveData<String>()
+    private val playerStateLiveData = MutableLiveData<PlayerState>()
 
     init {
-        playerStateLiveData.value = MediaPlayerConsts.STATE_DEFAULT
-        timerLiveData.value = "0:00"
-        mediaPlayerInteractor.setLambdas(
-            onCompletion = {
-                playerStateLiveData.value = MediaPlayerConsts.STATE_PREPARED
-            },
-            onPrepared = {
-                playerStateLiveData.value = MediaPlayerConsts.STATE_PREPARED
-            },
-            onSetTimer = { trackTime: String ->
-                timerLiveData.value = trackTime
-            }
-        )
+        playerStateLiveData.value = PlayerState.Default()
+        mediaPlayerInteractor.setLambdas(onCompletion = {
+            timerJob?.cancel()
+            playerStateLiveData.value = PlayerState.Prepared()
+        }, onPrepared = {
+            playerStateLiveData.value = PlayerState.Prepared()
+        })
     }
 
-    fun observePlayerState(): LiveData<MediaPlayerConsts> = playerStateLiveData
-
-    fun observeTimer(): LiveData<String> = timerLiveData
+    fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
 
     fun preparePlayer() {
         mediaPlayerInteractor.preparePlayer(track = track)
     }
 
     fun pausePlayer() {
-        playerStateLiveData.value = MediaPlayerConsts.STATE_PAUSED
+        timerJob?.cancel()
+        playerStateLiveData.value =
+            PlayerState.Paused(mediaPlayerInteractor.getCurrentPlayerPosition())
         mediaPlayerInteractor.pausePlayer()
     }
 
     private fun startPlayer() {
         mediaPlayerInteractor.startPlayer()
-        playerStateLiveData.value = MediaPlayerConsts.STATE_PLAYING
+        playerStateLiveData.value =
+            PlayerState.Playing(mediaPlayerInteractor.getCurrentPlayerPosition())
+        startTimer()
     }
 
     fun playbackControl() {
         when (playerStateLiveData.value!!) {
-            MediaPlayerConsts.STATE_DEFAULT -> {
+            is PlayerState.Default -> {
             }
 
-            MediaPlayerConsts.STATE_PLAYING -> {
+            is PlayerState.Playing -> {
                 pausePlayer()
             }
 
-            MediaPlayerConsts.STATE_PREPARED, MediaPlayerConsts.STATE_PAUSED -> {
+            is PlayerState.Prepared -> {
+                startPlayer()
+            }
+
+            is PlayerState.Paused -> {
                 startPlayer()
             }
         }
     }
 
     fun destroyPlayer() {
-        if (playerStateLiveData.value != MediaPlayerConsts.STATE_DEFAULT) mediaPlayerInteractor.closePlayer()
+        if (playerStateLiveData.value != PlayerState.Default()) mediaPlayerInteractor.closePlayer()
+    }
+
+    private var timerJob: Job? = null
+
+    private fun startTimer() {
+        timerJob = viewModelScope.launch {
+            while (playerStateLiveData.value is PlayerState.Playing) {
+                delay(UPDATE_TIMER_DEBOUNCE)
+                playerStateLiveData.postValue(PlayerState.Playing(mediaPlayerInteractor.getCurrentPlayerPosition()))
+            }
+        }
+    }
+
+    companion object {
+        private const val UPDATE_TIMER_DEBOUNCE = 300L
     }
 }

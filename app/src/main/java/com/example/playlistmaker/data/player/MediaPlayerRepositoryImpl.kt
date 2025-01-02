@@ -1,11 +1,8 @@
 package com.example.playlistmaker.data.player
 
 import android.media.MediaPlayer
-import android.os.Handler
-import android.os.Looper
 import com.example.playlistmaker.domain.api.player.MediaPlayerRepository
 import com.example.playlistmaker.domain.model.track.Track
-import com.example.playlistmaker.utils.consts.MediaPlayerConsts
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -15,79 +12,56 @@ class MediaPlayerRepositoryImpl(
 
     private lateinit var onPrepared: () -> Unit
     private lateinit var onCompletion: () -> Unit
-    private lateinit var onSetTimer: (time: String) -> Unit
 
-    private var playerState: MediaPlayerConsts = MediaPlayerConsts.STATE_DEFAULT
-
-    private val mainThreadHandler = Handler(Looper.getMainLooper())
+    private var playerState = STATE_DEFAULT
 
     override fun preparePlayer(track: Track) {
         mediaPlayer.setDataSource(track.previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playerState = MediaPlayerConsts.STATE_PREPARED
+            playerState = STATE_PREPARED
             onPrepared.invoke()
         }
         mediaPlayer.setOnCompletionListener {
-            playerState = MediaPlayerConsts.STATE_PREPARED
+            playerState = STATE_PREPARED
             onCompletion.invoke()
         }
     }
 
     override fun pausePlayer() {
         mediaPlayer.pause()
-        playerState = MediaPlayerConsts.STATE_PAUSED
+        playerState = STATE_PAUSED
     }
 
     override fun startPlayer() {
         mediaPlayer.start()
-        playerState = MediaPlayerConsts.STATE_PLAYING
-        mainThreadHandler.post(createUpdateTimerTask())
+        playerState = STATE_PLAYING
     }
 
     override fun closePlayer() {
-        if (playerState == MediaPlayerConsts.STATE_PLAYING) mediaPlayer.stop()
+        if (playerState == STATE_PLAYING) mediaPlayer.stop()
         mediaPlayer.reset()
-        playerState = MediaPlayerConsts.STATE_DEFAULT
+        playerState = STATE_DEFAULT
     }
 
     override fun setLambdas(
         onPrepared: () -> Unit,
-        onCompletion: () -> Unit,
-        onSetTimer: (time: String) -> Unit
+        onCompletion: () -> Unit
     ) {
         this.onPrepared = onPrepared
         this.onCompletion = onCompletion
-        this.onSetTimer = onSetTimer
     }
 
-
-    private fun createUpdateTimerTask(): Runnable {
-        return object : Runnable {
-            override fun run() {
-                val trackTime = mediaPlayer.currentPosition
-
-                mediaPlayer.setOnCompletionListener {
-                    pausePlayer()
-                    mainThreadHandler.removeCallbacks(this)
-                    onSetTimer.invoke("00:00")
-                    onCompletion.invoke()
-                }
-
-                if (playerState == MediaPlayerConsts.STATE_PLAYING) {
-                    onSetTimer.invoke(
-                        SimpleDateFormat("mm:ss", Locale.getDefault()).format(
-                            trackTime
-                        )
-                    )
-                    mainThreadHandler.postDelayed(this, DELAY)
-                }
-            }
-        }
+    override fun getCurrentPlayerPosition(): String {
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+            ?: "00:00"
     }
 
     companion object {
-        const val DELAY = 50L
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
     }
 
 }
