@@ -1,8 +1,5 @@
 package com.example.playlistmaker.presentation.search.view_model
 
-import android.os.Handler
-import android.os.Looper
-import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,8 +16,6 @@ class SearchViewModel(
     private val historyInteractor: HistoryInteractor, private val trackInteractor: TrackInteractor
 ) : ViewModel() {
 
-    private val handler = Handler(Looper.getMainLooper())
-
     private var latestRequest: String? = null
 
     private val trackSearchDebounce =
@@ -35,8 +30,6 @@ class SearchViewModel(
     }
 
     companion object {
-        private val SEARCH_REQUEST_TOKEN = Any()
-
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
@@ -46,25 +39,12 @@ class SearchViewModel(
         stateLiveData.postValue(state)
     }
 
-    override fun onCleared() {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-    }
-
     fun onTextChanged(text: String) {
         if (latestRequest == text || text.isEmpty()) {
-            handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
             return
         }
 
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-        latestRequest = text
-
-        val searchRunnable = Runnable {
-            search(text)
-        }
-        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
-        renderState(SearchState.PreLoading)
-        handler.postAtTime(searchRunnable, SEARCH_REQUEST_TOKEN, postTime)
+        searchDebounce(text)
     }
 
     fun searchDebounce(changedText: String) {
@@ -72,6 +52,7 @@ class SearchViewModel(
             return
         }
         this.latestRequest = changedText
+        renderState(SearchState.PreLoading)
         trackSearchDebounce(changedText)
     }
 
@@ -106,8 +87,6 @@ class SearchViewModel(
                     renderState(SearchState.Error)
                 }
             }
-        } else {
-            handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
         }
     }
 
@@ -116,12 +95,12 @@ class SearchViewModel(
     }
 
     fun showHistory() {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+
         renderState(SearchState.History(getHistory()))
     }
 
     fun clearHistory() {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+
         historyInteractor.setHistory(History(emptyList()))
         showHistory()
     }

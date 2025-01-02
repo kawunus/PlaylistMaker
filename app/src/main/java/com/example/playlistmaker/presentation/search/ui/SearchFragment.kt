@@ -77,9 +77,8 @@ class SearchFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.clearIcon.visibility = clearButtonVisibility(s)
                 if (s?.isNotEmpty() == true && s.isNotBlank()) {
-                    viewModel.onTextChanged(text = s.toString())
+                    viewModel.searchDebounce(changedText = s.toString())
                 } else {
-
                     viewModel.showHistory()
                 }
             }
