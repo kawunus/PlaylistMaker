@@ -41,7 +41,7 @@ class SearchFragment : Fragment() {
     }
 
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val CLICK_DEBOUNCE_DELAY = 500L
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -1,6 +1,7 @@
 package com.example.playlistmaker.presentation.track.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
@@ -61,29 +62,25 @@ class TrackActivity : AppCompatActivity() {
             when (playerState!!) {
                 is PlayerState.Default -> {
                     binding.playButton.setImageResource(R.drawable.ic_play)
-                    binding.playButton.isEnabled = false
                 }
 
                 is PlayerState.Paused -> {
                     binding.playButton.setImageResource(R.drawable.ic_play)
-                    binding.playButton.isEnabled = true
                 }
 
                 is PlayerState.Playing -> {
                     binding.playButton.setImageResource(R.drawable.ic_pause)
-                    binding.playButton.isEnabled = true
                 }
 
                 is PlayerState.Prepared -> {
                     binding.playButton.setImageResource(R.drawable.ic_play)
-                    binding.playButton.isEnabled = true
                 }
             }
+            Log.e("PLAYER_STATE", "${playerState}")
+            binding.currentTimeTextView.text = playerState.progress
+            binding.playButton.isEnabled = playerState.isPlayButtonEnabled
         }
         viewModel.preparePlayer()
-        viewModel.observeTimer().observe(this) { time ->
-            binding.currentTimeTextView.text = time
-        }
     }
 
     override fun onPause() {
