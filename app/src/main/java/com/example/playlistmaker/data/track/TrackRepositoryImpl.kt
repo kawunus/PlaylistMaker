@@ -15,7 +15,6 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepos
         val response = networkClient.doRequest(TrackSearchRequest(expression))
         when (response.resultCode) {
             200 -> {
-
                 val responseData =
                     TrackSearchResponse(results = (response as TrackSearchResponse).results.map {
                         TrackDto(
@@ -38,9 +37,6 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepos
             }
 
             else -> {
-                val data = TrackSearchResponse(
-                    results = emptyList(),
-                ).apply { this.resultCode = response.resultCode }
                 emit(
                     Resource.Error(
                         message = "Произошла ошибка сервера",
