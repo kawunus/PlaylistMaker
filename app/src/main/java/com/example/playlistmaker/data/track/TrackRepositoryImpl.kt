@@ -6,16 +6,17 @@ import com.example.playlistmaker.data.dto.TrackSearchRequest
 import com.example.playlistmaker.data.dto.TrackSearchResponse
 import com.example.playlistmaker.data.network.NetworkClient
 import com.example.playlistmaker.domain.api.track.TrackRepository
+import com.example.playlistmaker.domain.model.track.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepository {
-    override fun searchTracks(expression: String): Flow<Resource<TrackSearchResponse>> = flow {
+    override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TrackSearchRequest(expression))
         when (response.resultCode) {
             200 -> {
 
-                val data =
+                val responseData =
                     TrackSearchResponse(results = (response as TrackSearchResponse).results.map {
                         TrackDto(
                             it.trackName,
@@ -32,8 +33,8 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepos
                     }).apply {
                         this.resultCode = 200
                     }
-
-                emit(Resource.Success(data))
+                val data = dtoToModel(responseData.results)
+                emit(Resource.Success(data = data, resultCode = 200))
             }
 
             else -> {
@@ -42,10 +43,34 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepos
                 ).apply { this.resultCode = response.resultCode }
                 emit(
                     Resource.Error(
-                        message = "Произошла ошибка сервера", data = data
+                        message = "Произошла ошибка сервера",
+                        data = emptyList(),
+                        resultCode = response.resultCode
                     )
                 )
             }
         }
+    }
+
+    private fun dtoToModel(resultList: List<TrackDto>): List<Track> {
+        val trackList = mutableListOf<Track>()
+
+        for (trackDto in resultList) {
+            val track = Track(
+                trackName = trackDto.trackName,
+                artistName = trackDto.artistName,
+                trackTimeMillis = trackDto.trackTimeMillis,
+                artworkUrl100 = trackDto.artworkUrl100,
+                trackId = trackDto.trackId,
+                country = trackDto.country,
+                primaryGenreName = trackDto.primaryGenreName,
+                releaseDate = trackDto.releaseDate,
+                collectionName = trackDto.collectionName,
+                previewUrl = trackDto.previewUrl
+            )
+            trackList.add(track)
+        }
+
+        return trackList.toList()
     }
 }
