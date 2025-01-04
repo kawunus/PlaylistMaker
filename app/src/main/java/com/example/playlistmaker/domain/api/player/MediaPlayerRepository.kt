@@ -14,8 +14,9 @@ interface MediaPlayerRepository {
 
     fun setLambdas(
         onPrepared: () -> Unit,
-        onCompletion: () -> Unit,
-        onSetTimer: (time: String) -> Unit
+        onCompletion: () -> Unit
     )
+
+    fun getCurrentPlayerPosition(): String
 
 }

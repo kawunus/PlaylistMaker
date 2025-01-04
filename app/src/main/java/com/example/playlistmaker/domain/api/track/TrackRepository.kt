@@ -1,7 +1,9 @@
 package com.example.playlistmaker.domain.api.track
 
-import com.example.playlistmaker.data.dto.TrackSearchResponse
+import com.example.playlistmaker.data.dto.Resource
+import com.example.playlistmaker.domain.model.track.Track
+import kotlinx.coroutines.flow.Flow
 
 interface TrackRepository {
-    fun searchTracks(expression: String): TrackSearchResponse
+    fun searchTracks(expression: String): Flow<Resource<List<Track>>>
 }
