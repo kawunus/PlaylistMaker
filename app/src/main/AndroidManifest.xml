@@ -17,7 +17,7 @@
         android:theme="@style/Base.Theme.PlaylistMaker"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.track.ui.fragment.TrackActivity"
+            android:name=".presentation.player.ui.fragment.PlayerActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.root.ui.activity.RootActivity"

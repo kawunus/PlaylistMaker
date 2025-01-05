@@ -30,9 +30,9 @@
     </fragment>
     <activity
         android:id="@+id/trackActivity"
-        android:name="com.example.playlistmaker.presentation.track.ui.fragment.TrackActivity"
+        android:name="com.example.playlistmaker.presentation.player.ui.fragment.PlayerActivity"
         android:label="activity_track"
-        tools:layout="@layout/activity_track" />
+        tools:layout="@layout/activity_player" />
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.playlistmaker.presentation.favorites.ui.fragment.FavoritesFragment"

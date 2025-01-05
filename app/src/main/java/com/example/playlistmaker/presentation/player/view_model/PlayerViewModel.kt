@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.track.view_model
+package com.example.playlistmaker.presentation.player.view_model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,12 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.api.favorites.FavoriteTrackInteractor
 import com.example.playlistmaker.domain.api.player.MediaPlayerInteractor
 import com.example.playlistmaker.domain.model.track.Track
-import com.example.playlistmaker.presentation.track.ui.model.PlayerState
+import com.example.playlistmaker.presentation.player.ui.model.PlayerState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class TrackViewModel(
+class PlayerViewModel(
     private val track: Track,
     private val mediaPlayerInteractor: MediaPlayerInteractor,
     private val favoriteTrackInteractor: FavoriteTrackInteractor
