@@ -9,7 +9,11 @@
         android:id="@+id/libraryFragment"
         android:name="com.example.playlistmaker.presentation.library.ui.LibraryFragment"
         android:label="LibraryFragment"
-        tools:layout="@layout/fragment_library" />
+        tools:layout="@layout/fragment_library">
+        <action
+            android:id="@+id/action_libraryFragment_to_trackActivity"
+            app:destination="@id/trackActivity" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.playlistmaker.presentation.settings.ui.SettingsFragment"
@@ -29,5 +33,10 @@
         android:name="com.example.playlistmaker.presentation.track.ui.TrackActivity"
         android:label="activity_track"
         tools:layout="@layout/activity_track" />
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.example.playlistmaker.presentation.favorites.ui.fragment.FavoritesFragment"
+        android:label="FavoritesFragment"
+        tools:layout="@layout/fragment_favorites"></fragment>
 
 </navigation>

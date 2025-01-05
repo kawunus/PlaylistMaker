@@ -39,14 +39,6 @@ class SearchViewModel(
         stateLiveData.postValue(state)
     }
 
-    fun onTextChanged(text: String) {
-        if (latestRequest == text || text.isEmpty()) {
-            return
-        }
-
-        searchDebounce(text)
-    }
-
     fun searchDebounce(changedText: String) {
         if (latestRequest == changedText) {
             return

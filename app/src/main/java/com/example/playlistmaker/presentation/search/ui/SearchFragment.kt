@@ -41,13 +41,13 @@ class SearchFragment : Fragment() {
     }
 
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 500L
+        private const val CLICK_DEBOUNCE_DELAY = 300L
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        onTrackClickDebounce = debounce<Track>(
+        onTrackClickDebounce = debounce(
             CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
         ) { track: Track ->
             viewModel.addToHistory(track)
@@ -123,7 +123,7 @@ class SearchFragment : Fragment() {
         super.onViewStateRestored(savedInstanceState)
         savedInstanceState?.let {
             val editTextContext = it.getString("EDIT_TEXT_CONTEXT", "")
-            binding.editText.setText(editTextContext)
+            editText.setText(editTextContext)
         }
     }
 
