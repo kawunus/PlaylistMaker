@@ -2,6 +2,8 @@ package com.example.playlistmaker.di
 
 import android.content.Context
 import android.media.MediaPlayer
+import androidx.room.Room
+import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.data.network.ITunesApiService
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -25,5 +27,9 @@ val dataModule = module {
 
     factory {
         MediaPlayer()
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db").build()
     }
 }
