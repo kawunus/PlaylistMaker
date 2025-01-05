@@ -63,10 +63,8 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.8.5")
 
     val roomVersion = "2.6.1"
-
     implementation("androidx.room:room-runtime:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")
-
     implementation("androidx.room:room-ktx:$roomVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 }
