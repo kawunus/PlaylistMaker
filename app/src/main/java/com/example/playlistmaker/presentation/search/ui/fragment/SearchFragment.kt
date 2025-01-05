@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.search.ui
+package com.example.playlistmaker.presentation.search.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
@@ -14,8 +14,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
-import com.example.playlistmaker.domain.model.search.SearchState
 import com.example.playlistmaker.domain.model.track.Track
+import com.example.playlistmaker.presentation.search.ui.adapter.TrackAdapter
+import com.example.playlistmaker.presentation.search.ui.model.SearchState
 import com.example.playlistmaker.presentation.search.view_model.SearchViewModel
 import com.example.playlistmaker.utils.consts.IntentConsts
 import com.example.playlistmaker.utils.debounce.debounce

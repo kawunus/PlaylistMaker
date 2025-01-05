@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.library.ui
+package com.example.playlistmaker.presentation.library.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.CustomTabBinding
 import com.example.playlistmaker.databinding.FragmentLibraryBinding
+import com.example.playlistmaker.presentation.library.ui.adapter.LibraryViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
 class LibraryFragment : Fragment() {

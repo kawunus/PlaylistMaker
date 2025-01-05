@@ -13,7 +13,7 @@ import com.example.playlistmaker.databinding.FragmentFavoritesBinding
 import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.presentation.favorites.ui.model.FavoritesState
 import com.example.playlistmaker.presentation.favorites.view_model.FavoritesViewModel
-import com.example.playlistmaker.presentation.search.ui.TrackAdapter
+import com.example.playlistmaker.presentation.search.ui.adapter.TrackAdapter
 import com.example.playlistmaker.utils.consts.IntentConsts
 import com.example.playlistmaker.utils.debounce.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel

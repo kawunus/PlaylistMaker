@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.track.ui
+package com.example.playlistmaker.presentation.track.ui.fragment
 
 import android.os.Bundle
 import android.util.Log
