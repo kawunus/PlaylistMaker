@@ -15,7 +15,7 @@ interface FavoriteTrackDao {
     @Query("DELETE FROM favorite_tracks WHERE id = :trackId")
     suspend fun deleteTrackById(trackId: Long)
 
-    @Query("SELECT * FROM favorite_tracks ORDER BY added_at ASC")
+    @Query("SELECT * FROM favorite_tracks ORDER BY added_at DESC")
     suspend fun getFavoritesTracks(): List<FavoriteTrackEntity>
 
     @Query("SELECT EXISTS(SELECT 1 FROM favorite_tracks WHERE id = :trackId)")
