@@ -104,4 +104,9 @@ class FavoritesFragment : Fragment() {
         recyclerView.isVisible = true
         trackAdapter?.saveData(trackList)
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getData()
+    }
 }

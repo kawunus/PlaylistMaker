@@ -21,7 +21,7 @@ class FavoritesViewModel(private val favoriteTrackInteractor: FavoriteTrackInter
         getData()
     }
 
-    private fun getData() {
+    fun getData() {
         viewModelScope.launch {
             favoriteTrackInteractor.getFavoritesTracks().collect { trackList ->
                 processResult(trackList)
