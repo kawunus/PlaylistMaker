@@ -1,4 +1,4 @@
-package com.example.playlistmaker.utils.consts
+package com.example.playlistmaker.presentation.track.ui.model
 
 sealed class PlayerState(
     val isPlayButtonEnabled: Boolean, val buttonText: String, val progress: String

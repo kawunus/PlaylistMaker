@@ -9,9 +9,9 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityTrackBinding
 import com.example.playlistmaker.domain.model.track.Track
+import com.example.playlistmaker.presentation.track.ui.model.PlayerState
 import com.example.playlistmaker.presentation.track.view_model.TrackViewModel
 import com.example.playlistmaker.utils.consts.IntentConsts
-import com.example.playlistmaker.utils.consts.PlayerState
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
