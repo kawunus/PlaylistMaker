@@ -101,6 +101,14 @@ class PlayerViewModel(
         }
     }
 
+    fun likeButtonControl() {
+        if (isFavoriteLiveData.value == true) {
+            deleteTrackFromFavorites()
+        } else {
+            addTrackToFavorites()
+        }
+    }
+
     fun addTrackToFavorites() {
         viewModelScope.launch {
             favoriteTrackInteractor.addTrackToFavorites(track)

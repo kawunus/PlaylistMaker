@@ -54,17 +54,16 @@ class PlayerActivity : AppCompatActivity() {
             binding.trackAlbumTextView.text = model.collectionName
         }
 
+
+        binding.likeButton.setOnClickListener {
+            viewModel.likeButtonControl()
+        }
+
         viewModel.observeIsFavoriteState().observe(this) { isFavorite ->
             if (isFavorite) {
                 binding.likeButton.setImageResource(R.drawable.ic_is_liked)
-                binding.likeButton.setOnClickListener {
-                    viewModel.deleteTrackFromFavorites()
-                }
             } else {
                 binding.likeButton.setImageResource(R.drawable.ic_like)
-                binding.likeButton.setOnClickListener {
-                    viewModel.addTrackToFavorites()
-                }
             }
         }
 
