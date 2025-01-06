@@ -5,11 +5,11 @@ import com.example.playlistmaker.utils.converter.TrackConverter
 import org.koin.dsl.module
 
 val utilModule = module {
-    single {
+    factory {
         JsonConverter()
     }
 
-    single {
+    factory {
         TrackConverter()
     }
 }
