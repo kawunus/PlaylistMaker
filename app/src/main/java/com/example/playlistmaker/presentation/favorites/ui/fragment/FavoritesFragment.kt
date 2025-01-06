@@ -55,6 +55,8 @@ class FavoritesFragment : Fragment() {
             render(state)
         }
 
+        viewModel.getData()
+
         onTrackClickDebounce = debounce(
             CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
         ) { track: Track ->

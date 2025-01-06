@@ -16,12 +16,8 @@ class FavoritesViewModel(private val favoriteTrackInteractor: FavoriteTrackInter
 
     fun observeState(): LiveData<FavoritesState> = stateLiveData
 
-    init {
-        renderState(FavoritesState.Loading)
-        getData()
-    }
-
     fun getData() {
+        renderState(FavoritesState.Loading)
         viewModelScope.launch {
             favoriteTrackInteractor.getFavoritesTracks().collect { trackList ->
                 processResult(trackList)
