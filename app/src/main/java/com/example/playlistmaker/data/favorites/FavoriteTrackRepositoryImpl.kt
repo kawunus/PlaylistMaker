@@ -33,6 +33,6 @@ class FavoriteTrackRepositoryImpl(
     }
 
     private fun convertTrackToTrackEntity(track: Track): FavoriteTrackEntity {
-        return converter.map(track)
+        return converter.map(track, System.currentTimeMillis())
     }
 }
