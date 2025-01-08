@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.api.history.HistoryInteractor
 import com.example.playlistmaker.domain.api.track.TrackInteractor
 import com.example.playlistmaker.domain.model.history.History
-import com.example.playlistmaker.domain.model.search.SearchState
 import com.example.playlistmaker.domain.model.track.Track
+import com.example.playlistmaker.presentation.search.ui.model.SearchState
 import com.example.playlistmaker.utils.debounce.debounce
 import kotlinx.coroutines.launch
 
@@ -37,14 +37,6 @@ class SearchViewModel(
 
     private fun renderState(state: SearchState) {
         stateLiveData.postValue(state)
-    }
-
-    fun onTextChanged(text: String) {
-        if (latestRequest == text || text.isEmpty()) {
-            return
-        }
-
-        searchDebounce(text)
     }
 
     fun searchDebounce(changedText: String) {

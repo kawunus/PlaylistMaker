@@ -1,21 +1,26 @@
-package com.example.playlistmaker.presentation.track.view_model
+package com.example.playlistmaker.presentation.player.view_model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.domain.api.favorites.FavoriteTrackInteractor
 import com.example.playlistmaker.domain.api.player.MediaPlayerInteractor
 import com.example.playlistmaker.domain.model.track.Track
-import com.example.playlistmaker.utils.consts.PlayerState
+import com.example.playlistmaker.presentation.player.ui.model.PlayerState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class TrackViewModel(
-    private val track: Track, private val mediaPlayerInteractor: MediaPlayerInteractor
+class PlayerViewModel(
+    private val track: Track,
+    private val mediaPlayerInteractor: MediaPlayerInteractor,
+    private val favoriteTrackInteractor: FavoriteTrackInteractor
 ) : ViewModel() {
 
     private val playerStateLiveData = MutableLiveData<PlayerState>()
+
+    private val isFavoriteLiveData = MutableLiveData<Boolean>()
 
     init {
         playerStateLiveData.value = PlayerState.Default()
@@ -25,9 +30,16 @@ class TrackViewModel(
         }, onPrepared = {
             playerStateLiveData.value = PlayerState.Prepared()
         })
+
+        viewModelScope.launch {
+            isFavoriteLiveData.value =
+                favoriteTrackInteractor.isTrackInFavorites(trackId = track.trackId)
+        }
     }
 
     fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
+
+    fun observeIsFavoriteState(): LiveData<Boolean> = isFavoriteLiveData
 
     fun preparePlayer() {
         mediaPlayerInteractor.preparePlayer(track = track)
@@ -78,6 +90,30 @@ class TrackViewModel(
                 delay(UPDATE_TIMER_DEBOUNCE)
                 playerStateLiveData.postValue(PlayerState.Playing(mediaPlayerInteractor.getCurrentPlayerPosition()))
             }
+        }
+    }
+
+    fun deleteTrackFromFavorites() {
+        viewModelScope.launch {
+            favoriteTrackInteractor.deleteTrackFromFavorites(trackId = track.trackId)
+            isFavoriteLiveData.value =
+                favoriteTrackInteractor.isTrackInFavorites(trackId = track.trackId)
+        }
+    }
+
+    fun likeButtonControl() {
+        if (isFavoriteLiveData.value == true) {
+            deleteTrackFromFavorites()
+        } else {
+            addTrackToFavorites()
+        }
+    }
+
+    fun addTrackToFavorites() {
+        viewModelScope.launch {
+            favoriteTrackInteractor.addTrackToFavorites(track)
+            isFavoriteLiveData.value =
+                favoriteTrackInteractor.isTrackInFavorites(trackId = track.trackId)
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.track.ui
+package com.example.playlistmaker.presentation.player.ui.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -7,27 +7,27 @@ import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivityTrackBinding
+import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import com.example.playlistmaker.domain.model.track.Track
-import com.example.playlistmaker.presentation.track.view_model.TrackViewModel
+import com.example.playlistmaker.presentation.player.ui.model.PlayerState
+import com.example.playlistmaker.presentation.player.view_model.PlayerViewModel
 import com.example.playlistmaker.utils.consts.IntentConsts
-import com.example.playlistmaker.utils.consts.PlayerState
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class TrackActivity : AppCompatActivity() {
+class PlayerActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityTrackBinding
+    private lateinit var binding: ActivityPlayerBinding
 
-    private val viewModel: TrackViewModel by viewModel {
+    private val viewModel: PlayerViewModel by viewModel {
         parametersOf(intent.getParcelableExtra<Track>(IntentConsts.TRACK.name)!!)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityTrackBinding.inflate(layoutInflater)
+        binding = ActivityPlayerBinding.inflate(layoutInflater)
         val model = intent.getParcelableExtra<Track>(IntentConsts.TRACK.name)!!
 
         setContentView(binding.root)
@@ -52,6 +52,19 @@ class TrackActivity : AppCompatActivity() {
             binding.trackYearTextView.isVisible = false
         } else {
             binding.trackAlbumTextView.text = model.collectionName
+        }
+
+
+        binding.likeButton.setOnClickListener {
+            viewModel.likeButtonControl()
+        }
+
+        viewModel.observeIsFavoriteState().observe(this) { isFavorite ->
+            if (isFavorite) {
+                binding.likeButton.setImageResource(R.drawable.ic_is_liked)
+            } else {
+                binding.likeButton.setImageResource(R.drawable.ic_like)
+            }
         }
 
         binding.playButton.setOnClickListener {

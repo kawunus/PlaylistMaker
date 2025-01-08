@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSecondary"
-    tools:context=".presentation.library.ui.LibraryFragment">
+    tools:context=".presentation.library.ui.fragment.LibraryFragment">
 
     <Toolbar
         android:id="@+id/toolbar"

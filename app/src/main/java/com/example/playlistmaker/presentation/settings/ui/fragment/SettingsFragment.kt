@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.settings.ui
+package com.example.playlistmaker.presentation.settings.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
