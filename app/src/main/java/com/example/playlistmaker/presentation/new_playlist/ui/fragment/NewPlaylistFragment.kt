@@ -94,5 +94,9 @@ class NewPlaylistFragment : Fragment() {
                 imageUrl = coverUrl
             )
         }
+
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 }
