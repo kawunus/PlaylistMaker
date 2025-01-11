@@ -41,11 +41,13 @@ class NewPlaylistFragment : Fragment() {
                         requireContext(),
                         R.color.buttonCreateColorAble
                     )
+                    createButton.isEnabled = true
                 } else {
                     createButton.backgroundTintList = ContextCompat.getColorStateList(
                         requireContext(),
                         R.color.buttonCreateColorDisable
                     )
+                    createButton.isEnabled = false
                 }
             }
 
