@@ -39,4 +39,7 @@ val interactorModule = module {
         FavoriteTrackInteractorImpl(get())
     }
 
+    single<FavoriteTrackInteractor> {
+        FavoriteTrackInteractorImpl(get())
+    }
 }

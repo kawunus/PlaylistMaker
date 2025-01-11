@@ -52,5 +52,9 @@ class NewPlaylistFragment : Fragment() {
             }
 
         })
+
+        binding.createButton.setOnClickListener {
+
+        }
     }
 }
