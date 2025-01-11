@@ -1,6 +1,7 @@
 package com.example.playlistmaker.di
 
 import com.example.playlistmaker.data.favorites.FavoriteTrackRepositoryImpl
+import com.example.playlistmaker.data.file_manager.FileManager
 import com.example.playlistmaker.data.history.HistoryRepositoryImpl
 import com.example.playlistmaker.data.network.NetworkClient
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
@@ -16,6 +17,7 @@ import com.example.playlistmaker.domain.api.playlist.PlaylistRepository
 import com.example.playlistmaker.domain.api.settings.SettingsRepository
 import com.example.playlistmaker.domain.api.sharing.ExternalNavigator
 import com.example.playlistmaker.domain.api.track.TrackRepository
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val repositoryModule = module {
@@ -50,6 +52,10 @@ val repositoryModule = module {
     }
 
     single<PlaylistRepository> {
-        PlaylistRepositoryImpl(get())
+        PlaylistRepositoryImpl(get(), get())
+    }
+
+    single {
+        FileManager(androidContext())
     }
 }

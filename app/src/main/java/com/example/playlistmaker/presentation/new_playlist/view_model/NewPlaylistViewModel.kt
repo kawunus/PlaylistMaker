@@ -1,10 +1,11 @@
 package com.example.playlistmaker.presentation.new_playlist.view_model
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.data.db.entity.PlaylistEntity
+import com.example.playlistmaker.data.dto.PlaylistDto
 import com.example.playlistmaker.domain.api.playlist.PlaylistInteractor
 import com.example.playlistmaker.presentation.new_playlist.ui.model.NewPlaylistState
 import kotlinx.coroutines.launch
@@ -15,9 +16,15 @@ class NewPlaylistViewModel(private val playlistInteractor: PlaylistInteractor) :
 
     fun observeState(): LiveData<NewPlaylistState> = stateLiveData
 
-    fun createNewPlaylist(playlist: PlaylistEntity) {
+    fun createNewPlaylist(name: String, description: String?, imageUrl: Uri?) {
         viewModelScope.launch {
-            playlistInteractor.createNewPlaylist(playlist)
+            playlistInteractor.createNewPlaylist(
+                PlaylistDto(
+                    name = name,
+                    description = description,
+                    imageUrl = imageUrl
+                )
+            )
             stateLiveData.value = NewPlaylistState.Created
         }
     }
