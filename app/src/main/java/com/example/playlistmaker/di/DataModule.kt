@@ -31,11 +31,9 @@ val dataModule = module {
 
     single {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db").build()
-            .favoriteTrackDao()
     }
 
-    single {
-        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db").build()
-            .playlistDao()
-    }
+    single { get<AppDatabase>().favoriteTrackDao() }
+
+    single { get<AppDatabase>().playlistDao() }
 }

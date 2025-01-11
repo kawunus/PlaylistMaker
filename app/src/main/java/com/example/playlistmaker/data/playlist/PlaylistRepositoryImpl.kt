@@ -1,5 +1,6 @@
 package com.example.playlistmaker.data.playlist
 
+import android.util.Log
 import com.example.playlistmaker.data.db.dao.PlaylistDao
 import com.example.playlistmaker.data.db.entity.PlaylistEntity
 import com.example.playlistmaker.domain.api.playlist.PlaylistRepository
@@ -14,6 +15,7 @@ class PlaylistRepositoryImpl(private val playlistDao: PlaylistDao) : PlaylistRep
 
     override suspend fun createNewPlaylist(playlistEntity: PlaylistEntity) {
         playlistDao.createNewPlaylist(playlistEntity)
+        Log.e("DATABASE_PLAYLISTS", "${playlistDao.getPlaylists()}")
     }
 
     override suspend fun deletePlaylist(playlistEntity: PlaylistEntity) {

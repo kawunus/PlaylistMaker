@@ -7,9 +7,9 @@ import com.example.playlistmaker.domain.model.track.Track
 
 @Entity(tableName = "playlists")
 data class PlaylistEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int? = null,
     val name: String,
-    val description: String,
+    val description: String?,
     @ColumnInfo(name = "image_url") val imageUrl: String?,
     @ColumnInfo(name = "count_of_tracks") val countOfTracks: Int,
     @ColumnInfo(name = "track_list") val trackList: List<Track>

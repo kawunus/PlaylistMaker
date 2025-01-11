@@ -9,7 +9,10 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.R
+import com.example.playlistmaker.data.db.entity.PlaylistEntity
 import com.example.playlistmaker.databinding.FragmentNewPlaylistBinding
+import com.example.playlistmaker.presentation.new_playlist.view_model.NewPlaylistViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class NewPlaylistFragment : Fragment() {
 
@@ -17,10 +20,12 @@ class NewPlaylistFragment : Fragment() {
         FragmentNewPlaylistBinding.inflate(layoutInflater)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+    private val viewModel: NewPlaylistViewModel by viewModel()
+
+    override
+
+    fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         return binding.root
     }
@@ -38,14 +43,12 @@ class NewPlaylistFragment : Fragment() {
             override fun afterTextChanged(content: Editable?) {
                 if (!content.isNullOrEmpty()) {
                     createButton.backgroundTintList = ContextCompat.getColorStateList(
-                        requireContext(),
-                        R.color.buttonCreateColorAble
+                        requireContext(), R.color.buttonCreateColorAble
                     )
                     createButton.isEnabled = true
                 } else {
                     createButton.backgroundTintList = ContextCompat.getColorStateList(
-                        requireContext(),
-                        R.color.buttonCreateColorDisable
+                        requireContext(), R.color.buttonCreateColorDisable
                     )
                     createButton.isEnabled = false
                 }
@@ -54,7 +57,15 @@ class NewPlaylistFragment : Fragment() {
         })
 
         binding.createButton.setOnClickListener {
-
+            viewModel.createNewPlaylist(
+                PlaylistEntity(
+                    name = binding.nameEditText.text.toString(),
+                    description = binding.descriptionEditText.text.toString(),
+                    countOfTracks = 0,
+                    trackList = emptyList(),
+                    imageUrl = ""
+                )
+            )
         }
     }
 }
