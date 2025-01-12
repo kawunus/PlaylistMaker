@@ -7,6 +7,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.PlaylistItemInMediatekaBinding
 import com.example.playlistmaker.domain.model.playlist.Playlist
+import com.example.playlistmaker.utils.converter.WordConverter
 
 class PlaylistViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -16,6 +17,9 @@ class PlaylistViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         Glide.with(itemView).load(model.imageUrl).transform(RoundedCorners(8))
             .placeholder(R.drawable.placeholder).into(binding.coverImageView)
         binding.playlistNameTextView.text = model.name
-        binding.trackCountTextView.text = model.countOfTracks.toString()
+        val countOfTracks =
+            "${model.countOfTracks} ${WordConverter.getTrackWordForm(model.countOfTracks)}"
+        binding.trackCountTextView.text = countOfTracks
+
     }
 }
