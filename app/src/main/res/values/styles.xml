@@ -91,6 +91,7 @@
         <item name="boxStrokeColor">@color/input_edit_text_colors</item>
         <item name="boxStrokeWidthFocused">1dp</item>
         <item name="android:textColorHint">?attr/colorOnSecondary</item>
+        <item name="cursorColor">@color/blueColor</item>
     </style>
 
 </resources>
