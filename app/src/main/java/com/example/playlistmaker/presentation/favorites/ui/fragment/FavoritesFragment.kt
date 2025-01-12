@@ -44,7 +44,6 @@ class FavoritesFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
         _binding = null
     }
 
@@ -77,10 +76,7 @@ class FavoritesFragment : Fragment() {
     private fun render(state: FavoritesState) {
         when (state) {
             is FavoritesState.Content -> renderContent(state.trackList)
-            FavoritesState.Empty -> {
-                renderEmptyState()
-            }
-
+            FavoritesState.Empty -> renderEmptyState()
             FavoritesState.Loading -> renderLoadingState()
         }
     }
