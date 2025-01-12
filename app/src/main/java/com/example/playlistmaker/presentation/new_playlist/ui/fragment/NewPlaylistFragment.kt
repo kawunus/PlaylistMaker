@@ -1,5 +1,6 @@
 package com.example.playlistmaker.presentation.new_playlist.ui.fragment
 
+import android.app.AlertDialog
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -8,6 +9,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -17,6 +20,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentNewPlaylistBinding
 import com.example.playlistmaker.presentation.new_playlist.ui.model.NewPlaylistState
 import com.example.playlistmaker.presentation.new_playlist.view_model.NewPlaylistViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class NewPlaylistFragment : Fragment() {
@@ -35,7 +39,7 @@ class NewPlaylistFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?): Unit = with(binding) {
         super.onViewCreated(view, savedInstanceState)
 
         nameEditText.addTextChangedListener(object : TextWatcher {
@@ -64,6 +68,11 @@ class NewPlaylistFragment : Fragment() {
         viewModel.observeState().observe(viewLifecycleOwner) { state ->
             when (state) {
                 NewPlaylistState.Created -> {
+                    Toast.makeText(
+                        requireContext(),
+                        "Плейлист ${binding.nameEditText.text.toString()} создан",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     findNavController().popBackStack()
                 }
 
@@ -96,7 +105,34 @@ class NewPlaylistFragment : Fragment() {
         }
 
         binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+            if (binding.descriptionEditText.text.isNullOrEmpty() && binding.nameEditText.text.isNullOrEmpty() && coverUrl == null) {
+                findNavController().popBackStack()
+            } else {
+                showDialog()
+            }
         }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            if (binding.descriptionEditText.text.isNullOrEmpty() && binding.nameEditText.text.isNullOrEmpty() && coverUrl == null) {
+                findNavController().popBackStack()
+            } else {
+                showDialog()
+            }
+        }
+    }
+
+    private fun showDialog() {
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Завершить создание плейлиста?")
+            .setMessage("Все несохраненные данные будут потеряны")
+            .setNeutralButton("Отмена") { _, _ ->
+            }
+            .setPositiveButton("Завершить") { _, _ ->
+                findNavController().popBackStack()
+            }.show()
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            .setTextColor(ContextCompat.getColor(requireContext(), R.color.defaultTextColor))
+        dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
+            .setTextColor(ContextCompat.getColor(requireContext(), R.color.defaultTextColor))
+
     }
 }
