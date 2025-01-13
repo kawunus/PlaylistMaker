@@ -14,7 +14,7 @@ class PlaylistViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun bind(model: Playlist) {
         Glide.with(itemView).load(model.imageUrl).centerCrop()
-            .placeholder(R.drawable.playlist_in_library_placeholder).into(binding.coverImageView)
+            .placeholder(R.drawable.ic_placeholder).into(binding.coverImageView)
         binding.playlistNameTextView.text = model.name
         val countOfTracks =
             "${model.countOfTracks} ${WordConverter.getTrackWordForm(model.countOfTracks)}"

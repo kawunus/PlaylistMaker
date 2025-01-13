@@ -14,7 +14,7 @@ class TrackViewHolder(trackView: View) : RecyclerView.ViewHolder(trackView) {
     private val binding: TrackViewBinding = TrackViewBinding.bind(trackView)
     fun bind(model: Track) {
         Glide.with(itemView).load(model.artworkUrl100).transform(RoundedCorners(2))
-            .placeholder(R.drawable.track_placeholder).into(binding.artworkImageView)
+            .placeholder(R.drawable.ic_placeholder).into(binding.artworkImageView)
         binding.trackNameTextView.text = model.trackName
         binding.artistNameTextView.text = model.artistName
 
