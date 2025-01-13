@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.domain.api.track.TrackInteractor
+import com.example.playlistmaker.domain.api.favorite.FavoriteTrackInteractor
 import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.presentation.favorites.ui.model.FavoritesState
 import kotlinx.coroutines.launch
 
-class FavoritesViewModel(private val trackInteractor: TrackInteractor) :
+class FavoritesViewModel(private val favoriteTrackInteractor: FavoriteTrackInteractor) :
     ViewModel() {
 
     private val stateLiveData = MutableLiveData<FavoritesState>()
@@ -19,7 +19,7 @@ class FavoritesViewModel(private val trackInteractor: TrackInteractor) :
     fun getData() {
         renderState(FavoritesState.Loading)
         viewModelScope.launch {
-            trackInteractor.getFavoritesTracks().collect { trackList ->
+            favoriteTrackInteractor.getFavoritesTracks().collect { trackList ->
                 processResult(trackList)
             }
         }

@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.domain.api.favorite.FavoriteTrackInteractor
 import com.example.playlistmaker.domain.api.player.MediaPlayerInteractor
-import com.example.playlistmaker.domain.api.track.TrackInteractor
 import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.presentation.player.ui.model.PlayerState
 import kotlinx.coroutines.Job
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 class PlayerViewModel(
     private val track: Track,
     private val mediaPlayerInteractor: MediaPlayerInteractor,
-    private val trackInteractor: TrackInteractor
+    private val favoriteTrackInteractor: FavoriteTrackInteractor
 ) : ViewModel() {
 
     private val playerStateLiveData = MutableLiveData<PlayerState>()
@@ -33,7 +33,7 @@ class PlayerViewModel(
 
         viewModelScope.launch {
             isFavoriteLiveData.value =
-                trackInteractor.isTrackInFavorites(trackId = track.trackId)
+                favoriteTrackInteractor.isTrackInFavorites(trackId = track.trackId)
         }
     }
 
@@ -95,9 +95,9 @@ class PlayerViewModel(
 
     fun deleteTrackFromFavorites() {
         viewModelScope.launch {
-            trackInteractor.deleteTrackFromFavorites(trackId = track.trackId)
+            favoriteTrackInteractor.deleteTrackFromFavorites(trackId = track.trackId)
             isFavoriteLiveData.value =
-                trackInteractor.isTrackInFavorites(trackId = track.trackId)
+                favoriteTrackInteractor.isTrackInFavorites(trackId = track.trackId)
         }
     }
 
@@ -111,9 +111,9 @@ class PlayerViewModel(
 
     fun addTrackToFavorites() {
         viewModelScope.launch {
-            trackInteractor.addTrackToFavorites(track)
+            favoriteTrackInteractor.addTrackToFavorites(track)
             isFavoriteLiveData.value =
-                trackInteractor.isTrackInFavorites(trackId = track.trackId)
+                favoriteTrackInteractor.isTrackInFavorites(trackId = track.trackId)
         }
     }
 

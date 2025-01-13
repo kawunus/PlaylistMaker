@@ -1,9 +1,9 @@
-package com.example.playlistmaker.domain.api.track
+package com.example.playlistmaker.domain.api.favorite
 
 import com.example.playlistmaker.domain.model.track.Track
 import kotlinx.coroutines.flow.Flow
 
-interface TrackRepository {
+interface FavoriteTrackInteractor {
 
     fun getFavoritesTracks(): Flow<List<Track>>
 

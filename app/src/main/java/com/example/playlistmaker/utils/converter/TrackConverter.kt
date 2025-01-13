@@ -1,11 +1,12 @@
 package com.example.playlistmaker.utils.converter
 
-import com.example.playlistmaker.data.db.entity.TrackEntity
+import com.example.playlistmaker.data.db.entity.FavoriteTrackEntity
 import com.example.playlistmaker.domain.model.track.Track
 
 class TrackConverter {
 
-    fun map(track: Track, addedAt: Long, isFavorite: Boolean): TrackEntity = TrackEntity(
+    fun map(track: Track, addedAt: Long, isFavorite: Boolean): FavoriteTrackEntity =
+        FavoriteTrackEntity(
         trackId = track.trackId,
         trackName = track.trackName,
         artistName = track.artistName,
@@ -20,7 +21,7 @@ class TrackConverter {
         isFavorite = isFavorite
     )
 
-    fun map(track: TrackEntity): Track = Track(
+    fun map(track: FavoriteTrackEntity): Track = Track(
         trackId = track.trackId,
         trackName = track.trackName,
         artistName = track.artistName,

@@ -4,19 +4,19 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.playlistmaker.data.db.entity.TrackEntity
+import com.example.playlistmaker.data.db.entity.FavoriteTrackEntity
 
 @Dao
-interface TrackDao {
+interface FavoriteTrackDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addTrackToFavorites(track: TrackEntity)
+    suspend fun addTrackToFavorites(track: FavoriteTrackEntity)
 
     @Query("DELETE FROM tracks WHERE id = :trackId")
     suspend fun deleteTrackById(trackId: Long)
 
     @Query("SELECT * FROM tracks WHERE is_favorite = true ORDER BY added_at DESC")
-    suspend fun getFavoritesTracks(): List<TrackEntity>
+    suspend fun getFavoritesTracks(): List<FavoriteTrackEntity>
 
     @Query("SELECT EXISTS(SELECT 1 FROM tracks WHERE id = :trackId AND is_favorite = true)")
     suspend fun isTrackInFavorites(trackId: Long): Boolean
