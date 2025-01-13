@@ -1,9 +1,15 @@
 package com.example.playlistmaker.domain.api.track
 
-import com.example.playlistmaker.data.dto.Resource
 import com.example.playlistmaker.domain.model.track.Track
 import kotlinx.coroutines.flow.Flow
 
 interface TrackRepository {
-    fun searchTracks(expression: String): Flow<Resource<List<Track>>>
+
+    fun getFavoritesTracks(): Flow<List<Track>>
+
+    suspend fun deleteTrackFromFavorites(trackId: Long)
+
+    suspend fun addTrackToFavorites(track: Track)
+
+    suspend fun isTrackInFavorites(trackId: Long): Boolean
 }

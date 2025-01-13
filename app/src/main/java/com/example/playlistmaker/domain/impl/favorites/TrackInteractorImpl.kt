@@ -1,12 +1,12 @@
 package com.example.playlistmaker.domain.impl.favorites
 
-import com.example.playlistmaker.domain.api.favorites.FavoriteTrackInteractor
-import com.example.playlistmaker.domain.api.favorites.FavoriteTrackRepository
+import com.example.playlistmaker.domain.api.track.TrackInteractor
+import com.example.playlistmaker.domain.api.track.TrackRepository
 import com.example.playlistmaker.domain.model.track.Track
 import kotlinx.coroutines.flow.Flow
 
-class FavoriteTrackInteractorImpl(private val repository: FavoriteTrackRepository) :
-    FavoriteTrackInteractor {
+class TrackInteractorImpl(private val repository: TrackRepository) :
+    TrackInteractor {
     override fun getFavoritesTracks(): Flow<List<Track>> {
         return repository.getFavoritesTracks()
     }

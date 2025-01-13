@@ -1,72 +1,38 @@
 package com.example.playlistmaker.data.track
 
-import com.example.playlistmaker.data.dto.Resource
-import com.example.playlistmaker.data.dto.TrackDto
-import com.example.playlistmaker.data.dto.TrackSearchRequest
-import com.example.playlistmaker.data.dto.TrackSearchResponse
-import com.example.playlistmaker.data.network.NetworkClient
+import com.example.playlistmaker.data.db.dao.TrackDao
+import com.example.playlistmaker.data.db.entity.TrackEntity
 import com.example.playlistmaker.domain.api.track.TrackRepository
 import com.example.playlistmaker.domain.model.track.Track
+import com.example.playlistmaker.utils.converter.TrackConverter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepository {
-    override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
-        val response = networkClient.doRequest(TrackSearchRequest(expression))
-        when (response.resultCode) {
-            200 -> {
-                val responseData =
-                    TrackSearchResponse(results = (response as TrackSearchResponse).results.map {
-                        TrackDto(
-                            it.trackName,
-                            it.artistName,
-                            it.trackTimeMillis,
-                            it.artworkUrl100,
-                            it.trackId,
-                            it.country,
-                            it.primaryGenreName,
-                            it.releaseDate,
-                            it.collectionName,
-                            it.previewUrl
-                        )
-                    }).apply {
-                        this.resultCode = 200
-                    }
-                val data = dtoToModel(responseData.results)
-                emit(Resource.Success(data = data, resultCode = 200))
-            }
-
-            else -> {
-                emit(
-                    Resource.Error(
-                        message = "Произошла ошибка сервера",
-                        data = emptyList(),
-                        resultCode = response.resultCode
-                    )
-                )
-            }
-        }
+class TrackRepositoryImpl(
+    private val trackDao: TrackDao, private val converter: TrackConverter
+) : TrackRepository {
+    override fun getFavoritesTracks(): Flow<List<Track>> = flow {
+        val tracks = trackDao.getFavoritesTracks()
+        emit(convertListFromTrackEntity(tracks))
     }
 
-    private fun dtoToModel(resultList: List<TrackDto>): List<Track> {
-        val trackList = mutableListOf<Track>()
+    override suspend fun deleteTrackFromFavorites(trackId: Long) {
+        trackDao.deleteTrackById(trackId)
+    }
 
-        for (trackDto in resultList) {
-            val track = Track(
-                trackName = trackDto.trackName,
-                artistName = trackDto.artistName,
-                trackTimeMillis = trackDto.trackTimeMillis,
-                artworkUrl100 = trackDto.artworkUrl100,
-                trackId = trackDto.trackId,
-                country = trackDto.country,
-                primaryGenreName = trackDto.primaryGenreName,
-                releaseDate = trackDto.releaseDate,
-                collectionName = trackDto.collectionName,
-                previewUrl = trackDto.previewUrl
-            )
-            trackList.add(track)
-        }
+    override suspend fun addTrackToFavorites(track: Track) {
+        trackDao.addTrackToFavorites(convertTrackToTrackEntity(track, true))
+    }
 
-        return trackList.toList()
+    override suspend fun isTrackInFavorites(trackId: Long): Boolean {
+        return trackDao.isTrackInFavorites(trackId)
+    }
+
+    private fun convertListFromTrackEntity(tracks: List<TrackEntity>): List<Track> {
+        return tracks.map { track -> converter.map(track) }
+    }
+
+    private fun convertTrackToTrackEntity(track: Track, isFavorite: Boolean): TrackEntity {
+        return converter.map(track, System.currentTimeMillis(), isFavorite)
     }
 }
