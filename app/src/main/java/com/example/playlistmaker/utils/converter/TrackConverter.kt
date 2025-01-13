@@ -5,7 +5,7 @@ import com.example.playlistmaker.domain.model.track.Track
 
 class TrackConverter {
 
-    fun map(track: Track, addedAt: Long, isFavorite: Boolean): FavoriteTrackEntity =
+    fun map(track: Track, addedAt: Long): FavoriteTrackEntity =
         FavoriteTrackEntity(
         trackId = track.trackId,
         trackName = track.trackName,
@@ -18,7 +18,6 @@ class TrackConverter {
         previewUrl = track.previewUrl,
         releaseDate = track.releaseDate,
         addedAt = addedAt,
-        isFavorite = isFavorite
     )
 
     fun map(track: FavoriteTrackEntity): Track = Track(

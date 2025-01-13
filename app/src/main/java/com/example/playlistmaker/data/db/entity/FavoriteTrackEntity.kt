@@ -16,6 +16,5 @@ data class FavoriteTrackEntity(
     @ColumnInfo(name = "release_date") val releaseDate: String,
     @ColumnInfo(name = "collection_name") val collectionName: String,
     @ColumnInfo(name = "preview_url") val previewUrl: String,
-    @ColumnInfo(name = "added_at") val addedAt: Long,
-    @ColumnInfo(name = "is_favorite") val isFavorite: Boolean
+    @ColumnInfo(name = "added_at") val addedAt: Long
 )

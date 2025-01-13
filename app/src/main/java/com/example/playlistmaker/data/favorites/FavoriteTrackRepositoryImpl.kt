@@ -21,7 +21,7 @@ class FavoriteTrackRepositoryImpl(
     }
 
     override suspend fun addTrackToFavorites(track: Track) {
-        favoriteTrackDao.addTrackToFavorites(convertTrackToTrackEntity(track, true))
+        favoriteTrackDao.addTrackToFavorites(convertTrackToTrackEntity(track))
     }
 
     override suspend fun isTrackInFavorites(trackId: Long): Boolean {
@@ -32,7 +32,7 @@ class FavoriteTrackRepositoryImpl(
         return tracks.map { track -> converter.map(track) }
     }
 
-    private fun convertTrackToTrackEntity(track: Track, isFavorite: Boolean): FavoriteTrackEntity {
-        return converter.map(track, System.currentTimeMillis(), isFavorite)
+    private fun convertTrackToTrackEntity(track: Track): FavoriteTrackEntity {
+        return converter.map(track, System.currentTimeMillis())
     }
 }
