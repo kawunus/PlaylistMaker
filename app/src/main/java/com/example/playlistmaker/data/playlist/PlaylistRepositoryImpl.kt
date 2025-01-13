@@ -35,7 +35,6 @@ class PlaylistRepositoryImpl(
             name = playlistDto.name,
             description = playlistDto.description,
             countOfTracks = 0,
-            trackList = emptyList(),
             imageUrl = filePath,
             imageName = fileName
         )
