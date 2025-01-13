@@ -50,4 +50,8 @@
     <string name="playlist_name_placeholder">Название*</string>
     <string name="playlist_description_placeholder">Описание</string>
     <string name="playlist_create">Создать</string>
+    <string name="playlist_dialog_title">Завершить создание плейлиста?</string>
+    <string name="playlist_dialog_message">Все несохраненные данные будут потеряны</string>
+    <string name="playlist_dialog_neutral">Отмена</string>
+    <string name="playlist_dialog_positive">Завершить</string>
 </resources>

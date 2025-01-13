@@ -122,11 +122,11 @@ class NewPlaylistFragment : Fragment() {
 
     private fun showDialog() {
         val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Завершить создание плейлиста?")
-            .setMessage("Все несохраненные данные будут потеряны")
-            .setNeutralButton("Отмена") { _, _ ->
+            .setTitle(R.string.playlist_dialog_title)
+            .setMessage(R.string.playlist_dialog_message)
+            .setNeutralButton(R.string.playlist_dialog_neutral) { _, _ ->
             }
-            .setPositiveButton("Завершить") { _, _ ->
+            .setPositiveButton(R.string.playlist_dialog_positive) { _, _ ->
                 findNavController().popBackStack()
             }.show()
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)
