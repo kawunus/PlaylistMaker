@@ -92,6 +92,7 @@
         <item name="boxStrokeWidthFocused">1dp</item>
         <item name="android:textColorHint">?attr/colorOnSecondary</item>
         <item name="cursorColor">@color/blueColor</item>
+        <item name="android:windowSoftInputMode">adjustPan</item>
     </style>
 
     <style name="RoundedImageStyle">
