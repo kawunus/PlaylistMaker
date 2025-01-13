@@ -41,7 +41,7 @@ class PlayerActivity : AppCompatActivity() {
         binding.trackTimeTextView.text = dateFormatter.format(model.trackTimeMillis)
         Glide.with(this).load(model.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")).transform(
             RoundedCorners(8)
-        ).placeholder(R.drawable.placeholder).into(binding.imageView)
+        ).placeholder(R.drawable.track_placeholder).into(binding.imageView)
         binding.trackCountryTextView.text = model.country
         binding.trackGenreTextView.text = model.primaryGenreName
         binding.trackYearTextView.text = model.releaseDate.substring(0, 4)
