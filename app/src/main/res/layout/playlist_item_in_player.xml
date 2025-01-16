@@ -27,13 +27,15 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="14dp"
         android:fontFamily="@font/yandex_sans_display_regular"
+        android:maxLines="1"
+        android:singleLine="true"
         android:textColor="?attr/colorOnSecondary"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/coverImageView"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="второй" />
+        tools:text="" />
 
     <TextView
         android:id="@+id/countryTextView"
@@ -41,12 +43,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
         android:fontFamily="@font/yandex_sans_display_regular"
+        android:maxLines="1"
+        android:singleLine="true"
         android:textColor="?attr/colorOnSecondary"
         android:textSize="11sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/nameTextView"
         app:layout_constraintTop_toBottomOf="@id/nameTextView"
-        tools:text="52" />
+        tools:text="" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
