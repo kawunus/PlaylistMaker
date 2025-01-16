@@ -36,7 +36,8 @@ class PlaylistRepositoryImpl(
             description = playlistDto.description,
             countOfTracks = 0,
             imageUrl = filePath,
-            imageName = fileName
+            imageName = fileName,
+            trackIds = emptyList()
         )
 
         playlistDao.createNewPlaylist(playlist)
@@ -47,7 +48,7 @@ class PlaylistRepositoryImpl(
         playlistDao.deletePlaylist(playlistEntity)
     }
 
-    fun convertPlaylistListFromEntity(playlistEntityList: List<PlaylistEntity>): List<Playlist> {
+    private fun convertPlaylistListFromEntity(playlistEntityList: List<PlaylistEntity>): List<Playlist> {
         return playlistEntityList.map { playlistEntity ->
             converter.map(playlistEntity)
         }

@@ -18,7 +18,6 @@ import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.presentation.search.ui.adapter.TrackAdapter
 import com.example.playlistmaker.presentation.search.ui.model.SearchState
 import com.example.playlistmaker.presentation.search.view_model.SearchViewModel
-import com.example.playlistmaker.utils.consts.IntentConsts
 import com.example.playlistmaker.utils.debounce.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -52,10 +51,8 @@ class SearchFragment : Fragment() {
             CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
         ) { track: Track ->
             viewModel.addToHistory(track)
-            findNavController().navigate(R.id.action_searchFragment_to_trackActivity,
-                Bundle().apply {
-                    putParcelable(IntentConsts.TRACK.name, track)
-                })
+            val action = SearchFragmentDirections.actionSearchFragmentToTrackActivity(track)
+            findNavController().navigate(action)
         }
 
         trackAdapter = TrackAdapter { track ->

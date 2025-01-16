@@ -8,13 +8,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentFavoritesBinding
 import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.presentation.favorites.ui.model.FavoritesState
 import com.example.playlistmaker.presentation.favorites.view_model.FavoritesViewModel
+import com.example.playlistmaker.presentation.library.ui.fragment.LibraryFragmentDirections
 import com.example.playlistmaker.presentation.search.ui.adapter.TrackAdapter
-import com.example.playlistmaker.utils.consts.IntentConsts
 import com.example.playlistmaker.utils.debounce.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -59,11 +58,8 @@ class FavoritesFragment : Fragment() {
         onTrackClickDebounce = debounce(
             CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
         ) { track: Track ->
-            findNavController().navigate(
-                R.id.action_libraryFragment_to_trackActivity,
-                Bundle().apply {
-                    putParcelable(IntentConsts.TRACK.name, track)
-                })
+            val action = LibraryFragmentDirections.actionLibraryFragmentToTrackActivity(track)
+            findNavController().navigate(action)
         }
 
         trackAdapter = TrackAdapter { track ->

@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_library">
         <action
             android:id="@+id/action_libraryFragment_to_trackActivity"
-            app:destination="@id/trackActivity" />
+            app:destination="@id/playerFragment" />
         <action
             android:id="@+id/action_libraryFragment_to_newPlaylistFragment"
             app:destination="@id/newPlaylistFragment" />
@@ -29,17 +29,23 @@
         tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_searchFragment_to_trackActivity"
-            app:destination="@id/trackActivity" />
+            app:destination="@id/playerFragment" />
     </fragment>
-    <activity
-        android:id="@+id/trackActivity"
-        android:name="com.example.playlistmaker.presentation.player.ui.fragment.PlayerActivity"
-        android:label="activity_track"
-        tools:layout="@layout/activity_player" />
+
     <fragment
         android:id="@+id/newPlaylistFragment"
         android:name="com.example.playlistmaker.presentation.new_playlist.ui.fragment.NewPlaylistFragment"
         android:label="NewPlaylistFragment"
         tools:layout="@layout/fragment_new_playlist" />
+    <fragment
+        android:id="@+id/playerFragment"
+        android:name="com.example.playlistmaker.presentation.player.ui.fragment.PlayerFragment"
+        android:label="fragment_player"
+        tools:layout="@layout/fragment_player">
+        <argument
+            android:name="track"
+            app:argType="com.example.playlistmaker.domain.model.track.Track"
+            app:nullable="false" />
+    </fragment>
 
 </navigation>
