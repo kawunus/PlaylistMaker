@@ -54,4 +54,7 @@
     <string name="playlist_dialog_message">Все несохраненные данные будут потеряны</string>
     <string name="playlist_dialog_neutral">Отмена</string>
     <string name="playlist_dialog_positive">Завершить</string>
+
+    <!-- Bottom Sheet -->
+    <string name="bottom_sheet_title">Добавить в плейлист</string>
 </resources>

@@ -226,4 +226,69 @@
                 app:layout_constraintTop_toTopOf="@id/countryTextView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <!-- Bottom Sheet View's -->
+
+    <View
+        android:id="@+id/shadowOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/shadowOverlayColor"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/bottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="295dp"
+        android:background="?attr/colorSecondary"
+        android:orientation="vertical"
+        app:behavior_hideable="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            android:id="@+id/bottomSheetHandle"
+            android:layout_width="50dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bottom_sheet_handle" />
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/yandex_sans_display_regular"
+            android:gravity="center"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="18dp"
+            android:paddingBottom="12dp"
+            android:text="@string/bottom_sheet_title"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/findUpdateButtonColor"
+            android:fontFamily="@font/yandex_sans_display_regular"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="14dp"
+            android:text="@string/new_playlist"
+            android:textColor="@color/findUpdateButtonTextColor"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="24dp"
+            tools:listitem="@layout/playlist_item_in_player" />
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
