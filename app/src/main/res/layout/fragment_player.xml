@@ -207,7 +207,7 @@
                 app:layout_constraintTop_toTopOf="@id/genreTextView" />
 
             <TextView
-                android:id="@+id/countryTextView"
+                android:id="@+id/countTextView"
                 style="@style/trackInfoLeftTextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -222,8 +222,8 @@
                 style="@style/trackInfoRightTextViewStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/countryTextView"
-                app:layout_constraintTop_toTopOf="@id/countryTextView" />
+                app:layout_constraintStart_toEndOf="@id/countTextView"
+                app:layout_constraintTop_toTopOf="@id/countTextView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
