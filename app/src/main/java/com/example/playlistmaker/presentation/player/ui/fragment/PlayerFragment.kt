@@ -136,34 +136,35 @@ class PlayerFragment : Fragment() {
         adapter?.saveData(playlistList)
     }
 
-    private fun renderModelInformation() {
+    private fun renderModelInformation() = with(binding) {
         val args: PlayerFragmentArgs by navArgs()
         val model = args.track
 
         val dateFormatter = SimpleDateFormat("mm:ss", Locale.getDefault())
 
-        binding.trackNameTextView.text = model.trackName
-        binding.artistNameTextView.text = model.artistName
-        binding.trackTimeTextView.text = dateFormatter.format(model.trackTimeMillis)
-        Glide.with(this).load(model.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
+        trackNameTextView.text = model.trackName
+        artistNameTextView.text = model.artistName
+        trackTimeTextView.text = dateFormatter.format(model.trackTimeMillis)
+        Glide.with(requireContext())
+            .load(model.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
             .transform(
                 RoundedCorners(8)
-            ).placeholder(R.drawable.track_placeholder).into(binding.imageView)
-        binding.trackCountryTextView.text = model.country
-        binding.trackGenreTextView.text = model.primaryGenreName
-        binding.trackYearTextView.text = model.releaseDate.substring(0, 4)
-        binding.currentTimeTextView.text = getString(R.string.track_current_time)
+            ).placeholder(R.drawable.track_placeholder).into(imageView)
+        trackCountryTextView.text = model.country
+        trackGenreTextView.text = model.primaryGenreName
+        trackYearTextView.text = model.releaseDate.substring(0, 4)
+        currentTimeTextView.text = getString(R.string.track_current_time)
 
         if (model.collectionName.isEmpty()) {
-            binding.yearTextView.isVisible = false
-            binding.trackYearTextView.isVisible = false
+            yearTextView.isVisible = false
+            trackYearTextView.isVisible = false
         } else {
-            binding.trackAlbumTextView.text = model.collectionName
+            trackAlbumTextView.text = model.collectionName
         }
     }
 
-    private fun renderBottomSheet() {
-        val bottomSheetContainer = binding.bottomSheet
+    private fun renderBottomSheet() = with(binding) {
+        val bottomSheetContainer = bottomSheet
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
@@ -172,11 +173,11 @@ class PlayerFragment : Fragment() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
                     BottomSheetBehavior.STATE_HIDDEN -> {
-                        binding.shadowOverlay.visibility = View.GONE
+                        shadowOverlay.visibility = View.GONE
                     }
 
                     else -> {
-                        binding.shadowOverlay.visibility = View.VISIBLE
+                        shadowOverlay.visibility = View.VISIBLE
                     }
                 }
             }
@@ -185,8 +186,13 @@ class PlayerFragment : Fragment() {
             }
         })
 
-        binding.playlistButton.setOnClickListener {
+        playlistButton.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+
+        newPlaylistButton.setOnClickListener {
+            viewModel.destroyPlayer()
+            findNavController().navigate(R.id.action_playerFragment_to_newPlaylistFragment)
         }
     }
 }

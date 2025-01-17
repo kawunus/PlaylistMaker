@@ -46,6 +46,9 @@
             android:name="track"
             app:argType="com.example.playlistmaker.domain.model.track.Track"
             app:nullable="false" />
+        <action
+            android:id="@+id/action_playerFragment_to_newPlaylistFragment"
+            app:destination="@id/newPlaylistFragment" />
     </fragment>
 
 </navigation>
