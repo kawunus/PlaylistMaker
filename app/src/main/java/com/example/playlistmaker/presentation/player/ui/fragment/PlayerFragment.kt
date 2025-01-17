@@ -14,6 +14,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
+import com.example.playlistmaker.domain.model.playlist.Playlist
+import com.example.playlistmaker.presentation.player.ui.adapter.PlaylistInPlayerAdapter
+import com.example.playlistmaker.presentation.player.ui.model.PlayerPlaylistState
 import com.example.playlistmaker.presentation.player.ui.model.PlayerState
 import com.example.playlistmaker.presentation.player.view_model.PlayerViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -26,6 +29,7 @@ class PlayerFragment : Fragment() {
 
     private lateinit var binding: FragmentPlayerBinding
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+    private var adapter: PlaylistInPlayerAdapter? = null
 
     private val viewModel: PlayerViewModel by viewModel {
         val args: PlayerFragmentArgs by navArgs()
@@ -111,6 +115,21 @@ class PlayerFragment : Fragment() {
         }
         viewModel.preparePlayer()
 
+        viewModel.observePlayerPlaylistState().observe(viewLifecycleOwner) { playlistState ->
+            when (playlistState) {
+                is PlayerPlaylistState.Content -> renderContent(playlistState.playlistList)
+                PlayerPlaylistState.Empty -> renderEmpty()
+            }
+        }
+
+        adapter = PlaylistInPlayerAdapter {
+            // TODO: Добавить трек в плейлист
+        }
+
+        binding.recyclerView.adapter = adapter
+
+        viewModel.getPlaylists()
+
         val bottomSheetContainer = binding.bottomSheet
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -147,6 +166,19 @@ class PlayerFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         viewModel.destroyPlayer()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getPlaylists()
+    }
+
+    private fun renderEmpty() {
+        adapter?.saveData(emptyList())
+    }
+
+    private fun renderContent(playlistList: List<Playlist>) {
+        adapter?.saveData(playlistList)
     }
 }
 

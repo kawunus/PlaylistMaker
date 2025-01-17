@@ -7,7 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.api.favorite.FavoriteTrackInteractor
 import com.example.playlistmaker.domain.api.player.MediaPlayerInteractor
 import com.example.playlistmaker.domain.api.playlist.PlaylistInteractor
+import com.example.playlistmaker.domain.model.playlist.Playlist
 import com.example.playlistmaker.domain.model.track.Track
+import com.example.playlistmaker.presentation.player.ui.model.PlayerPlaylistState
 import com.example.playlistmaker.presentation.player.ui.model.PlayerState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -23,6 +25,8 @@ class PlayerViewModel(
     private val playerStateLiveData = MutableLiveData<PlayerState>()
 
     private val isFavoriteLiveData = MutableLiveData<Boolean>()
+
+    private val playerPlaylistState = MutableLiveData<PlayerPlaylistState>()
 
     init {
         playerStateLiveData.value = PlayerState.Default()
@@ -42,6 +46,8 @@ class PlayerViewModel(
     fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
 
     fun observeIsFavoriteState(): LiveData<Boolean> = isFavoriteLiveData
+
+    fun observePlayerPlaylistState(): LiveData<PlayerPlaylistState> = playerPlaylistState
 
     fun preparePlayer() {
         mediaPlayerInteractor.preparePlayer(track = track)
@@ -95,6 +101,14 @@ class PlayerViewModel(
         }
     }
 
+    fun getPlaylists() {
+        viewModelScope.launch {
+            playlistInteractor.getPlaylists().collect { playlistList ->
+                processResult(playlistList)
+            }
+        }
+    }
+
     fun deleteTrackFromFavorites() {
         viewModelScope.launch {
             favoriteTrackInteractor.deleteTrackFromFavorites(trackId = track.trackId)
@@ -117,6 +131,16 @@ class PlayerViewModel(
             isFavoriteLiveData.value =
                 favoriteTrackInteractor.isTrackInFavorites(trackId = track.trackId)
         }
+    }
+
+    private fun processResult(playlistList: List<Playlist>) {
+        if (playlistList.isEmpty()) {
+            renderPlaylistsState(PlayerPlaylistState.Empty)
+        } else renderPlaylistsState(PlayerPlaylistState.Content(playlistList))
+    }
+
+    fun renderPlaylistsState(state: PlayerPlaylistState) {
+        playerPlaylistState.value = state
     }
 
     companion object {
