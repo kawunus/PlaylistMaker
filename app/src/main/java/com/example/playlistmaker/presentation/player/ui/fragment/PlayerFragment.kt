@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -117,6 +118,14 @@ class PlayerFragment : Fragment() {
         viewModel.getPlaylists()
 
         renderBottomSheet()
+
+        viewModel.observeToastState().observe(viewLifecycleOwner) { message ->
+            showToast(message)
+        }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onPause() {

@@ -11,6 +11,7 @@ import com.example.playlistmaker.domain.model.playlist.Playlist
 import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.presentation.player.ui.model.PlayerPlaylistState
 import com.example.playlistmaker.presentation.player.ui.model.PlayerState
+import com.example.playlistmaker.utils.single_live_event.SingleLiveEvent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -109,7 +110,7 @@ class PlayerViewModel(
         }
     }
 
-    fun deleteTrackFromFavorites() {
+    private fun deleteTrackFromFavorites() {
         viewModelScope.launch {
             favoriteTrackInteractor.deleteTrackFromFavorites(trackId = track.trackId)
             isFavoriteLiveData.value =
@@ -125,7 +126,7 @@ class PlayerViewModel(
         }
     }
 
-    fun addTrackToFavorites() {
+    private fun addTrackToFavorites() {
         viewModelScope.launch {
             favoriteTrackInteractor.addTrackToFavorites(track)
             isFavoriteLiveData.value =
@@ -139,7 +140,7 @@ class PlayerViewModel(
         } else renderPlaylistsState(PlayerPlaylistState.Content(playlistList))
     }
 
-    fun renderPlaylistsState(state: PlayerPlaylistState) {
+    private fun renderPlaylistsState(state: PlayerPlaylistState) {
         playerPlaylistState.value = state
     }
 
@@ -147,11 +148,20 @@ class PlayerViewModel(
         private const val UPDATE_TIMER_DEBOUNCE = 300L
     }
 
+    private val showToast = SingleLiveEvent<String>()
+    fun observeToastState(): LiveData<String> = showToast
+
     fun addTrackToPlaylist(track: Track, playlist: Playlist) {
         viewModelScope.launch {
-            playlistInteractor.addTrackToPlaylist(track = track, playlist = playlist)
+            val isAdded = playlistInteractor.addTrackToPlaylist(track = track, playlist = playlist)
+
+            if (isAdded) {
+                showToast.postValue("Добавлено в плейлист ${playlist.name}")
+            } else {
+                showToast.postValue("Трек уже добавлен в плейлист ${playlist.name}")
+            }
+
             getPlaylists()
         }
-
     }
 }
