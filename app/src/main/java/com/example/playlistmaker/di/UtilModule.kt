@@ -1,5 +1,6 @@
 package com.example.playlistmaker.di
 
+import com.example.playlistmaker.utils.converter.FavoriteTrackConverter
 import com.example.playlistmaker.utils.converter.JsonConverter
 import com.example.playlistmaker.utils.converter.PlaylistConverter
 import com.example.playlistmaker.utils.converter.TrackConverter
@@ -11,10 +12,14 @@ val utilModule = module {
     }
 
     factory {
-        TrackConverter()
+        FavoriteTrackConverter()
     }
 
     factory {
         PlaylistConverter()
+    }
+
+    factory {
+        TrackConverter()
     }
 }

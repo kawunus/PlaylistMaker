@@ -146,4 +146,8 @@ class PlayerViewModel(
     companion object {
         private const val UPDATE_TIMER_DEBOUNCE = 300L
     }
+
+    fun addTrackToPlaylist(track: Track, playlist: Playlist) {
+
+    }
 }

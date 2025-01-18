@@ -4,12 +4,12 @@ import com.example.playlistmaker.data.db.dao.FavoriteTrackDao
 import com.example.playlistmaker.data.db.entity.FavoriteTrackEntity
 import com.example.playlistmaker.domain.api.favorite.FavoriteTrackRepository
 import com.example.playlistmaker.domain.model.track.Track
-import com.example.playlistmaker.utils.converter.TrackConverter
+import com.example.playlistmaker.utils.converter.FavoriteTrackConverter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class FavoriteTrackRepositoryImpl(
-    private val favoriteTrackDao: FavoriteTrackDao, private val converter: TrackConverter
+    private val favoriteTrackDao: FavoriteTrackDao, private val converter: FavoriteTrackConverter
 ) : FavoriteTrackRepository {
     override fun getFavoritesTracks(): Flow<List<Track>> = flow {
         val tracks = favoriteTrackDao.getFavoritesTracks()

@@ -13,4 +13,13 @@ class PlaylistConverter {
         imageUrl = playlist.imageUrl,
         imageName = playlist.imageName
     )
+
+    fun map(playlist: Playlist): PlaylistEntity = PlaylistEntity(
+        name = playlist.name,
+        description = playlist.description,
+        id = playlist.id ?: 0,
+        countOfTracks = playlist.countOfTracks,
+        imageUrl = playlist.imageUrl,
+        imageName = playlist.imageName
+    )
 }

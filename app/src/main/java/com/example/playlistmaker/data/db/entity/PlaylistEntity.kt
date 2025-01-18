@@ -11,6 +11,5 @@ data class PlaylistEntity(
     @ColumnInfo(name = "description") val description: String?,
     @ColumnInfo(name = "image_url") val imageUrl: String?,
     @ColumnInfo(name = "image_name") val imageName: String?,
-    @ColumnInfo(name = "count_of_tracks") val countOfTracks: Int,
-    @ColumnInfo(name = "tracks_ids") val trackIds: List<Int>
+    @ColumnInfo(name = "count_of_tracks", defaultValue = "0") val countOfTracks: Int,
 )

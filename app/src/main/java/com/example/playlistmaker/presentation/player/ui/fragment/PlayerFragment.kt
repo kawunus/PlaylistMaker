@@ -15,6 +15,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
 import com.example.playlistmaker.domain.model.playlist.Playlist
+import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.presentation.player.ui.adapter.PlaylistInPlayerAdapter
 import com.example.playlistmaker.presentation.player.ui.model.PlayerPlaylistState
 import com.example.playlistmaker.presentation.player.ui.model.PlayerState
@@ -48,11 +49,14 @@ class PlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val args: PlayerFragmentArgs by navArgs()
+        val model = args.track
+
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
-        renderModelInformation()
+        renderModelInformation(model)
 
         binding.likeButton.setOnClickListener {
             viewModel.likeButtonControl()
@@ -101,8 +105,11 @@ class PlayerFragment : Fragment() {
             }
         }
 
-        adapter = PlaylistInPlayerAdapter {
-            // TODO: Добавить трек в плейлист
+        adapter = PlaylistInPlayerAdapter { playlist ->
+            viewModel.addTrackToPlaylist(
+                track = model,
+                playlist = playlist
+            )
         }
 
         binding.recyclerView.adapter = adapter
@@ -136,9 +143,7 @@ class PlayerFragment : Fragment() {
         adapter?.saveData(playlistList)
     }
 
-    private fun renderModelInformation() = with(binding) {
-        val args: PlayerFragmentArgs by navArgs()
-        val model = args.track
+    private fun renderModelInformation(model: Track) = with(binding) {
 
         val dateFormatter = SimpleDateFormat("mm:ss", Locale.getDefault())
 
