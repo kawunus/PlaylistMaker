@@ -9,6 +9,7 @@ import com.example.playlistmaker.domain.api.player.MediaPlayerInteractor
 import com.example.playlistmaker.domain.api.playlist.PlaylistInteractor
 import com.example.playlistmaker.domain.model.playlist.Playlist
 import com.example.playlistmaker.domain.model.track.Track
+import com.example.playlistmaker.presentation.player.ui.model.AdditionState
 import com.example.playlistmaker.presentation.player.ui.model.PlayerPlaylistState
 import com.example.playlistmaker.presentation.player.ui.model.PlayerState
 import com.example.playlistmaker.utils.single_live_event.SingleLiveEvent
@@ -148,17 +149,17 @@ class PlayerViewModel(
         private const val UPDATE_TIMER_DEBOUNCE = 300L
     }
 
-    private val showToast = SingleLiveEvent<String>()
-    fun observeToastState(): LiveData<String> = showToast
+    private val additionStatusLiveData = SingleLiveEvent<AdditionState>()
+    fun observeAdditionStatus(): LiveData<AdditionState> = additionStatusLiveData
 
     fun addTrackToPlaylist(track: Track, playlist: Playlist) {
         viewModelScope.launch {
             val isAdded = playlistInteractor.addTrackToPlaylist(track = track, playlist = playlist)
 
             if (isAdded) {
-                showToast.postValue("Добавлено в плейлист ${playlist.name}")
+                additionStatusLiveData.postValue(AdditionState.Successful(playlist.name))
             } else {
-                showToast.postValue("Трек уже добавлен в плейлист ${playlist.name}")
+                additionStatusLiveData.postValue(AdditionState.Error(playlist.name))
             }
 
             getPlaylists()

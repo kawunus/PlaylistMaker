@@ -18,6 +18,7 @@ import com.example.playlistmaker.databinding.FragmentPlayerBinding
 import com.example.playlistmaker.domain.model.playlist.Playlist
 import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.presentation.player.ui.adapter.PlaylistInPlayerAdapter
+import com.example.playlistmaker.presentation.player.ui.model.AdditionState
 import com.example.playlistmaker.presentation.player.ui.model.PlayerPlaylistState
 import com.example.playlistmaker.presentation.player.ui.model.PlayerState
 import com.example.playlistmaker.presentation.player.view_model.PlayerViewModel
@@ -119,8 +120,23 @@ class PlayerFragment : Fragment() {
 
         renderBottomSheet()
 
-        viewModel.observeToastState().observe(viewLifecycleOwner) { message ->
-            showToast(message)
+        viewModel.observeAdditionStatus().observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is AdditionState.Error -> {
+                    showToast(getString(R.string.bottom_sheet_failed_addition, state.playlistName))
+                }
+
+                is AdditionState.Successful -> {
+                    showToast(
+                        getString(
+                            R.string.bottom_sheet_successful_addition,
+                            state.playlistName
+                        )
+                    )
+
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                }
+            }
         }
     }
 
