@@ -197,7 +197,6 @@ class PlayerFragment : Fragment() {
         val bottomSheetContainer = bottomSheet
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
@@ -217,7 +216,7 @@ class PlayerFragment : Fragment() {
         })
 
         playlistButton.setOnClickListener {
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
         }
 
         newPlaylistButton.setOnClickListener {
