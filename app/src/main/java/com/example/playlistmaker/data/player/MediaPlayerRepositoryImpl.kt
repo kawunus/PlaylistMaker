@@ -53,8 +53,8 @@ class MediaPlayerRepositoryImpl(
     }
 
     override fun getCurrentPlayerPosition(): String {
-        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-            ?: "00:00"
+        val currentPosition = mediaPlayer.currentPosition
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentPosition)
     }
 
     companion object {
