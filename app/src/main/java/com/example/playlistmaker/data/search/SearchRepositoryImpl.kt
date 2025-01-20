@@ -1,16 +1,16 @@
-package com.example.playlistmaker.data.track
+package com.example.playlistmaker.data.search
 
 import com.example.playlistmaker.data.dto.Resource
 import com.example.playlistmaker.data.dto.TrackDto
 import com.example.playlistmaker.data.dto.TrackSearchRequest
 import com.example.playlistmaker.data.dto.TrackSearchResponse
 import com.example.playlistmaker.data.network.NetworkClient
-import com.example.playlistmaker.domain.api.track.TrackRepository
+import com.example.playlistmaker.domain.api.search.SearchRepository
 import com.example.playlistmaker.domain.model.track.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepository {
+class SearchRepositoryImpl(private val networkClient: NetworkClient) : SearchRepository {
     override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TrackSearchRequest(expression))
         when (response.resultCode) {

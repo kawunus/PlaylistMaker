@@ -23,4 +23,9 @@
     <color name="progressBarColor">#3772E7</color>
     <color name="dividerColor">#E6E8EB</color>
     <color name="blueColor">#3772E7</color>
+    <color name="buttonCreateColorDisable">#AEAFB4</color>
+    <color name="buttonCreateColorAble">#3772E7</color>
+    <color name="defaultTextColor">#000000</color>
+    <color name="bottomSheetHandleColor">#E6E8EB</color>
+    <color name="shadowOverlayColor">#801A1B22</color>
 </resources>

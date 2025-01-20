@@ -33,6 +33,7 @@
         <item name="android:textSize">@dimen/main_menu</item>
         <item name="android:textColor">@color/mainMenuLogoColor</item>
         <item name="android:fontFamily">@font/yandex_sans_display_regular</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="settingsToolbarTitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
@@ -59,7 +60,7 @@
     </style>
 
     <style name="trackInfoRightTextViewStyle" parent="Widget.AppCompat.TextView">
-        <item name="android:textSize">13dp</item>
+        <item name="android:textSize">13sp</item>
         <item name="fontFamily">@font/yandex_sans_display_regular</item>
         <item name="layout_constraintEnd_toEndOf">@id/rightBorder</item>
         <item name="color">?attr/colorSecondary</item>
@@ -72,6 +73,31 @@
     <style name="BottomNavigationViewTextStyle" parent="Widget.Design.BottomNavigationView">
         <item name="android:fontFamily">@font/yandex_sans_display_regular</item>
         <item name="android:gravity">center</item>
+    </style>
+
+    <style name="EditTextHintStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/yandex_sans_display_regular</item>
+    </style>
+
+    <style name="TextInputLayoutStyle" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusBottomEnd">4dp</item>
+        <item name="boxCornerRadiusBottomStart">4dp</item>
+        <item name="boxCornerRadiusTopEnd">4dp</item>
+        <item name="boxCornerRadiusTopStart">4dp</item>
+        <item name="android:layout_marginHorizontal">16dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="hintTextColor">@color/input_edit_text_colors</item>
+        <item name="boxStrokeColor">@color/input_edit_text_colors</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="android:textColorHint">?attr/colorOnSecondary</item>
+        <item name="cursorColor">@color/blueColor</item>
+        <item name="android:windowSoftInputMode">adjustPan</item>
+    </style>
+
+    <style name="RoundedImageStyle">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
     </style>
 
 </resources>

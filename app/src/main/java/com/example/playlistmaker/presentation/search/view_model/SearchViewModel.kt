@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.api.history.HistoryInteractor
-import com.example.playlistmaker.domain.api.track.TrackInteractor
+import com.example.playlistmaker.domain.api.search.SearchInteractor
 import com.example.playlistmaker.domain.model.history.History
 import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.presentation.search.ui.model.SearchState
@@ -13,7 +13,7 @@ import com.example.playlistmaker.utils.debounce.debounce
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
-    private val historyInteractor: HistoryInteractor, private val trackInteractor: TrackInteractor
+    private val historyInteractor: HistoryInteractor, private val searchInteractor: SearchInteractor
 ) : ViewModel() {
 
     private var latestRequest: String? = null
@@ -53,7 +53,7 @@ class SearchViewModel(
             renderState(SearchState.Loading)
 
             viewModelScope.launch {
-                trackInteractor.searchTracks(request).collect { pair ->
+                searchInteractor.searchTracks(request).collect { pair ->
                     processResult(pair.first, pair.second)
                 }
             }
