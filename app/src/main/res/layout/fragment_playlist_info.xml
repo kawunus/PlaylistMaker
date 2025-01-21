@@ -41,6 +41,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:src="@drawable/ic_arrow"
+            app:tint="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,7 +53,7 @@
             android:fontFamily="@font/yandex_sans_display_regular"
             android:maxLines="1"
             android:singleLine="true"
-            android:textColor="?attr/colorOnSecondary"
+            android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@id/rightBorder"
@@ -67,7 +68,7 @@
             android:fontFamily="@font/yandex_sans_display_regular"
             android:maxLines="1"
             android:singleLine="true"
-            android:textColor="?attr/colorOnSecondary"
+            android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="@id/rightBorder"
             app:layout_constraintStart_toStartOf="@id/leftBorder"
@@ -81,7 +82,7 @@
             android:fontFamily="@font/yandex_sans_display_regular"
             android:maxLines="1"
             android:singleLine="true"
-            android:textColor="?attr/colorOnSecondary"
+            android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@id/ellipse"
             app:layout_constraintStart_toEndOf="@id/leftBorder"
@@ -92,7 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
-            android:backgroundTint="?attr/colorOnSecondary"
+            android:backgroundTint="@color/black"
             android:padding="5dp"
             android:src="@drawable/ellipse_2"
             app:layout_constraintBottom_toBottomOf="@id/durationOfTracksTextView"
@@ -108,7 +109,7 @@
             android:fontFamily="@font/yandex_sans_display_regular"
             android:maxLines="1"
             android:singleLine="true"
-            android:textColor="?attr/colorOnSecondary"
+            android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintStart_toEndOf="@id/ellipse"
             app:layout_constraintTop_toBottomOf="@id/descriptionTextView" />
@@ -121,7 +122,7 @@
             android:src="@drawable/ic_share"
             app:layout_constraintStart_toEndOf="@id/leftBorder"
             app:layout_constraintTop_toBottomOf="@id/durationOfTracksTextView"
-            app:tint="?attr/colorOnSecondary" />
+            app:tint="@color/black" />
 
         <ImageView
             android:id="@+id/moreImageView"
@@ -132,7 +133,7 @@
             android:src="@drawable/ic_more"
             app:layout_constraintStart_toEndOf="@id/shareImageView"
             app:layout_constraintTop_toBottomOf="@id/durationOfTracksTextView"
-            app:tint="?attr/colorOnSecondary" />
+            app:tint="@color/black" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
