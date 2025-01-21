@@ -6,6 +6,7 @@ import com.example.playlistmaker.data.db.dao.PlaylistTrackDao
 import com.example.playlistmaker.data.db.dao.TrackDao
 import com.example.playlistmaker.data.db.entity.PlaylistEntity
 import com.example.playlistmaker.data.db.entity.PlaylistTrackEntity
+import com.example.playlistmaker.data.db.entity.TrackEntity
 import com.example.playlistmaker.data.dto.PlaylistDto
 import com.example.playlistmaker.data.file_manager.FileManager
 import com.example.playlistmaker.domain.api.playlist.PlaylistRepository
@@ -76,6 +77,21 @@ class PlaylistRepositoryImpl(
             return true
         } else {
             return false
+        }
+    }
+
+    override fun getTracks(playlistId: Int): Flow<List<Track>> = flow {
+        val relationList = playlistTrackDao.getTracksByPlaylistId(playlistId)
+        val trackList = relationList
+            .mapNotNull { relation -> trackDao.getTrackById(trackId = relation.trackId) }
+            .sortedByDescending { track -> track.addedAt }
+
+        emit(convertTrackListFromEntity(trackList))
+    }
+
+    private fun convertTrackListFromEntity(trackList: List<TrackEntity>): List<Track> {
+        return trackList.map { track ->
+            trackConverter.map(track)
         }
     }
 }
