@@ -9,7 +9,8 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.model.track.Track
 
 class TrackAdapter(
-    private val onItemClick: ((track: Track) -> Unit)?
+    private val onItemClick: ((track: Track) -> Unit)?,
+    private val onLongItemClick: ((track: Track) -> Unit)?
 ) :
     RecyclerView.Adapter<TrackViewHolder>() {
     private val diffUtil = object : DiffUtil.ItemCallback<Track>() {
@@ -40,6 +41,11 @@ class TrackAdapter(
 
         holder.itemView.setOnClickListener {
             onItemClick?.invoke(track)
+        }
+
+        holder.itemView.setOnLongClickListener {
+            onLongItemClick?.invoke(track)
+            true
         }
     }
 

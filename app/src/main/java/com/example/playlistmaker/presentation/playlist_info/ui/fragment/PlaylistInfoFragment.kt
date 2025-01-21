@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -19,11 +20,18 @@ import com.example.playlistmaker.presentation.playlist_info.ui.model.TracksInPla
 import com.example.playlistmaker.presentation.playlist_info.view_model.PlaylistInfoViewModel
 import com.example.playlistmaker.presentation.search.ui.adapter.TrackAdapter
 import com.example.playlistmaker.utils.converter.WordConverter
+import com.example.playlistmaker.utils.debounce.debounce
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 class PlaylistInfoFragment : Fragment() {
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 300L
+    }
+
+    private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     private lateinit var binding: FragmentPlaylistInfoBinding
     private val viewModel: PlaylistInfoViewModel by viewModel {
@@ -48,9 +56,18 @@ class PlaylistInfoFragment : Fragment() {
         val args: PlaylistInfoFragmentArgs by navArgs()
         val model: Playlist = args.playlist
 
-        adapter = TrackAdapter {
-
+        onTrackClickDebounce = debounce(
+            CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
+        ) { track ->
+            val action =
+                PlaylistInfoFragmentDirections.actionPlaylistInfoFragmentToPlayerFragment(track)
+            findNavController().navigate(action)
         }
+        adapter = TrackAdapter(onItemClick = { track ->
+            onTrackClickDebounce(track)
+        },
+            onLongItemClick = { track ->
+            })
         binding.recyclerView.adapter = adapter
 
         viewModel.observeTracksInPlaylist().observe(viewLifecycleOwner) { state ->
