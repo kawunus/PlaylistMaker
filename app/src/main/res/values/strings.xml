@@ -59,4 +59,8 @@
     <string name="bottom_sheet_title">Добавить в плейлист</string>
     <string name="bottom_sheet_successful_addition">Добавлено в плейлист %1$s</string>
     <string name="bottom_sheet_failed_addition">Трек уже добавлен в плейлист %1$s</string>
+
+    <!-- Playlist Info Screen -->
+    <string name="empty_playlist_message">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="share_playlist_title">Поделится плейлистом через: </string>
 </resources>

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -12,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistInfoBinding
 import com.example.playlistmaker.domain.model.playlist.Playlist
+import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.presentation.playlist_info.ui.model.TracksInPlaylistState
 import com.example.playlistmaker.presentation.playlist_info.view_model.PlaylistInfoViewModel
 import com.example.playlistmaker.utils.converter.WordConverter
@@ -25,6 +27,8 @@ class PlaylistInfoFragment : Fragment() {
         val args: PlaylistInfoFragmentArgs by navArgs()
         parametersOf(args.playlist)
     }
+
+    private var trackList: List<Track> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -47,15 +51,17 @@ class PlaylistInfoFragment : Fragment() {
                     }
                     val duration: String = WordConverter.getMinuteWordFromMillis(durationInMillis)
                     binding.durationOfTracksTextView.text = duration
+                    trackList = state.trackList
                 }
 
                 TracksInPlaylistState.Empty -> {
                     val duration: String = WordConverter.getMinuteWordFromMillis(0)
                     binding.durationOfTracksTextView.text = duration
+                    trackList = emptyList()
                 }
 
                 TracksInPlaylistState.Loading -> {
-
+                    trackList = emptyList()
                 }
             }
         }
@@ -77,7 +83,21 @@ class PlaylistInfoFragment : Fragment() {
         val countOfTracks: String =
             "${model.countOfTracks} ${WordConverter.getTrackWordForm(model.countOfTracks)}"
         binding.countOfTracksTextView.text = countOfTracks
+
+        binding.shareImageView.setOnClickListener {
+            sharePlaylist()
+        }
     }
 
+    private fun sharePlaylist() {
+        if (trackList.isEmpty()) {
+            showToast(requireContext().getString(R.string.empty_playlist_message))
+        } else {
+            viewModel.sharePlaylist(trackList)
+        }
+    }
 
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    }
 }
