@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class PlaylistInfoViewModel(
     private val playlistInteractor: PlaylistInteractor,
-    private val playlist: Playlist,
+    private var playlist: Playlist,
     private val sharingInteractor: SharingInteractor
 ) : ViewModel() {
     private val tracksInPlaylistState = MutableLiveData<TracksInPlaylistState>()
@@ -32,10 +32,12 @@ class PlaylistInfoViewModel(
         tracksInPlaylistState.value = state
     }
 
-    private fun processResult(trackList: List<Track>) {
+    private suspend fun processResult(trackList: List<Track>) {
+        val updatedPlaylist = playlistInteractor.getPlaylistById(playlistId = playlist.id)
+        playlist = updatedPlaylist
         if (trackList.isEmpty()) {
-            renderState(TracksInPlaylistState.Empty)
-        } else renderState(TracksInPlaylistState.Content(trackList))
+            renderState(TracksInPlaylistState.Empty(playlist))
+        } else renderState(TracksInPlaylistState.Content(trackList, playlist))
     }
 
     fun sharePlaylist(trackList: List<Track>) {

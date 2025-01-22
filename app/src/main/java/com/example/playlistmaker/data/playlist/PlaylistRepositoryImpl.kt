@@ -108,4 +108,9 @@ class PlaylistRepositoryImpl(
             trackDao.deleteTrackById(trackId = track.trackId)
         }
     }
+
+    override suspend fun getPlaylistById(playlistId: Int): Playlist {
+        val playlistEntity = playlistDao.getPlaylistById(playlistId)
+        return playlistConverter.map(playlistEntity)
+    }
 }

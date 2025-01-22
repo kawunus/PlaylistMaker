@@ -79,22 +79,13 @@ class PlaylistInfoFragment : Fragment() {
         viewModel.observeTracksInPlaylist().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is TracksInPlaylistState.Content -> {
-                    val durationInMillis = state.trackList.sumOf {
-                        it.trackTimeMillis
-                    }
-                    val duration: String = WordConverter.getMinuteWordFromMillis(durationInMillis)
-                    binding.durationOfTracksTextView.text = duration
-                    trackList = state.trackList
-                    adapter.saveData(trackList)
-                    val countOfTracks: String =
-                        "${model?.countOfTracks} ${WordConverter.getTrackWordForm(model?.countOfTracks ?: 0)}"
-                    binding.countOfTracksTextView.text = countOfTracks
+                    model = state.playlist
+                    renderModelViews(state.trackList)
                 }
 
                 is TracksInPlaylistState.Empty -> {
-                    val duration: String = WordConverter.getMinuteWordFromMillis(0)
-                    binding.durationOfTracksTextView.text = duration
-                    trackList = emptyList()
+                    model = state.playlist
+                    renderModelViews(trackList)
                 }
 
                 TracksInPlaylistState.Loading -> {
@@ -107,15 +98,6 @@ class PlaylistInfoFragment : Fragment() {
 
         binding.navigationIconImageView.setOnClickListener {
             findNavController().popBackStack()
-        }
-
-        Glide.with(requireContext()).load(model?.imageUrl).centerCrop()
-            .placeholder(R.drawable.ic_single_playlist_placeholder).into(binding.coverImageView)
-        binding.titleTextView.text = model?.name
-        if (model?.description.isNullOrEmpty()) {
-            binding.descriptionTextView.isVisible = false
-        } else {
-            binding.descriptionTextView.text = model?.description
         }
 
         binding.shareImageView.setOnClickListener {
@@ -168,5 +150,25 @@ class PlaylistInfoFragment : Fragment() {
             .setTextColor(ContextCompat.getColor(requireContext(), R.color.blueColor))
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
             .setTextColor(ContextCompat.getColor(requireContext(), R.color.blueColor))
+    }
+
+    private fun renderModelViews(trackList: List<Track>) {
+        Glide.with(requireContext()).load(model?.imageUrl).centerCrop()
+            .placeholder(R.drawable.ic_single_playlist_placeholder).into(binding.coverImageView)
+        binding.titleTextView.text = model?.name
+        if (model?.description.isNullOrEmpty()) {
+            binding.descriptionTextView.isVisible = false
+        } else {
+            binding.descriptionTextView.text = model?.description
+        }
+        val durationInMillis = trackList.sumOf {
+            it.trackTimeMillis
+        }
+        val duration: String = WordConverter.getMinuteWordFromMillis(durationInMillis)
+        binding.durationOfTracksTextView.text = duration
+        adapter.saveData(trackList)
+        val countOfTracks =
+            "${model?.countOfTracks} ${WordConverter.getTrackWordForm(model?.countOfTracks ?: 0)}"
+        binding.countOfTracksTextView.text = countOfTracks
     }
 }
