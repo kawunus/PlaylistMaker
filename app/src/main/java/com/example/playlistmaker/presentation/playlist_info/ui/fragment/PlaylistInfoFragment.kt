@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -42,6 +43,7 @@ class PlaylistInfoFragment : Fragment() {
         parametersOf(args.playlist)
     }
 
+    private lateinit var playlistBottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     private var trackList: List<Track> = emptyList()
 
     private lateinit var adapter: TrackAdapter
@@ -60,7 +62,6 @@ class PlaylistInfoFragment : Fragment() {
 
         val args: PlaylistInfoFragmentArgs by navArgs()
         model = args.playlist
-
         onTrackClickDebounce = debounce(
             CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
         ) { track ->
@@ -134,6 +135,31 @@ class PlaylistInfoFragment : Fragment() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
             }
         })
+
+        val bottomSheetContainer = playlistBottomSheet
+        playlistBottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
+        playlistBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        playlistBottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        shadowOverlay.visibility = View.GONE
+                    }
+
+                    else -> {
+                        shadowOverlay.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+        })
+
+        binding.moreImageView.setOnClickListener {
+            playlistBottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+        }
     }
 
     private fun showDialog(track: Track) {
@@ -152,23 +178,28 @@ class PlaylistInfoFragment : Fragment() {
             .setTextColor(ContextCompat.getColor(requireContext(), R.color.blueColor))
     }
 
-    private fun renderModelViews(trackList: List<Track>) {
+    private fun renderModelViews(trackList: List<Track>) = with(binding) {
         Glide.with(requireContext()).load(model?.imageUrl).centerCrop()
-            .placeholder(R.drawable.ic_single_playlist_placeholder).into(binding.coverImageView)
-        binding.titleTextView.text = model?.name
+            .placeholder(R.drawable.ic_single_playlist_placeholder).into(coverImageView)
+        titleTextView.text = model?.name
         if (model?.description.isNullOrEmpty()) {
-            binding.descriptionTextView.isVisible = false
+            descriptionTextView.isVisible = false
         } else {
-            binding.descriptionTextView.text = model?.description
+            descriptionTextView.text = model?.description
         }
         val durationInMillis = trackList.sumOf {
             it.trackTimeMillis
         }
         val duration: String = WordConverter.getMinuteWordFromMillis(durationInMillis)
-        binding.durationOfTracksTextView.text = duration
+        durationOfTracksTextView.text = duration
         adapter.saveData(trackList)
         val countOfTracks =
             "${model?.countOfTracks} ${WordConverter.getTrackWordForm(model?.countOfTracks ?: 0)}"
-        binding.countOfTracksTextView.text = countOfTracks
+        countOfTracksTextView.text = countOfTracks
+
+        Glide.with(requireContext()).load(model?.imageUrl).centerCrop()
+            .placeholder(R.drawable.playlist_placeholder).into(binding.miniCoverImageView)
+        binding.nameTextView.text = model?.name
+        binding.countTextView.text = countOfTracks
     }
 }
