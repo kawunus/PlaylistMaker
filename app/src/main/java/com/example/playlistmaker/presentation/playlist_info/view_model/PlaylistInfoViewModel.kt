@@ -50,4 +50,10 @@ class PlaylistInfoViewModel(
             getData()
         }
     }
+
+    fun deletePlaylist() {
+        viewModelScope.launch {
+            playlistInteractor.deletePlaylistById(playlistId = playlist.id)
+        }
+    }
 }

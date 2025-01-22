@@ -113,4 +113,19 @@ class PlaylistRepositoryImpl(
         val playlistEntity = playlistDao.getPlaylistById(playlistId)
         return playlistConverter.map(playlistEntity)
     }
+
+    override suspend fun deletePlaylistById(playlistId: Int) {
+        val trackList = getTracks(playlistId).first()
+
+        for (track: Track in trackList) {
+            playlistTrackDao.deleteTrackFromPlaylistTrack(
+                playlistId = playlistId, trackId = track.trackId
+            )
+            if (playlistTrackDao.getTrackPlaylistByTrackId(trackId = track.trackId) == null) {
+                trackDao.deleteTrackById(trackId = track.trackId)
+            }
+        }
+
+        playlistDao.deletePlaylist(playlistId)
+    }
 }

@@ -105,6 +105,10 @@ class PlaylistInfoFragment : Fragment() {
             sharePlaylist()
         }
         renderBottomSheets()
+
+        binding.deletePlaylistTextView.setOnClickListener {
+            viewModel.deletePlaylist()
+        }
     }
 
     private fun sharePlaylist() {
