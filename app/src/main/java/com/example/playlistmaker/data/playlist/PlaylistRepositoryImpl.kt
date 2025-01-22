@@ -15,6 +15,7 @@ import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.utils.converter.PlaylistConverter
 import com.example.playlistmaker.utils.converter.TrackConverter
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import java.util.UUID
 
@@ -82,9 +83,9 @@ class PlaylistRepositoryImpl(
 
     override fun getTracks(playlistId: Int): Flow<List<Track>> = flow {
         val relationList = playlistTrackDao.getTracksByPlaylistId(playlistId)
-        val trackList = relationList
-            .mapNotNull { relation -> trackDao.getTrackById(trackId = relation.trackId) }
-            .sortedByDescending { track -> track.addedAt }
+        val trackList =
+            relationList.mapNotNull { relation -> trackDao.getTrackById(trackId = relation.trackId) }
+                .sortedByDescending { track -> track.addedAt }
 
         emit(convertTrackListFromEntity(trackList))
     }
@@ -92,6 +93,19 @@ class PlaylistRepositoryImpl(
     private fun convertTrackListFromEntity(trackList: List<TrackEntity>): List<Track> {
         return trackList.map { track ->
             trackConverter.map(track)
+        }
+    }
+
+    override suspend fun deleteTrackFromPlaylist(playlist: Playlist, track: Track) {
+        playlistTrackDao.deleteTrackFromPlaylistTrack(
+            playlistId = playlist.id, trackId = track.trackId
+        )
+        val trackList = getTracks(playlist.id).first()
+        val updatedPlaylist = playlist.copy(countOfTracks = trackList.size)
+        playlistDao.updatePlaylist(playlistConverter.map(updatedPlaylist))
+
+        if (playlistTrackDao.getTrackPlaylistByTrackId(trackId = track.trackId) == null) {
+            trackDao.deleteTrackById(trackId = track.trackId)
         }
     }
 }

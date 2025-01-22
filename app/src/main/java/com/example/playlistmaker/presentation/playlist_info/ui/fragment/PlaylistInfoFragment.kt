@@ -1,11 +1,13 @@
 package com.example.playlistmaker.presentation.playlist_info.ui.fragment
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +24,7 @@ import com.example.playlistmaker.presentation.search.ui.adapter.TrackAdapter
 import com.example.playlistmaker.utils.converter.WordConverter
 import com.example.playlistmaker.utils.debounce.debounce
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -43,6 +46,8 @@ class PlaylistInfoFragment : Fragment() {
 
     private lateinit var adapter: TrackAdapter
 
+    var model: Playlist? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -54,7 +59,7 @@ class PlaylistInfoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val args: PlaylistInfoFragmentArgs by navArgs()
-        val model: Playlist = args.playlist
+        model = args.playlist
 
         onTrackClickDebounce = debounce(
             CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
@@ -67,6 +72,7 @@ class PlaylistInfoFragment : Fragment() {
             onTrackClickDebounce(track)
         },
             onLongItemClick = { track ->
+                showDialog(track)
             })
         binding.recyclerView.adapter = adapter
 
@@ -80,9 +86,12 @@ class PlaylistInfoFragment : Fragment() {
                     binding.durationOfTracksTextView.text = duration
                     trackList = state.trackList
                     adapter.saveData(trackList)
+                    val countOfTracks: String =
+                        "${model?.countOfTracks} ${WordConverter.getTrackWordForm(model?.countOfTracks ?: 0)}"
+                    binding.countOfTracksTextView.text = countOfTracks
                 }
 
-                TracksInPlaylistState.Empty -> {
+                is TracksInPlaylistState.Empty -> {
                     val duration: String = WordConverter.getMinuteWordFromMillis(0)
                     binding.durationOfTracksTextView.text = duration
                     trackList = emptyList()
@@ -100,17 +109,14 @@ class PlaylistInfoFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        Glide.with(requireContext()).load(model.imageUrl).centerCrop()
+        Glide.with(requireContext()).load(model?.imageUrl).centerCrop()
             .placeholder(R.drawable.ic_single_playlist_placeholder).into(binding.coverImageView)
-        binding.titleTextView.text = model.name
-        if (model.description.isNullOrEmpty()) {
+        binding.titleTextView.text = model?.name
+        if (model?.description.isNullOrEmpty()) {
             binding.descriptionTextView.isVisible = false
         } else {
-            binding.descriptionTextView.text = model.description
+            binding.descriptionTextView.text = model?.description
         }
-        val countOfTracks: String =
-            "${model.countOfTracks} ${WordConverter.getTrackWordForm(model.countOfTracks)}"
-        binding.countOfTracksTextView.text = countOfTracks
 
         binding.shareImageView.setOnClickListener {
             sharePlaylist()
@@ -146,5 +152,21 @@ class PlaylistInfoFragment : Fragment() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
             }
         })
+    }
+
+    private fun showDialog(track: Track) {
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.delete_dialog_title)
+            .setNegativeButton(R.string.dialog_no) { _, _ ->
+            }
+            .setPositiveButton(R.string.dialog_yes) { _, _ ->
+                viewModel.deleteTrackFromPlaylist(track)
+
+            }.show()
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            .setTextColor(ContextCompat.getColor(requireContext(), R.color.blueColor))
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            .setTextColor(ContextCompat.getColor(requireContext(), R.color.blueColor))
     }
 }

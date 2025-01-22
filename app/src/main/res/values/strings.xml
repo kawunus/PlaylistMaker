@@ -63,4 +63,7 @@
     <!-- Playlist Info Screen -->
     <string name="empty_playlist_message">В этом плейлисте нет списка треков, которым можно поделиться</string>
     <string name="share_playlist_title">Поделится плейлистом через: </string>
+    <string name="delete_dialog_title">Хотите удалить трек?</string>
+    <string name="dialog_yes">Да</string>
+    <string name="dialog_no">Нет</string>
 </resources>
