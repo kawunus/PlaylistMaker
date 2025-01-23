@@ -115,6 +115,10 @@ class PlaylistInfoFragment : Fragment() {
         binding.deletePlaylistTextView.setOnClickListener {
             showPlaylistDeleteDialog()
         }
+
+        binding.sharePlaylistTextView.setOnClickListener {
+            sharePlaylist()
+        }
     }
 
     private fun sharePlaylist() {
