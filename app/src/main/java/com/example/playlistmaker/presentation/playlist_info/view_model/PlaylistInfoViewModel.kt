@@ -51,9 +51,13 @@ class PlaylistInfoViewModel(
         }
     }
 
+    private val deletedStateLiveData = MutableLiveData<Boolean>(false)
+    fun observeDeleteState(): LiveData<Boolean> = deletedStateLiveData
+
     fun deletePlaylist() {
         viewModelScope.launch {
             playlistInteractor.deletePlaylistById(playlistId = playlist.id)
+            deletedStateLiveData.value = true
         }
     }
 }

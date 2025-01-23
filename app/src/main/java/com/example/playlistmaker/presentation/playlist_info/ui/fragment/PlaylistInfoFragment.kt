@@ -73,7 +73,7 @@ class PlaylistInfoFragment : Fragment() {
             onTrackClickDebounce(track)
         },
             onLongItemClick = { track ->
-                showDialog(track)
+                showTrackDeleteDialog(track)
             })
         binding.recyclerView.adapter = adapter
 
@@ -97,6 +97,12 @@ class PlaylistInfoFragment : Fragment() {
 
         viewModel.getData()
 
+        viewModel.observeDeleteState().observe(viewLifecycleOwner) { isDeleted ->
+            if (isDeleted) {
+                findNavController().popBackStack()
+            }
+        }
+
         binding.navigationIconImageView.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -107,7 +113,7 @@ class PlaylistInfoFragment : Fragment() {
         renderBottomSheets()
 
         binding.deletePlaylistTextView.setOnClickListener {
-            viewModel.deletePlaylist()
+            showPlaylistDeleteDialog()
         }
     }
 
@@ -166,13 +172,34 @@ class PlaylistInfoFragment : Fragment() {
         }
     }
 
-    private fun showDialog(track: Track) {
+    private fun showTrackDeleteDialog(track: Track) {
         val dialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.delete_dialog_title)
             .setNegativeButton(R.string.dialog_no) { _, _ ->
             }
             .setPositiveButton(R.string.dialog_yes) { _, _ ->
                 viewModel.deleteTrackFromPlaylist(track)
+
+            }.show()
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            .setTextColor(ContextCompat.getColor(requireContext(), R.color.blueColor))
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            .setTextColor(ContextCompat.getColor(requireContext(), R.color.blueColor))
+    }
+
+    private fun showPlaylistDeleteDialog() {
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(
+                requireContext().getString(
+                    R.string.playlist_delete_dialog_title,
+                    model?.name
+                )
+            )
+            .setNegativeButton(R.string.dialog_no) { _, _ ->
+            }
+            .setPositiveButton(R.string.dialog_yes) { _, _ ->
+                viewModel.deletePlaylist()
 
             }.show()
 
