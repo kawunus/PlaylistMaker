@@ -55,6 +55,12 @@ class NewPlaylistFragment : Fragment() {
             binding.descriptionEditText.setText(model?.description ?: "")
             Glide.with(requireContext()).load(model?.imageUrl).centerCrop()
                 .placeholder(R.drawable.ic_add_playlist).into(addImageImageView)
+            binding.createButton.text = getString(R.string.playlist_save)
+            createButton.backgroundTintList = ContextCompat.getColorStateList(
+                requireContext(), R.color.buttonCreateColorAble
+            )
+            createButton.isEnabled = true
+            binding.toolbar.title = getString(R.string.playlist_edit_title)
         }
 
         nameEditText.addTextChangedListener(object : TextWatcher {
@@ -80,15 +86,25 @@ class NewPlaylistFragment : Fragment() {
 
         })
 
+        // TODO: вынести в строковые ресурсы
         viewModel.observeState().observe(viewLifecycleOwner) { state ->
             when (state) {
                 NewPlaylistState.Created -> {
-                    Toast.makeText(
-                        requireContext(),
-                        "Плейлист ${binding.nameEditText.text.toString()} создан",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    findNavController().popBackStack()
+                    if (model == null) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Плейлист ${binding.nameEditText.text.toString()} создан",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        findNavController().popBackStack()
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "Плейлист ${binding.nameEditText.text.toString()} сохранен",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        findNavController().popBackStack()
+                    }
                 }
 
                 NewPlaylistState.NotCreated -> {
@@ -111,12 +127,16 @@ class NewPlaylistFragment : Fragment() {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
-        binding.createButton.setOnClickListener {
-            viewModel.createNewPlaylist(
-                name = binding.nameEditText.text.toString(),
-                description = binding.descriptionEditText.text.toString(),
-                imageUrl = coverUrl
-            )
+        if (model == null) {
+            binding.createButton.setOnClickListener {
+                viewModel.createNewPlaylist(
+                    name = binding.nameEditText.text.toString(),
+                    description = binding.descriptionEditText.text.toString(),
+                    imageUrl = coverUrl
+                )
+            }
+        } else {
+            // TODO: Обновление плейлиста
         }
 
         binding.toolbar.setNavigationOnClickListener {
@@ -136,14 +156,14 @@ class NewPlaylistFragment : Fragment() {
     }
 
     private fun showDialog() {
-        val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.playlist_dialog_title)
-            .setMessage(R.string.playlist_dialog_message)
-            .setNeutralButton(R.string.playlist_dialog_neutral) { _, _ ->
-            }
-            .setPositiveButton(R.string.playlist_dialog_positive) { _, _ ->
-                findNavController().popBackStack()
-            }.show()
+        // TODO: Тайтл для диалога при редактировании
+        val dialog =
+            MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.playlist_dialog_title)
+                .setMessage(R.string.playlist_dialog_message)
+                .setNeutralButton(R.string.playlist_dialog_neutral) { _, _ ->
+                }.setPositiveButton(R.string.playlist_dialog_positive) { _, _ ->
+                    findNavController().popBackStack()
+                }.show()
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             .setTextColor(ContextCompat.getColor(requireContext(), R.color.defaultTextColor))
         dialog.getButton(AlertDialog.BUTTON_NEUTRAL)

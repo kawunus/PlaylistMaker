@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.data.dto.PlaylistDto
 import com.example.playlistmaker.domain.api.playlist.PlaylistInteractor
+import com.example.playlistmaker.domain.model.playlist.Playlist
 import com.example.playlistmaker.presentation.new_playlist.ui.model.NewPlaylistState
 import kotlinx.coroutines.launch
 
@@ -25,6 +26,13 @@ class NewPlaylistViewModel(private val playlistInteractor: PlaylistInteractor) :
                     imageUrl = imageUrl
                 )
             )
+            stateLiveData.value = NewPlaylistState.Created
+        }
+    }
+
+    fun updatePlaylist(playlist: Playlist) {
+        viewModelScope.launch {
+            playlistInteractor.updatePlaylist(playlist)
             stateLiveData.value = NewPlaylistState.Created
         }
     }

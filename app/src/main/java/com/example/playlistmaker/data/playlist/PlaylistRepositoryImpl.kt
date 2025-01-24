@@ -128,4 +128,8 @@ class PlaylistRepositoryImpl(
 
         playlistDao.deletePlaylist(playlistId)
     }
+
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        playlistDao.updatePlaylist(playlistConverter.map(playlist))
+    }
 }
