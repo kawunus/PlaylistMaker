@@ -125,7 +125,8 @@ class PlaylistRepositoryImpl(
                 trackDao.deleteTrackById(trackId = track.trackId)
             }
         }
-
+        val playlist = playlistDao.getPlaylistById(playlistId)
+        fileManager.deleteCoverFromLocalStorage(playlist.imageName ?: "")
         playlistDao.deletePlaylist(playlistId)
     }
 
