@@ -36,9 +36,9 @@ class PlaylistRepositoryImpl(
     override suspend fun createNewPlaylist(playlistDto: PlaylistDto) {
 
         var filePath: String? = null
-
-        val fileName = "${playlistDto.name}_${UUID.randomUUID()}.jpg"
+        var fileName: String? = null
         if (playlistDto.imageUrl != null) {
+            fileName = "${playlistDto.name}_${UUID.randomUUID()}.jpg"
             filePath = fileManager.saveCoverToPrivateStorage(playlistDto.imageUrl, fileName)
         }
 
@@ -129,7 +129,23 @@ class PlaylistRepositoryImpl(
         playlistDao.deletePlaylist(playlistId)
     }
 
-    override suspend fun updatePlaylist(playlist: Playlist) {
-        playlistDao.updatePlaylist(playlistConverter.map(playlist))
+    override suspend fun updatePlaylist(playlistDto: PlaylistDto, playlist: Playlist) {
+        val newName = playlistDto.name
+        val newDescription = playlistDto.description
+        val newCover = playlistDto.imageUrl
+        var filePath: String? = null
+        var fileName: String? = null
+        if (playlistDto.imageUrl != null) {
+            fileName = "${playlistDto.name}_${UUID.randomUUID()}.jpg"
+            filePath = fileManager.saveCoverToPrivateStorage(playlistDto.imageUrl, fileName)
+        }
+        val updatedPlaylist = playlist.copy(
+            name = newName,
+            description = newDescription ?: playlist.description,
+            imageUrl = filePath ?: playlist.imageUrl,
+            imageName = fileName ?: playlist.imageName
+        )
+
+        playlistDao.updatePlaylist(playlistConverter.map(updatedPlaylist))
     }
 }

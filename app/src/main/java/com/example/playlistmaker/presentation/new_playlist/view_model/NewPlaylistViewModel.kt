@@ -30,9 +30,15 @@ class NewPlaylistViewModel(private val playlistInteractor: PlaylistInteractor) :
         }
     }
 
-    fun updatePlaylist(playlist: Playlist) {
+    fun updatePlaylist(name: String, description: String?, imageUrl: Uri?, playlist: Playlist) {
         viewModelScope.launch {
-            playlistInteractor.updatePlaylist(playlist)
+            playlistInteractor.updatePlaylist(
+                PlaylistDto(
+                    name = name,
+                    description = description,
+                    imageUrl = imageUrl
+                ), playlist
+            )
             stateLiveData.value = NewPlaylistState.Created
         }
     }

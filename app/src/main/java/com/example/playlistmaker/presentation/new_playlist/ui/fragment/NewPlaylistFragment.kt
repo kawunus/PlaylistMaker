@@ -61,6 +61,7 @@ class NewPlaylistFragment : Fragment() {
             )
             createButton.isEnabled = true
             binding.toolbar.title = getString(R.string.playlist_edit_title)
+            coverUrl
         }
 
         nameEditText.addTextChangedListener(object : TextWatcher {
@@ -141,7 +142,14 @@ class NewPlaylistFragment : Fragment() {
                 )
             }
         } else {
-            // TODO: Обновление плейлиста
+            binding.createButton.setOnClickListener {
+                viewModel.updatePlaylist(
+                    name = binding.nameEditText.text.toString(),
+                    description = binding.descriptionEditText.text.toString(),
+                    imageUrl = coverUrl,
+                    playlist = model!!
+                )
+            }
         }
 
         binding.toolbar.setNavigationOnClickListener {

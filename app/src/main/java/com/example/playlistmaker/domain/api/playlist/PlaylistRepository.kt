@@ -23,5 +23,5 @@ interface PlaylistRepository {
 
     suspend fun deletePlaylistById(playlistId: Int)
 
-    suspend fun updatePlaylist(playlist: Playlist)
+    suspend fun updatePlaylist(playlistDto: PlaylistDto, playlist: Playlist)
 }
