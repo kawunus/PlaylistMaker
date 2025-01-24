@@ -31,7 +31,7 @@ class PlaylistInPlayerAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistInPlayerViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.playlist_item_in_player, parent, false)
+            .inflate(R.layout.item_playlist_in_player, parent, false)
         return PlaylistInPlayerViewHolder(view)
     }
 
