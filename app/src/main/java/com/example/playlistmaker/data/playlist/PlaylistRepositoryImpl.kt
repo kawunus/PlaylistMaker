@@ -132,12 +132,12 @@ class PlaylistRepositoryImpl(
     override suspend fun updatePlaylist(playlistDto: PlaylistDto, playlist: Playlist) {
         val newName = playlistDto.name
         val newDescription = playlistDto.description
-        val newCover = playlistDto.imageUrl
         var filePath: String? = null
         var fileName: String? = null
         if (playlistDto.imageUrl != null) {
             fileName = "${playlistDto.name}_${UUID.randomUUID()}.jpg"
             filePath = fileManager.saveCoverToPrivateStorage(playlistDto.imageUrl, fileName)
+            fileManager.deleteCoverFromLocalStorage(playlist.imageName ?: "")
         }
         val updatedPlaylist = playlist.copy(
             name = newName,

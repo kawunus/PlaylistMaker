@@ -29,4 +29,12 @@ class FileManager(private val context: Context) {
 
         return file.path
     }
+
+    fun deleteCoverFromLocalStorage(fileName: String) {
+        val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "covers")
+        val file = File(filePath, fileName)
+        if (file.exists()) {
+            file.delete()
+        }
+    }
 }
