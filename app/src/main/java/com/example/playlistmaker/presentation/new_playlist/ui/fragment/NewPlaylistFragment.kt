@@ -161,7 +161,6 @@ class NewPlaylistFragment : Fragment() {
     }
 
     private fun showDialog() {
-        // TODO: Тайтл для диалога при редактировании
         val dialog =
             MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.playlist_dialog_title)
                 .setMessage(R.string.playlist_dialog_message)
@@ -169,6 +168,10 @@ class NewPlaylistFragment : Fragment() {
                 }.setPositiveButton(R.string.playlist_dialog_positive) { _, _ ->
                     findNavController().popBackStack()
                 }.show()
+
+        if (model != null) {
+            dialog.setTitle(R.string.playlist_dialog_edit_title)
+        }
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             .setTextColor(ContextCompat.getColor(requireContext(), R.color.defaultTextColor))
         dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
