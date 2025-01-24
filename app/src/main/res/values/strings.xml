@@ -56,6 +56,8 @@
     <string name="playlist_dialog_positive">Завершить</string>
     <string name="playlist_save">Сохранить</string>
     <string name="playlist_edit_title">Редактировать</string>
+    <string name="playlist_created">Плейлист %1$s создан</string>
+    <string name="playlist_edit_ok">Плейлист %1$s сохранен</string>
 
     <!-- Bottom Sheet -->
     <string name="bottom_sheet_title">Добавить в плейлист</string>

@@ -86,21 +86,26 @@ class NewPlaylistFragment : Fragment() {
 
         })
 
-        // TODO: вынести в строковые ресурсы
         viewModel.observeState().observe(viewLifecycleOwner) { state ->
             when (state) {
                 NewPlaylistState.Created -> {
                     if (model == null) {
                         Toast.makeText(
                             requireContext(),
-                            "Плейлист ${binding.nameEditText.text.toString()} создан",
+                            getString(
+                                R.string.playlist_created,
+                                binding.nameEditText.text.toString()
+                            ),
                             Toast.LENGTH_SHORT
                         ).show()
                         findNavController().popBackStack()
                     } else {
                         Toast.makeText(
                             requireContext(),
-                            "Плейлист ${binding.nameEditText.text.toString()} сохранен",
+                            getString(
+                                R.string.playlist_edit_ok,
+                                binding.nameEditText.text.toString()
+                            ),
                             Toast.LENGTH_SHORT
                         ).show()
                         findNavController().popBackStack()
