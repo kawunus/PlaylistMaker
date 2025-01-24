@@ -16,8 +16,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentNewPlaylistBinding
+import com.example.playlistmaker.domain.model.playlist.Playlist
 import com.example.playlistmaker.presentation.new_playlist.ui.model.NewPlaylistState
 import com.example.playlistmaker.presentation.new_playlist.view_model.NewPlaylistViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -28,6 +31,8 @@ class NewPlaylistFragment : Fragment() {
     private val binding by lazy {
         FragmentNewPlaylistBinding.inflate(layoutInflater)
     }
+
+    private var model: Playlist? = null
 
     private val viewModel: NewPlaylistViewModel by viewModel()
 
@@ -41,6 +46,16 @@ class NewPlaylistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?): Unit = with(binding) {
         super.onViewCreated(view, savedInstanceState)
+
+        val args: NewPlaylistFragmentArgs by navArgs()
+        model = args.playlist
+
+        if (model != null) {
+            binding.nameEditText.setText(model?.name)
+            binding.descriptionEditText.setText(model?.description ?: "")
+            Glide.with(requireContext()).load(model?.imageUrl).centerCrop()
+                .placeholder(R.drawable.ic_add_playlist).into(addImageImageView)
+        }
 
         nameEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {

@@ -219,7 +219,8 @@ class PlayerFragment : Fragment() {
 
         newPlaylistButton.setOnClickListener {
             viewModel.destroyPlayer()
-            findNavController().navigate(R.id.action_playerFragment_to_newPlaylistFragment)
+            val action = PlayerFragmentDirections.actionPlayerFragmentToNewPlaylistFragment(null)
+            findNavController().navigate(action)
         }
     }
 }

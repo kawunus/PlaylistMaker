@@ -119,6 +119,12 @@ class PlaylistInfoFragment : Fragment() {
         binding.sharePlaylistTextView.setOnClickListener {
             sharePlaylist()
         }
+
+        binding.editPlaylistTextView.setOnClickListener {
+            val action =
+                PlaylistInfoFragmentDirections.actionPlaylistInfoFragmentToNewPlaylistFragment(model)
+            findNavController().navigate(action)
+        }
     }
 
     private fun sharePlaylist() {
