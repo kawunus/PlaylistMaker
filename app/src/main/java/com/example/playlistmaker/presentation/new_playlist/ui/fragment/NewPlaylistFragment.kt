@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,6 +22,7 @@ import com.example.playlistmaker.databinding.FragmentNewPlaylistBinding
 import com.example.playlistmaker.domain.model.playlist.Playlist
 import com.example.playlistmaker.presentation.new_playlist.ui.model.NewPlaylistState
 import com.example.playlistmaker.presentation.new_playlist.view_model.NewPlaylistViewModel
+import com.example.playlistmaker.utils.snackbar.Snackbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -91,24 +91,20 @@ class NewPlaylistFragment : Fragment() {
             when (state) {
                 NewPlaylistState.Created -> {
                     if (model == null) {
-                        Toast.makeText(
-                            requireContext(),
+                        showSnackBar(
                             getString(
                                 R.string.playlist_created,
                                 binding.nameEditText.text.toString().trim()
-                            ),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            )
+                        )
                         findNavController().popBackStack()
                     } else {
-                        Toast.makeText(
-                            requireContext(),
+                        showSnackBar(
                             getString(
                                 R.string.playlist_edit_ok,
                                 binding.nameEditText.text.toString().trim()
-                            ),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            )
+                        )
                         findNavController().popBackStack()
                     }
                 }
@@ -118,6 +114,7 @@ class NewPlaylistFragment : Fragment() {
                 }
             }
         }
+
 
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -181,5 +178,9 @@ class NewPlaylistFragment : Fragment() {
         dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
             .setTextColor(ContextCompat.getColor(requireContext(), R.color.defaultTextColor))
 
+    }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.showSnackbar(binding.root, message, requireContext())
     }
 }
