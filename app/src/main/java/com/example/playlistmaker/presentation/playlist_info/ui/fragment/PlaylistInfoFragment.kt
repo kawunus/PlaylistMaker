@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -24,6 +23,7 @@ import com.example.playlistmaker.presentation.playlist_info.view_model.PlaylistI
 import com.example.playlistmaker.presentation.search.ui.adapter.TrackAdapter
 import com.example.playlistmaker.utils.converter.WordConverter
 import com.example.playlistmaker.utils.debounce.debounce
+import com.example.playlistmaker.utils.snackbar.Snackbar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -88,6 +88,7 @@ class PlaylistInfoFragment : Fragment() {
                     model = state.playlist
                     trackList = emptyList()
                     renderModelViews(emptyList())
+                    showSnackBar(getString(R.string.playlist_empty_snackbar, model?.name))
                 }
 
                 TracksInPlaylistState.Loading -> {
@@ -141,10 +142,14 @@ class PlaylistInfoFragment : Fragment() {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
+    private fun showSnackBar(message: String) {
+        Snackbar.showSnackbar(binding.root, message, requireContext())
+    }
+
     private fun renderBottomSheets() = with(binding) {
         val trackBottomSheetContainer = trackBottomSheet
 
-        val trackBottomSheetBehavior: BottomSheetBehavior<LinearLayout> =
+        val trackBottomSheetBehavior: BottomSheetBehavior<ConstraintLayout> =
             BottomSheetBehavior.from(trackBottomSheetContainer).apply {
                 state = BottomSheetBehavior.STATE_COLLAPSED
             }

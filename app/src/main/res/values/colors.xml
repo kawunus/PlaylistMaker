@@ -29,4 +29,6 @@
     <color name="bottomSheetHandleColor">#E6E8EB</color>
     <color name="shadowOverlayColor">#801A1B22</color>
     <color name="playlistInfoBackgroundColor">#E6E8EB</color>
+    <color name="snackbarBackgroundColor">#1A1B22</color>
+    <color name="snackbarTextColor">#FFFFFF</color>
 </resources>

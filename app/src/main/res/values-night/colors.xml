@@ -15,4 +15,6 @@
     <color name="blueColor">#3772E7</color>
     <color name="defaultTextColor">#FFFFFF</color>
     <color name="bottomSheetHandleColor">#FFFFFF</color>
+    <color name="snackbarBackgroundColor">#FFFFFF</color>
+    <color name="snackbarTextColor">#1A1B22</color>
 </resources>
