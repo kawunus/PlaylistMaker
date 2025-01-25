@@ -95,7 +95,7 @@ class NewPlaylistFragment : Fragment() {
                             requireContext(),
                             getString(
                                 R.string.playlist_created,
-                                binding.nameEditText.text.toString()
+                                binding.nameEditText.text.toString().trim()
                             ),
                             Toast.LENGTH_SHORT
                         ).show()
@@ -105,7 +105,7 @@ class NewPlaylistFragment : Fragment() {
                             requireContext(),
                             getString(
                                 R.string.playlist_edit_ok,
-                                binding.nameEditText.text.toString()
+                                binding.nameEditText.text.toString().trim()
                             ),
                             Toast.LENGTH_SHORT
                         ).show()

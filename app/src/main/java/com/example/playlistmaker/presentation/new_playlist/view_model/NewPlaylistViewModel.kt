@@ -21,8 +21,8 @@ class NewPlaylistViewModel(private val playlistInteractor: PlaylistInteractor) :
         viewModelScope.launch {
             playlistInteractor.createNewPlaylist(
                 PlaylistDto(
-                    name = name,
-                    description = description,
+                    name = name.trim(),
+                    description = description?.trim(),
                     imageUrl = imageUrl
                 )
             )
@@ -34,8 +34,8 @@ class NewPlaylistViewModel(private val playlistInteractor: PlaylistInteractor) :
         viewModelScope.launch {
             playlistInteractor.updatePlaylist(
                 PlaylistDto(
-                    name = name,
-                    description = description,
+                    name = name.trim(),
+                    description = description?.trim(),
                     imageUrl = imageUrl
                 ), playlist
             )
