@@ -202,7 +202,8 @@ class PlaylistInfoFragment : Fragment() {
 
     private fun showPlaylistDeleteDialog() {
         val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(
+            .setTitle(getString(R.string.playlist_delete))
+            .setMessage(
                 requireContext().getString(
                     R.string.playlist_delete_dialog_title,
                     model?.name
