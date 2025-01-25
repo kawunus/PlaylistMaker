@@ -71,10 +71,9 @@ class PlaylistInfoFragment : Fragment() {
         }
         adapter = TrackAdapter(onItemClick = { track ->
             onTrackClickDebounce(track)
-        },
-            onLongItemClick = { track ->
-                showTrackDeleteDialog(track)
-            })
+        }, onLongItemClick = { track ->
+            showTrackDeleteDialog(track)
+        })
         binding.recyclerView.adapter = adapter
 
         viewModel.observeTracksInPlaylist().observe(viewLifecycleOwner) { state ->
@@ -120,6 +119,7 @@ class PlaylistInfoFragment : Fragment() {
 
         binding.sharePlaylistTextView.setOnClickListener {
             sharePlaylist()
+            playlistBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
 
         binding.editPlaylistTextView.setOnClickListener {
@@ -185,14 +185,13 @@ class PlaylistInfoFragment : Fragment() {
     }
 
     private fun showTrackDeleteDialog(track: Track) {
-        val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.delete_dialog_title)
-            .setNegativeButton(R.string.dialog_no) { _, _ ->
-            }
-            .setPositiveButton(R.string.dialog_yes) { _, _ ->
-                viewModel.deleteTrackFromPlaylist(track)
+        val dialog =
+            MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.delete_dialog_title)
+                .setNegativeButton(R.string.dialog_no) { _, _ ->
+                }.setPositiveButton(R.string.dialog_yes) { _, _ ->
+                    viewModel.deleteTrackFromPlaylist(track)
 
-            }.show()
+                }.show()
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             .setTextColor(ContextCompat.getColor(requireContext(), R.color.blueColor))
@@ -201,20 +200,17 @@ class PlaylistInfoFragment : Fragment() {
     }
 
     private fun showPlaylistDeleteDialog() {
-        val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.playlist_delete))
-            .setMessage(
-                requireContext().getString(
-                    R.string.playlist_delete_dialog_title,
-                    model?.name
-                )
-            )
-            .setNegativeButton(R.string.dialog_no) { _, _ ->
-            }
-            .setPositiveButton(R.string.dialog_yes) { _, _ ->
-                viewModel.deletePlaylist()
+        val dialog =
+            MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.playlist_delete))
+                .setMessage(
+                    requireContext().getString(
+                        R.string.playlist_delete_dialog_title, model?.name
+                    )
+                ).setNegativeButton(R.string.dialog_no) { _, _ ->
+                }.setPositiveButton(R.string.dialog_yes) { _, _ ->
+                    viewModel.deletePlaylist()
 
-            }.show()
+                }.show()
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             .setTextColor(ContextCompat.getColor(requireContext(), R.color.blueColor))
