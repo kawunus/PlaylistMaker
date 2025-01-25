@@ -81,12 +81,14 @@ class PlaylistInfoFragment : Fragment() {
             when (state) {
                 is TracksInPlaylistState.Content -> {
                     model = state.playlist
+                    trackList = state.trackList
                     renderModelViews(state.trackList)
                 }
 
                 is TracksInPlaylistState.Empty -> {
                     model = state.playlist
-                    renderModelViews(trackList)
+                    trackList = emptyList()
+                    renderModelViews(emptyList())
                 }
 
                 TracksInPlaylistState.Loading -> {
