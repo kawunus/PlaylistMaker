@@ -153,14 +153,14 @@ class NewPlaylistFragment : Fragment() {
         }
 
         binding.toolbar.setNavigationOnClickListener {
-            if (binding.descriptionEditText.text.isNullOrEmpty() && binding.nameEditText.text.isNullOrEmpty() && coverUrl == null) {
+            if ((binding.descriptionEditText.text.isNullOrEmpty() && binding.nameEditText.text.isNullOrEmpty() && coverUrl == null) || model != null) {
                 findNavController().popBackStack()
             } else {
                 showDialog()
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            if (binding.descriptionEditText.text.isNullOrEmpty() && binding.nameEditText.text.isNullOrEmpty() && coverUrl == null) {
+            if ((binding.descriptionEditText.text.isNullOrEmpty() && binding.nameEditText.text.isNullOrEmpty() && coverUrl == null) || model != null) {
                 findNavController().popBackStack()
             } else {
                 showDialog()
@@ -176,10 +176,6 @@ class NewPlaylistFragment : Fragment() {
                 }.setPositiveButton(R.string.playlist_dialog_positive) { _, _ ->
                     findNavController().popBackStack()
                 }.show()
-
-        if (model != null) {
-            dialog.setTitle(R.string.playlist_dialog_edit_title)
-        }
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             .setTextColor(ContextCompat.getColor(requireContext(), R.color.defaultTextColor))
         dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
