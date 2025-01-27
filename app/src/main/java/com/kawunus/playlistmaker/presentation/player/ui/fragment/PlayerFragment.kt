@@ -59,6 +59,7 @@ class PlayerFragment : Fragment() {
 
         binding.likeButton.setOnClickListener {
             viewModel.likeButtonControl()
+
         }
 
         viewModel.observeIsFavoriteState().observe(viewLifecycleOwner) { isFavorite ->

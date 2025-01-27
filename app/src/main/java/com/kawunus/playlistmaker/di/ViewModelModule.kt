@@ -1,5 +1,6 @@
 package com.kawunus.playlistmaker.di
 
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.kawunus.playlistmaker.domain.model.playlist.Playlist
 import com.kawunus.playlistmaker.domain.model.track.Track
 import com.kawunus.playlistmaker.presentation.favorites.view_model.FavoritesViewModel
@@ -14,7 +15,7 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel { (track: Track) ->
-        PlayerViewModel(track, get(), get(), get())
+        PlayerViewModel(track, get(), get(), get(), FirebaseAnalytics.getInstance(get()))
     }
     viewModel {
         SettingsViewModel(get(), get())
@@ -29,7 +30,7 @@ val viewModelModule = module {
         PlaylistViewModel(get())
     }
     viewModel {
-        NewPlaylistViewModel(get())
+        NewPlaylistViewModel(get(), FirebaseAnalytics.getInstance(get()))
     }
     viewModel { (playlist: Playlist) ->
         PlaylistInfoViewModel(get(), playlist, get())

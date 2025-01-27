@@ -18,7 +18,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.kawunus.playlistmaker.R
 import com.kawunus.playlistmaker.databinding.FragmentNewPlaylistBinding
 import com.kawunus.playlistmaker.domain.model.playlist.Playlist
@@ -28,10 +27,6 @@ import com.kawunus.playlistmaker.utils.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class NewPlaylistFragment : Fragment() {
-
-    private val analytics: FirebaseAnalytics by lazy {
-        FirebaseAnalytics.getInstance(requireContext())
-    }
 
     private val binding by lazy {
         FragmentNewPlaylistBinding.inflate(layoutInflater)
@@ -106,14 +101,6 @@ class NewPlaylistFragment : Fragment() {
                                 binding.nameEditText.text.toString().trim()
                             )
                         )
-                        val analyticsBundle = Bundle().apply {
-                            putString("Playlist Name", binding.nameEditText.text.toString().trim())
-                            putString(
-                                "Playlist description",
-                                binding.descriptionEditText.text.toString().trim()
-                            )
-                        }
-                        analytics.logEvent("Create_Playlist", analyticsBundle)
                         findNavController().popBackStack()
                     } else {
                         showSnackBar(
@@ -127,7 +114,6 @@ class NewPlaylistFragment : Fragment() {
                 }
 
                 NewPlaylistState.NotCreated -> {
-
                 }
             }
         }
