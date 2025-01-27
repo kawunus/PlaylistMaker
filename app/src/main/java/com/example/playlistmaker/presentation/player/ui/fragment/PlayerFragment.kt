@@ -10,8 +10,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import coil.load
+import coil.transform.RoundedCornersTransformation
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
 import com.example.playlistmaker.domain.model.playlist.Playlist
@@ -39,9 +39,7 @@ class PlayerFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentPlayerBinding.inflate(inflater, container, false)
         return binding.root
@@ -107,8 +105,7 @@ class PlayerFragment : Fragment() {
 
         adapter = PlaylistInPlayerAdapter { playlist ->
             viewModel.addTrackToPlaylist(
-                track = model,
-                playlist = playlist
+                track = model, playlist = playlist
             )
         }
 
@@ -127,8 +124,7 @@ class PlayerFragment : Fragment() {
                 is AdditionState.Successful -> {
                     showToast(
                         getString(
-                            R.string.bottom_sheet_successful_addition,
-                            state.playlistName
+                            R.string.bottom_sheet_successful_addition, state.playlistName
                         )
                     )
 
@@ -173,11 +169,11 @@ class PlayerFragment : Fragment() {
         trackNameTextView.text = model.trackName
         artistNameTextView.text = model.artistName
         trackTimeTextView.text = dateFormatter.format(model.trackTimeMillis)
-        Glide.with(requireContext())
-            .load(model.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
-            .transform(
-                RoundedCorners(8)
-            ).placeholder(R.drawable.track_placeholder).into(imageView)
+        imageView.load(model.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")) {
+            placeholder(R.drawable.track_placeholder)
+            error(R.drawable.track_placeholder)
+            transformations(RoundedCornersTransformation(8f))
+        }
         trackCountryTextView.text = model.country
         trackGenreTextView.text = model.primaryGenreName
         trackYearTextView.text = model.releaseDate.substring(0, 4)

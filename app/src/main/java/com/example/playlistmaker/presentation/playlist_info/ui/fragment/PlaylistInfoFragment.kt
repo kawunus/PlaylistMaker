@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
+import coil.load
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistInfoBinding
 import com.example.playlistmaker.domain.model.playlist.Playlist
@@ -224,8 +224,10 @@ class PlaylistInfoFragment : Fragment() {
     }
 
     private fun renderModelViews(trackList: List<Track>) = with(binding) {
-        Glide.with(requireContext()).load(model?.imageUrl).centerCrop()
-            .placeholder(R.drawable.ic_single_playlist_placeholder).into(coverImageView)
+        coverImageView.load(model?.imageUrl) {
+            placeholder(R.drawable.ic_single_playlist_placeholder)
+            error(R.drawable.ic_single_playlist_placeholder)
+        }
         titleTextView.text = model?.name
         if (model?.description.isNullOrEmpty()) {
             descriptionTextView.isVisible = false
@@ -241,9 +243,10 @@ class PlaylistInfoFragment : Fragment() {
         val countOfTracks =
             "${model?.countOfTracks} ${WordConverter.getTrackWordForm(model?.countOfTracks ?: 0)}"
         countOfTracksTextView.text = countOfTracks
-
-        Glide.with(requireContext()).load(model?.imageUrl).centerCrop()
-            .placeholder(R.drawable.playlist_placeholder).into(binding.miniCoverImageView)
+        miniCoverImageView.load(model?.imageUrl) {
+            placeholder(R.drawable.playlist_placeholder)
+            error(R.drawable.playlist_placeholder)
+        }
         binding.nameTextView.text = model?.name
         binding.countTextView.text = countOfTracks
     }

@@ -28,6 +28,7 @@
             android:id="@+id/coverImageView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_single_playlist_placeholder"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"

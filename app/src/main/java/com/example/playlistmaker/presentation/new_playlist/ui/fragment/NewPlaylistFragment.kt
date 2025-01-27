@@ -16,7 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
+import coil.load
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentNewPlaylistBinding
 import com.example.playlistmaker.domain.model.playlist.Playlist
@@ -53,8 +53,12 @@ class NewPlaylistFragment : Fragment() {
         if (model != null) {
             binding.nameEditText.setText(model?.name)
             binding.descriptionEditText.setText(model?.description ?: "")
-            Glide.with(requireContext()).load(model?.imageUrl).centerCrop()
-                .placeholder(R.drawable.ic_add_playlist).into(addImageImageView)
+
+            addImageImageView.load(model?.imageUrl) {
+                placeholder(R.drawable.ic_add_playlist)
+                error(R.drawable.ic_add_playlist)
+            }
+
             binding.createButton.text = getString(R.string.playlist_save)
             createButton.backgroundTintList = ContextCompat.getColorStateList(
                 requireContext(), R.color.buttonCreateColorAble
