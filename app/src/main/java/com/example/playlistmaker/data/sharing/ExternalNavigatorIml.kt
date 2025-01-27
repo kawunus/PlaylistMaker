@@ -6,6 +6,8 @@ import android.net.Uri
 import com.example.playlistmaker.R
 import com.example.playlistmaker.data.dto.EmailData
 import com.example.playlistmaker.domain.api.sharing.ExternalNavigator
+import com.example.playlistmaker.domain.model.track.Track
+import com.example.playlistmaker.utils.converter.WordConverter
 
 class ExternalNavigatorIml(private val context: Context) : ExternalNavigator {
     override fun shareLink(link: String) {
@@ -42,4 +44,44 @@ class ExternalNavigatorIml(private val context: Context) : ExternalNavigator {
     )
 
     override fun getTermsLink(): String = context.getString(R.string.link_to_agreement)
+
+    override fun sharePlaylist(
+        trackList: List<Track>,
+        playlistName: String,
+        playlistDescription: String?
+    ) {
+        val message = getPlaylistMessage(trackList, playlistName, playlistDescription)
+
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.putExtra(Intent.EXTRA_TEXT, message)
+        intent.type = "text/plain"
+        val chooser = Intent.createChooser(intent, context.getString(R.string.share_playlist_title))
+        chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(chooser)
+    }
+
+    private fun getPlaylistMessage(
+        trackList: List<Track>,
+        playlistName: String,
+        playlistDescription: String?
+    ): String {
+        val tracksCount = "${trackList.size} ${WordConverter.getTrackWordForm(trackList.size)}\n"
+        val trackMessage = trackList.mapIndexed { index, track ->
+            "${index + 1}. ${track.artistName} - ${track.trackName} (${
+                WordConverter.getMinuteWordFromMillis(
+                    track.trackTimeMillis
+                )
+            })"
+        }.joinToString("\n")
+        val title = "Плейлист $playlistName \n"
+        val description =
+            if (playlistDescription.isNullOrEmpty()) {
+                ""
+            } else {
+                "Описание: $playlistDescription \n"
+            }
+        val message = title + description + tracksCount + trackMessage
+
+        return message
+    }
 }

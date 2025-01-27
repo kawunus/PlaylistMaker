@@ -55,9 +55,9 @@ class SearchFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        trackAdapter = TrackAdapter { track ->
+        trackAdapter = TrackAdapter(onLongItemClick = null, onItemClick = { track ->
             onTrackClickDebounce(track)
-        }
+        })
         historyAdapter = trackAdapter
         binding.historyRecyclerView.adapter = trackAdapter
         binding.recyclerView.adapter = trackAdapter

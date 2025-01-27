@@ -95,6 +95,7 @@ class PlayerViewModel(
     private var timerJob: Job? = null
 
     private fun startTimer() {
+        timerJob?.cancel()
         timerJob = viewModelScope.launch {
             while (playerStateLiveData.value is PlayerState.Playing) {
                 delay(UPDATE_TIMER_DEBOUNCE)

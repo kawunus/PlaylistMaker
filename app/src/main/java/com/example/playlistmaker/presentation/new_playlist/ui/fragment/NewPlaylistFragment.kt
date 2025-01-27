@@ -9,17 +9,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentNewPlaylistBinding
+import com.example.playlistmaker.domain.model.playlist.Playlist
 import com.example.playlistmaker.presentation.new_playlist.ui.model.NewPlaylistState
 import com.example.playlistmaker.presentation.new_playlist.view_model.NewPlaylistViewModel
+import com.example.playlistmaker.utils.snackbar.Snackbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -28,6 +31,8 @@ class NewPlaylistFragment : Fragment() {
     private val binding by lazy {
         FragmentNewPlaylistBinding.inflate(layoutInflater)
     }
+
+    private var model: Playlist? = null
 
     private val viewModel: NewPlaylistViewModel by viewModel()
 
@@ -41,6 +46,23 @@ class NewPlaylistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?): Unit = with(binding) {
         super.onViewCreated(view, savedInstanceState)
+
+        val args: NewPlaylistFragmentArgs by navArgs()
+        model = args.playlist
+
+        if (model != null) {
+            binding.nameEditText.setText(model?.name)
+            binding.descriptionEditText.setText(model?.description ?: "")
+            Glide.with(requireContext()).load(model?.imageUrl).centerCrop()
+                .placeholder(R.drawable.ic_add_playlist).into(addImageImageView)
+            binding.createButton.text = getString(R.string.playlist_save)
+            createButton.backgroundTintList = ContextCompat.getColorStateList(
+                requireContext(), R.color.buttonCreateColorAble
+            )
+            createButton.isEnabled = true
+            binding.toolbar.title = getString(R.string.playlist_edit_title)
+            coverUrl
+        }
 
         nameEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -68,12 +90,23 @@ class NewPlaylistFragment : Fragment() {
         viewModel.observeState().observe(viewLifecycleOwner) { state ->
             when (state) {
                 NewPlaylistState.Created -> {
-                    Toast.makeText(
-                        requireContext(),
-                        "Плейлист ${binding.nameEditText.text.toString()} создан",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    findNavController().popBackStack()
+                    if (model == null) {
+                        showSnackBar(
+                            getString(
+                                R.string.playlist_created,
+                                binding.nameEditText.text.toString().trim()
+                            )
+                        )
+                        findNavController().popBackStack()
+                    } else {
+                        showSnackBar(
+                            getString(
+                                R.string.playlist_edit_ok,
+                                binding.nameEditText.text.toString().trim()
+                            )
+                        )
+                        findNavController().popBackStack()
+                    }
                 }
 
                 NewPlaylistState.NotCreated -> {
@@ -81,6 +114,7 @@ class NewPlaylistFragment : Fragment() {
                 }
             }
         }
+
 
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -96,23 +130,34 @@ class NewPlaylistFragment : Fragment() {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
-        binding.createButton.setOnClickListener {
-            viewModel.createNewPlaylist(
-                name = binding.nameEditText.text.toString(),
-                description = binding.descriptionEditText.text.toString(),
-                imageUrl = coverUrl
-            )
+        if (model == null) {
+            binding.createButton.setOnClickListener {
+                viewModel.createNewPlaylist(
+                    name = binding.nameEditText.text.toString(),
+                    description = binding.descriptionEditText.text.toString(),
+                    imageUrl = coverUrl
+                )
+            }
+        } else {
+            binding.createButton.setOnClickListener {
+                viewModel.updatePlaylist(
+                    name = binding.nameEditText.text.toString(),
+                    description = binding.descriptionEditText.text.toString(),
+                    imageUrl = coverUrl,
+                    playlist = model!!
+                )
+            }
         }
 
         binding.toolbar.setNavigationOnClickListener {
-            if (binding.descriptionEditText.text.isNullOrEmpty() && binding.nameEditText.text.isNullOrEmpty() && coverUrl == null) {
+            if ((binding.descriptionEditText.text.isNullOrEmpty() && binding.nameEditText.text.isNullOrEmpty() && coverUrl == null) || model != null) {
                 findNavController().popBackStack()
             } else {
                 showDialog()
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            if (binding.descriptionEditText.text.isNullOrEmpty() && binding.nameEditText.text.isNullOrEmpty() && coverUrl == null) {
+            if ((binding.descriptionEditText.text.isNullOrEmpty() && binding.nameEditText.text.isNullOrEmpty() && coverUrl == null) || model != null) {
                 findNavController().popBackStack()
             } else {
                 showDialog()
@@ -121,18 +166,21 @@ class NewPlaylistFragment : Fragment() {
     }
 
     private fun showDialog() {
-        val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.playlist_dialog_title)
-            .setMessage(R.string.playlist_dialog_message)
-            .setNeutralButton(R.string.playlist_dialog_neutral) { _, _ ->
-            }
-            .setPositiveButton(R.string.playlist_dialog_positive) { _, _ ->
-                findNavController().popBackStack()
-            }.show()
+        val dialog =
+            MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.playlist_dialog_title)
+                .setMessage(R.string.playlist_dialog_message)
+                .setNeutralButton(R.string.playlist_dialog_neutral) { _, _ ->
+                }.setPositiveButton(R.string.playlist_dialog_positive) { _, _ ->
+                    findNavController().popBackStack()
+                }.show()
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             .setTextColor(ContextCompat.getColor(requireContext(), R.color.defaultTextColor))
         dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
             .setTextColor(ContextCompat.getColor(requireContext(), R.color.defaultTextColor))
 
+    }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.showSnackbar(binding.root, message, requireContext())
     }
 }

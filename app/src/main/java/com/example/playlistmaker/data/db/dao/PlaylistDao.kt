@@ -24,5 +24,4 @@ interface PlaylistDao {
 
     @Query("SELECT * FROM playlists WHERE id = :playlistId LIMIT 1")
     suspend fun getPlaylistById(playlistId: Int): PlaylistEntity
-
 }

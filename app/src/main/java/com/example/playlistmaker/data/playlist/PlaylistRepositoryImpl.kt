@@ -6,6 +6,7 @@ import com.example.playlistmaker.data.db.dao.PlaylistTrackDao
 import com.example.playlistmaker.data.db.dao.TrackDao
 import com.example.playlistmaker.data.db.entity.PlaylistEntity
 import com.example.playlistmaker.data.db.entity.PlaylistTrackEntity
+import com.example.playlistmaker.data.db.entity.TrackEntity
 import com.example.playlistmaker.data.dto.PlaylistDto
 import com.example.playlistmaker.data.file_manager.FileManager
 import com.example.playlistmaker.domain.api.playlist.PlaylistRepository
@@ -14,6 +15,7 @@ import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.utils.converter.PlaylistConverter
 import com.example.playlistmaker.utils.converter.TrackConverter
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import java.util.UUID
 
@@ -34,9 +36,9 @@ class PlaylistRepositoryImpl(
     override suspend fun createNewPlaylist(playlistDto: PlaylistDto) {
 
         var filePath: String? = null
-
-        val fileName = "${playlistDto.name}_${UUID.randomUUID()}.jpg"
+        var fileName: String? = null
         if (playlistDto.imageUrl != null) {
+            fileName = "${playlistDto.name}_${UUID.randomUUID()}.jpg"
             filePath = fileManager.saveCoverToPrivateStorage(playlistDto.imageUrl, fileName)
         }
 
@@ -77,5 +79,74 @@ class PlaylistRepositoryImpl(
         } else {
             return false
         }
+    }
+
+    override fun getTracks(playlistId: Int): Flow<List<Track>> = flow {
+        val relationList = playlistTrackDao.getTracksByPlaylistId(playlistId)
+        val trackList =
+            relationList.mapNotNull { relation -> trackDao.getTrackById(trackId = relation.trackId) }
+                .sortedByDescending { track -> track.addedAt }
+
+        emit(convertTrackListFromEntity(trackList))
+    }
+
+    private fun convertTrackListFromEntity(trackList: List<TrackEntity>): List<Track> {
+        return trackList.map { track ->
+            trackConverter.map(track)
+        }
+    }
+
+    override suspend fun deleteTrackFromPlaylist(playlist: Playlist, track: Track) {
+        playlistTrackDao.deleteTrackFromPlaylistTrack(
+            playlistId = playlist.id, trackId = track.trackId
+        )
+        val trackList = getTracks(playlist.id).first()
+        val updatedPlaylist = playlist.copy(countOfTracks = trackList.size)
+        playlistDao.updatePlaylist(playlistConverter.map(updatedPlaylist))
+
+        if (playlistTrackDao.getTrackPlaylistByTrackId(trackId = track.trackId) == null) {
+            trackDao.deleteTrackById(trackId = track.trackId)
+        }
+    }
+
+    override suspend fun getPlaylistById(playlistId: Int): Playlist {
+        val playlistEntity = playlistDao.getPlaylistById(playlistId)
+        return playlistConverter.map(playlistEntity)
+    }
+
+    override suspend fun deletePlaylistById(playlistId: Int) {
+        val trackList = getTracks(playlistId).first()
+
+        for (track: Track in trackList) {
+            playlistTrackDao.deleteTrackFromPlaylistTrack(
+                playlistId = playlistId, trackId = track.trackId
+            )
+            if (playlistTrackDao.getTrackPlaylistByTrackId(trackId = track.trackId) == null) {
+                trackDao.deleteTrackById(trackId = track.trackId)
+            }
+        }
+        val playlist = playlistDao.getPlaylistById(playlistId)
+        fileManager.deleteCoverFromLocalStorage(playlist.imageName ?: "")
+        playlistDao.deletePlaylist(playlistId)
+    }
+
+    override suspend fun updatePlaylist(playlistDto: PlaylistDto, playlist: Playlist) {
+        val newName = playlistDto.name
+        val newDescription = playlistDto.description
+        var filePath: String? = null
+        var fileName: String? = null
+        if (playlistDto.imageUrl != null) {
+            fileName = "${playlistDto.name}_${UUID.randomUUID()}.jpg"
+            filePath = fileManager.saveCoverToPrivateStorage(playlistDto.imageUrl, fileName)
+            fileManager.deleteCoverFromLocalStorage(playlist.imageName ?: "")
+        }
+        val updatedPlaylist = playlist.copy(
+            name = newName,
+            description = newDescription ?: playlist.description,
+            imageUrl = filePath ?: playlist.imageUrl,
+            imageName = fileName ?: playlist.imageName
+        )
+
+        playlistDao.updatePlaylist(playlistConverter.map(updatedPlaylist))
     }
 }

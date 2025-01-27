@@ -12,8 +12,8 @@ interface TrackDao {
     suspend fun createTrack(trackEntity: TrackEntity)
 
     @Query("SELECT * FROM tracks WHERE id = :trackId")
-    suspend fun getTrackById(trackId: Int): TrackEntity?
+    suspend fun getTrackById(trackId: kotlin.Long): TrackEntity?
 
     @Query("DELETE FROM tracks WHERE id = :trackId")
-    suspend fun deleteTrackById(trackId: Int)
+    suspend fun deleteTrackById(trackId: kotlin.Long)
 }

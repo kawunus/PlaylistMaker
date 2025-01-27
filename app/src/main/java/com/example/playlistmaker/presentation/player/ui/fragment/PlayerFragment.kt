@@ -1,7 +1,6 @@
 package com.example.playlistmaker.presentation.player.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -94,7 +93,6 @@ class PlayerFragment : Fragment() {
                     binding.playButton.setImageResource(R.drawable.ic_play)
                 }
             }
-            Log.e("PLAYER_STATE", "$playerState")
             binding.currentTimeTextView.text = playerState.progress
             binding.playButton.isEnabled = playerState.isPlayButtonEnabled
         }
@@ -221,7 +219,8 @@ class PlayerFragment : Fragment() {
 
         newPlaylistButton.setOnClickListener {
             viewModel.destroyPlayer()
-            findNavController().navigate(R.id.action_playerFragment_to_newPlaylistFragment)
+            val action = PlayerFragmentDirections.actionPlayerFragmentToNewPlaylistFragment(null)
+            findNavController().navigate(action)
         }
     }
 }

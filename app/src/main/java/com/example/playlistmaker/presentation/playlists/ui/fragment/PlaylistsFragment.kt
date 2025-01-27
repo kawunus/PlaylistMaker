@@ -9,9 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.domain.model.playlist.Playlist
+import com.example.playlistmaker.presentation.library.ui.fragment.LibraryFragmentDirections
 import com.example.playlistmaker.presentation.playlists.ui.adapter.PlaylistAdapter
 import com.example.playlistmaker.presentation.playlists.ui.model.PlaylistState
 import com.example.playlistmaker.presentation.playlists.view_model.PlaylistViewModel
@@ -49,7 +49,8 @@ class PlaylistsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.newPlaylistButton.setOnClickListener {
-            findNavController().navigate(R.id.action_libraryFragment_to_newPlaylistFragment)
+            val action = LibraryFragmentDirections.actionLibraryFragmentToNewPlaylistFragment(null)
+            findNavController().navigate(action)
         }
         viewModel.observeState().observe(viewLifecycleOwner) { state ->
             render(state)
@@ -60,7 +61,9 @@ class PlaylistsFragment : Fragment() {
             CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
 
         ) { playlist ->
-            // TODO: Переход на экран плейлиста
+            val action =
+                LibraryFragmentDirections.actionLibraryFragmentToPlaylistInfoFragment(playlist)
+            findNavController().navigate(action)
         }
 
         playlistAdapter = PlaylistAdapter { playlist ->

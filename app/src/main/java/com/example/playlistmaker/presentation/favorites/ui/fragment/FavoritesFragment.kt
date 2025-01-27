@@ -62,9 +62,9 @@ class FavoritesFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        trackAdapter = TrackAdapter { track ->
+        trackAdapter = TrackAdapter(onLongItemClick = null, onItemClick = { track ->
             onTrackClickDebounce(track)
-        }
+        })
 
         binding.recyclerView.adapter = trackAdapter
     }

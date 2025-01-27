@@ -38,7 +38,7 @@
         android:layout_marginTop="16dp"
         android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/track_view" />
+        tools:listitem="@layout/item_track" />
 
     <ProgressBar
         android:id="@+id/progressBar"
