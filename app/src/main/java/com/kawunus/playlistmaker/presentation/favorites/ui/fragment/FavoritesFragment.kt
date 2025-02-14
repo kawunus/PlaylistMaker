@@ -1,13 +1,9 @@
 package com.kawunus.playlistmaker.presentation.favorites.ui.fragment
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.kawunus.playlistmaker.core.ui.BaseFragment
 import com.kawunus.playlistmaker.databinding.FragmentFavoritesBinding
 import com.kawunus.playlistmaker.domain.model.track.Track
 import com.kawunus.playlistmaker.presentation.favorites.ui.model.FavoritesState
@@ -17,44 +13,21 @@ import com.kawunus.playlistmaker.presentation.search.ui.adapter.TrackAdapter
 import com.kawunus.playlistmaker.utils.debounce.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FavoritesFragment : Fragment() {
+class FavoritesFragment :
+    BaseFragment<FragmentFavoritesBinding, FavoritesViewModel>(FragmentFavoritesBinding::inflate) {
 
     companion object {
         fun newInstance() = FavoritesFragment()
         private const val CLICK_DEBOUNCE_DELAY = 300L
     }
 
-    private var _binding: FragmentFavoritesBinding? = null
-    private val binding get() = _binding!!
-
     private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     private var trackAdapter: TrackAdapter? = null
 
-    private val viewModel: FavoritesViewModel by viewModel()
+    override val viewModel: FavoritesViewModel by viewModel()
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel.observeState().observe(viewLifecycleOwner) { state ->
-            render(state)
-        }
-
-        viewModel.getData()
-
+    override fun initViews() {
         onTrackClickDebounce = debounce(
             CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
         ) { track: Track ->
@@ -67,6 +40,13 @@ class FavoritesFragment : Fragment() {
         })
 
         binding.recyclerView.adapter = trackAdapter
+    }
+
+    override fun subscribe() {
+        viewModel.observeState().observe(viewLifecycleOwner) { state ->
+            render(state)
+        }
+        viewModel.getData()
     }
 
     private fun render(state: FavoritesState) {

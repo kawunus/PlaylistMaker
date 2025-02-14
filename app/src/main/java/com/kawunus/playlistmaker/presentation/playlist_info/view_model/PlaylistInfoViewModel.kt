@@ -2,8 +2,8 @@ package com.kawunus.playlistmaker.presentation.playlist_info.view_model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kawunus.playlistmaker.core.ui.BaseViewModel
 import com.kawunus.playlistmaker.domain.api.playlist.PlaylistInteractor
 import com.kawunus.playlistmaker.domain.api.sharing.SharingInteractor
 import com.kawunus.playlistmaker.domain.model.playlist.Playlist
@@ -15,7 +15,7 @@ class PlaylistInfoViewModel(
     private val playlistInteractor: PlaylistInteractor,
     private var playlist: Playlist,
     private val sharingInteractor: SharingInteractor
-) : ViewModel() {
+) : BaseViewModel() {
     private val tracksInPlaylistState = MutableLiveData<TracksInPlaylistState>()
     fun observeTracksInPlaylist(): LiveData<TracksInPlaylistState> = tracksInPlaylistState
 

@@ -2,8 +2,8 @@ package com.kawunus.playlistmaker.presentation.search.view_model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kawunus.playlistmaker.core.ui.BaseViewModel
 import com.kawunus.playlistmaker.domain.api.history.HistoryInteractor
 import com.kawunus.playlistmaker.domain.api.search.SearchInteractor
 import com.kawunus.playlistmaker.domain.model.history.History
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val historyInteractor: HistoryInteractor, private val searchInteractor: SearchInteractor
-) : ViewModel() {
+) : BaseViewModel() {
 
     private var latestRequest: String? = null
 

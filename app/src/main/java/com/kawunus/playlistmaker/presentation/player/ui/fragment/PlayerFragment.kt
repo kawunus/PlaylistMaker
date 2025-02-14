@@ -1,19 +1,16 @@
 package com.kawunus.playlistmaker.presentation.player.ui.fragment
 
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.kawunus.playlistmaker.R
+import com.kawunus.playlistmaker.core.ui.BaseFragment
 import com.kawunus.playlistmaker.databinding.FragmentPlayerBinding
 import com.kawunus.playlistmaker.domain.model.playlist.Playlist
 import com.kawunus.playlistmaker.domain.model.track.Track
@@ -27,82 +24,36 @@ import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerFragment : Fragment() {
+class PlayerFragment :
+    BaseFragment<FragmentPlayerBinding, PlayerViewModel>(FragmentPlayerBinding::inflate) {
 
-    private lateinit var binding: FragmentPlayerBinding
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
     private var adapter: PlaylistInPlayerAdapter? = null
 
-    private val viewModel: PlayerViewModel by viewModel {
+    override val viewModel: PlayerViewModel by viewModel {
         val args: PlayerFragmentArgs by navArgs()
         parametersOf(args.track)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentPlayerBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun initViews() = with(binding) {
         val args: PlayerFragmentArgs by navArgs()
         val model = args.track
 
-        binding.toolbar.setNavigationOnClickListener {
+        toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
         renderModelInformation(model)
 
-        binding.likeButton.setOnClickListener {
+        likeButton.setOnClickListener {
             viewModel.likeButtonControl()
-
         }
 
-        viewModel.observeIsFavoriteState().observe(viewLifecycleOwner) { isFavorite ->
-            if (isFavorite) {
-                binding.likeButton.setImageResource(R.drawable.ic_is_liked)
-            } else {
-                binding.likeButton.setImageResource(R.drawable.ic_like)
-            }
-        }
-
-        binding.playButton.setOnClickListener {
+        playButton.setOnClickListener {
             viewModel.playbackControl()
         }
 
-        viewModel.observePlayerState().observe(viewLifecycleOwner) { playerState ->
-            when (playerState!!) {
-                is PlayerState.Default -> {
-                    binding.playButton.setImageResource(R.drawable.ic_play)
-                }
-
-                is PlayerState.Paused -> {
-                    binding.playButton.setImageResource(R.drawable.ic_play)
-                }
-
-                is PlayerState.Playing -> {
-                    binding.playButton.setImageResource(R.drawable.ic_pause)
-                }
-
-                is PlayerState.Prepared -> {
-                    binding.playButton.setImageResource(R.drawable.ic_play)
-                }
-            }
-            binding.currentTimeTextView.text = playerState.progress
-            binding.playButton.isEnabled = playerState.isPlayButtonEnabled
-        }
         viewModel.preparePlayer()
-
-        viewModel.observePlayerPlaylistState().observe(viewLifecycleOwner) { playlistState ->
-            when (playlistState) {
-                is PlayerPlaylistState.Content -> renderContent(playlistState.playlistList)
-                PlayerPlaylistState.Empty -> renderEmpty()
-            }
-        }
 
         adapter = PlaylistInPlayerAdapter { playlist ->
             viewModel.addTrackToPlaylist(
@@ -110,11 +61,50 @@ class PlayerFragment : Fragment() {
             )
         }
 
-        binding.recyclerView.adapter = adapter
+        recyclerView.adapter = adapter
 
         viewModel.getPlaylists()
 
         renderBottomSheet()
+    }
+
+    override fun subscribe() = with(binding) {
+        viewModel.observeIsFavoriteState().observe(viewLifecycleOwner) { isFavorite ->
+            if (isFavorite) {
+                likeButton.setImageResource(R.drawable.ic_is_liked)
+            } else {
+                likeButton.setImageResource(R.drawable.ic_like)
+            }
+        }
+
+        viewModel.observePlayerState().observe(viewLifecycleOwner) { playerState ->
+            when (playerState!!) {
+                is PlayerState.Default -> {
+                    playButton.setImageResource(R.drawable.ic_play)
+                }
+
+                is PlayerState.Paused -> {
+                    playButton.setImageResource(R.drawable.ic_play)
+                }
+
+                is PlayerState.Playing -> {
+                    playButton.setImageResource(R.drawable.ic_pause)
+                }
+
+                is PlayerState.Prepared -> {
+                    playButton.setImageResource(R.drawable.ic_play)
+                }
+            }
+            currentTimeTextView.text = playerState.progress
+            playButton.isEnabled = playerState.isPlayButtonEnabled
+        }
+
+        viewModel.observePlayerPlaylistState().observe(viewLifecycleOwner) { playlistState ->
+            when (playlistState) {
+                is PlayerPlaylistState.Content -> renderContent(playlistState.playlistList)
+                PlayerPlaylistState.Empty -> renderEmpty()
+            }
+        }
 
         viewModel.observeAdditionStatus().observe(viewLifecycleOwner) { state ->
             when (state) {

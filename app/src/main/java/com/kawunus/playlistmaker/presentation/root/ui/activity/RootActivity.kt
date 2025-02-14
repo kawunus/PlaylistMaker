@@ -1,21 +1,15 @@
 package com.kawunus.playlistmaker.presentation.root.ui.activity
 
-import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.kawunus.playlistmaker.R
+import com.kawunus.playlistmaker.core.ui.BaseActivity
 import com.kawunus.playlistmaker.databinding.ActivityRootBinding
 
-class RootActivity : AppCompatActivity() {
+class RootActivity : BaseActivity<ActivityRootBinding>(ActivityRootBinding::inflate) {
 
-    private val binding by lazy { ActivityRootBinding.inflate(layoutInflater) }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-
+    override fun initViews() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
 

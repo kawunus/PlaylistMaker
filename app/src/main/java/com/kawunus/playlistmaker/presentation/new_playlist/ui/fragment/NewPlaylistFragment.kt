@@ -2,23 +2,19 @@ package com.kawunus.playlistmaker.presentation.new_playlist.ui.fragment
 
 import android.app.AlertDialog
 import android.net.Uri
-import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kawunus.playlistmaker.R
+import com.kawunus.playlistmaker.core.ui.BaseFragment
 import com.kawunus.playlistmaker.databinding.FragmentNewPlaylistBinding
 import com.kawunus.playlistmaker.domain.model.playlist.Playlist
 import com.kawunus.playlistmaker.presentation.new_playlist.ui.model.NewPlaylistState
@@ -26,40 +22,29 @@ import com.kawunus.playlistmaker.presentation.new_playlist.view_model.NewPlaylis
 import com.kawunus.playlistmaker.utils.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class NewPlaylistFragment : Fragment() {
-
-    private val binding by lazy {
-        FragmentNewPlaylistBinding.inflate(layoutInflater)
-    }
+class NewPlaylistFragment :
+    BaseFragment<FragmentNewPlaylistBinding, NewPlaylistViewModel>(FragmentNewPlaylistBinding::inflate) {
 
     private var model: Playlist? = null
 
-    private val viewModel: NewPlaylistViewModel by viewModel()
+    override val viewModel: NewPlaylistViewModel by viewModel()
 
     private var coverUrl: Uri? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?): Unit = with(binding) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun initViews() = with(binding) {
         val args: NewPlaylistFragmentArgs by navArgs()
         model = args.playlist
 
         if (model != null) {
-            binding.nameEditText.setText(model?.name)
-            binding.descriptionEditText.setText(model?.description ?: "")
+            nameEditText.setText(model?.name)
+            descriptionEditText.setText(model?.description ?: "")
 
             addImageImageView.load(model?.imageUrl) {
                 placeholder(R.drawable.ic_add_playlist)
                 error(R.drawable.ic_add_playlist)
             }
 
-            binding.createButton.text = getString(R.string.playlist_save)
+            createButton.text = getString(R.string.playlist_save)
             createButton.backgroundTintList = ContextCompat.getColorStateList(
                 requireContext(), R.color.buttonCreateColorAble
             )
@@ -67,6 +52,7 @@ class NewPlaylistFragment : Fragment() {
             binding.toolbar.title = getString(R.string.playlist_edit_title)
             coverUrl
         }
+
 
         nameEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -91,6 +77,59 @@ class NewPlaylistFragment : Fragment() {
 
         })
 
+        val pickMedia =
+            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                if (uri != null) {
+                    binding.addImageImageView.setImageURI(uri)
+                    coverUrl = uri
+                } else {
+                    Log.e("PHOTO_PICKER", "No media selected")
+                }
+            }
+
+        addImageImageView.setOnClickListener {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+
+        if (model == null) {
+            createButton.setOnClickListener {
+                viewModel.createNewPlaylist(
+                    name = nameEditText.text.toString(),
+                    description = descriptionEditText.text.toString(),
+                    imageUrl = coverUrl
+                )
+            }
+        } else {
+            createButton.setOnClickListener {
+                viewModel.updatePlaylist(
+                    name = nameEditText.text.toString(),
+                    description = descriptionEditText.text.toString(),
+                    imageUrl = coverUrl,
+                    playlist = model!!
+                )
+            }
+        }
+        toolbar.setNavigationOnClickListener {
+            if ((descriptionEditText.text.isNullOrEmpty() && nameEditText.text.isNullOrEmpty() && coverUrl == null) || model != null) {
+                findNavController().popBackStack()
+            } else {
+                showDialog()
+            }
+        }
+        setOnBackPressed()
+    }
+
+    private fun setOnBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            if ((binding.descriptionEditText.text.isNullOrEmpty() && binding.nameEditText.text.isNullOrEmpty() && coverUrl == null) || model != null) {
+                findNavController().popBackStack()
+            } else {
+                showDialog()
+            }
+        }
+    }
+
+    override fun subscribe() {
         viewModel.observeState().observe(viewLifecycleOwner) { state ->
             when (state) {
                 NewPlaylistState.Created -> {
@@ -115,55 +154,6 @@ class NewPlaylistFragment : Fragment() {
 
                 NewPlaylistState.NotCreated -> {
                 }
-            }
-        }
-
-
-        val pickMedia =
-            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-                if (uri != null) {
-                    binding.addImageImageView.setImageURI(uri)
-                    coverUrl = uri
-                } else {
-                    Log.e("PHOTO_PICKER", "No media selected")
-                }
-            }
-
-        binding.addImageImageView.setOnClickListener {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
-
-        if (model == null) {
-            binding.createButton.setOnClickListener {
-                viewModel.createNewPlaylist(
-                    name = binding.nameEditText.text.toString(),
-                    description = binding.descriptionEditText.text.toString(),
-                    imageUrl = coverUrl
-                )
-            }
-        } else {
-            binding.createButton.setOnClickListener {
-                viewModel.updatePlaylist(
-                    name = binding.nameEditText.text.toString(),
-                    description = binding.descriptionEditText.text.toString(),
-                    imageUrl = coverUrl,
-                    playlist = model!!
-                )
-            }
-        }
-
-        binding.toolbar.setNavigationOnClickListener {
-            if ((binding.descriptionEditText.text.isNullOrEmpty() && binding.nameEditText.text.isNullOrEmpty() && coverUrl == null) || model != null) {
-                findNavController().popBackStack()
-            } else {
-                showDialog()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            if ((binding.descriptionEditText.text.isNullOrEmpty() && binding.nameEditText.text.isNullOrEmpty() && coverUrl == null) || model != null) {
-                findNavController().popBackStack()
-            } else {
-                showDialog()
             }
         }
     }

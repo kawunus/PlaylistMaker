@@ -2,14 +2,14 @@ package com.kawunus.playlistmaker.presentation.settings.view_model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.kawunus.playlistmaker.core.ui.BaseViewModel
 import com.kawunus.playlistmaker.domain.api.settings.SettingsInteractor
 import com.kawunus.playlistmaker.domain.api.sharing.SharingInteractor
 
 class SettingsViewModel(
     private val sharingInteractor: SharingInteractor,
     private val settingsInteractor: SettingsInteractor
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val themeLiveData = MutableLiveData<Boolean>()
 

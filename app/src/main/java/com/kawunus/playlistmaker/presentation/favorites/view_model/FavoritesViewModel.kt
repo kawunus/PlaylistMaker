@@ -2,15 +2,15 @@ package com.kawunus.playlistmaker.presentation.favorites.view_model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kawunus.playlistmaker.core.ui.BaseViewModel
 import com.kawunus.playlistmaker.domain.api.favorite.FavoriteTrackInteractor
 import com.kawunus.playlistmaker.domain.model.track.Track
 import com.kawunus.playlistmaker.presentation.favorites.ui.model.FavoritesState
 import kotlinx.coroutines.launch
 
 class FavoritesViewModel(private val favoriteTrackInteractor: FavoriteTrackInteractor) :
-    ViewModel() {
+    BaseViewModel() {
 
     private val stateLiveData = MutableLiveData<FavoritesState>()
 

@@ -4,9 +4,9 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.kawunus.playlistmaker.core.ui.BaseViewModel
 import com.kawunus.playlistmaker.data.dto.PlaylistDto
 import com.kawunus.playlistmaker.domain.api.playlist.PlaylistInteractor
 import com.kawunus.playlistmaker.domain.model.playlist.Playlist
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class NewPlaylistViewModel(
     private val playlistInteractor: PlaylistInteractor, private val analytics: FirebaseAnalytics
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val stateLiveData = MutableLiveData<NewPlaylistState>(NewPlaylistState.NotCreated)
 

@@ -1,14 +1,10 @@
 package com.kawunus.playlistmaker.presentation.playlists.ui.fragment
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.kawunus.playlistmaker.core.ui.BaseFragment
 import com.kawunus.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.kawunus.playlistmaker.domain.model.playlist.Playlist
 import com.kawunus.playlistmaker.presentation.library.ui.fragment.LibraryFragmentDirections
@@ -18,43 +14,26 @@ import com.kawunus.playlistmaker.presentation.playlists.view_model.PlaylistViewM
 import com.kawunus.playlistmaker.utils.debounce.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlaylistsFragment : Fragment() {
+class PlaylistsFragment :
+    BaseFragment<FragmentPlaylistsBinding, PlaylistViewModel>(FragmentPlaylistsBinding::inflate) {
 
     companion object {
         fun newInstance() = PlaylistsFragment()
         private const val CLICK_DEBOUNCE_DELAY = 300L
     }
 
-    private var _binding: FragmentPlaylistsBinding? = null
-    private val binding: FragmentPlaylistsBinding get() = _binding!!
-
     private lateinit var onPlaylistClickDebounce: (Playlist) -> Unit
 
     private var playlistAdapter: PlaylistAdapter? = null
 
-    private val viewModel: PlaylistViewModel by viewModel()
+    override val viewModel: PlaylistViewModel by viewModel()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.newPlaylistButton.setOnClickListener {
+    override fun initViews() = with(binding) {
+        newPlaylistButton.setOnClickListener {
             val action = LibraryFragmentDirections.actionLibraryFragmentToNewPlaylistFragment(null)
             findNavController().navigate(action)
         }
-        viewModel.observeState().observe(viewLifecycleOwner) { state ->
-            render(state)
-        }
+
         viewModel.getData()
 
         onPlaylistClickDebounce = debounce(
@@ -69,8 +48,14 @@ class PlaylistsFragment : Fragment() {
         playlistAdapter = PlaylistAdapter { playlist ->
             onPlaylistClickDebounce(playlist)
         }
-        binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.recyclerView.adapter = playlistAdapter
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        recyclerView.adapter = playlistAdapter
+    }
+
+    override fun subscribe() {
+        viewModel.observeState().observe(viewLifecycleOwner) { state ->
+            render(state)
+        }
     }
 
     private fun render(state: PlaylistState) {

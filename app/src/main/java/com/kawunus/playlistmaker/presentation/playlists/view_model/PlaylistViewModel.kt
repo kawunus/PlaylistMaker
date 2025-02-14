@@ -2,14 +2,14 @@ package com.kawunus.playlistmaker.presentation.playlists.view_model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kawunus.playlistmaker.core.ui.BaseViewModel
 import com.kawunus.playlistmaker.domain.api.playlist.PlaylistInteractor
 import com.kawunus.playlistmaker.domain.model.playlist.Playlist
 import com.kawunus.playlistmaker.presentation.playlists.ui.model.PlaylistState
 import kotlinx.coroutines.launch
 
-class PlaylistViewModel(private val playlistInteractor: PlaylistInteractor) : ViewModel() {
+class PlaylistViewModel(private val playlistInteractor: PlaylistInteractor) : BaseViewModel() {
 
     private val stateLiveData = MutableLiveData<PlaylistState>()
 
