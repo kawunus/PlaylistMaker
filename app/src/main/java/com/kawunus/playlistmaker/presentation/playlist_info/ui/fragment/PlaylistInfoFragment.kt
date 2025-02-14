@@ -2,7 +2,6 @@ package com.kawunus.playlistmaker.presentation.playlist_info.ui.fragment
 
 import android.app.AlertDialog
 import android.view.View
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -122,14 +121,10 @@ class PlaylistInfoFragment :
 
     private fun sharePlaylist() {
         if (trackList.isEmpty()) {
-            showToast(requireContext().getString(R.string.empty_playlist_message))
+            showSnackBar(requireContext().getString(R.string.empty_playlist_message))
         } else {
             viewModel.sharePlaylist(trackList)
         }
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     private fun showSnackBar(message: String) {

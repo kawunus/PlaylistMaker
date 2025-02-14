@@ -2,7 +2,6 @@ package com.kawunus.playlistmaker.presentation.player.ui.fragment
 
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -19,6 +18,7 @@ import com.kawunus.playlistmaker.presentation.player.ui.model.AdditionState
 import com.kawunus.playlistmaker.presentation.player.ui.model.PlayerPlaylistState
 import com.kawunus.playlistmaker.presentation.player.ui.model.PlayerState
 import com.kawunus.playlistmaker.presentation.player.view_model.PlayerViewModel
+import com.kawunus.playlistmaker.utils.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
@@ -109,11 +109,16 @@ class PlayerFragment :
         viewModel.observeAdditionStatus().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is AdditionState.Error -> {
-                    showToast(getString(R.string.bottom_sheet_failed_addition, state.playlistName))
+                    showSnackBar(
+                        getString(
+                            R.string.bottom_sheet_failed_addition,
+                            state.playlistName
+                        )
+                    )
                 }
 
                 is AdditionState.Successful -> {
-                    showToast(
+                    showSnackBar(
                         getString(
                             R.string.bottom_sheet_successful_addition, state.playlistName
                         )
@@ -125,8 +130,8 @@ class PlayerFragment :
         }
     }
 
-    private fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    private fun showSnackBar(message: String) {
+        Snackbar.showSnackbar(binding.root, message, requireContext())
     }
 
     override fun onPause() {
