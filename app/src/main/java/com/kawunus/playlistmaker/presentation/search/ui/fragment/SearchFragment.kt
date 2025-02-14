@@ -4,15 +4,13 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.kawunus.playlistmaker.R
+import com.kawunus.playlistmaker.core.ui.BaseFragment
 import com.kawunus.playlistmaker.databinding.FragmentSearchBinding
 import com.kawunus.playlistmaker.domain.model.track.Track
 import com.kawunus.playlistmaker.presentation.search.ui.adapter.TrackAdapter
@@ -21,32 +19,23 @@ import com.kawunus.playlistmaker.presentation.search.view_model.SearchViewModel
 import com.kawunus.playlistmaker.utils.debounce.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchFragment : Fragment() {
+class SearchFragment :
+    BaseFragment<FragmentSearchBinding, SearchViewModel>(FragmentSearchBinding::inflate) {
 
     private var editTextContext = ""
-    private lateinit var binding: FragmentSearchBinding
 
     private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     private var trackAdapter: TrackAdapter? = null
     private var historyAdapter: TrackAdapter? = null
 
-    private val viewModel: SearchViewModel by viewModel()
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override val viewModel: SearchViewModel by viewModel()
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 300L
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun initViews() = with(binding) {
         onTrackClickDebounce = debounce(
             CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
         ) { track: Track ->
@@ -59,13 +48,9 @@ class SearchFragment : Fragment() {
             onTrackClickDebounce(track)
         })
         historyAdapter = trackAdapter
-        binding.historyRecyclerView.adapter = trackAdapter
-        binding.recyclerView.adapter = trackAdapter
+        historyRecyclerView.adapter = trackAdapter
+        recyclerView.adapter = trackAdapter
 
-
-        viewModel.observeState().observe(viewLifecycleOwner) { state ->
-            render(state)
-        }
 
         val editTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -73,7 +58,7 @@ class SearchFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.clearIcon.visibility = clearButtonVisibility(s)
+                clearIcon.visibility = clearButtonVisibility(s)
                 if (s?.isNotEmpty() == true && s.isNotBlank()) {
                     viewModel.searchDebounce(changedText = s.toString())
                 } else {
@@ -84,23 +69,29 @@ class SearchFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
             }
         }
-        binding.editText.addTextChangedListener(editTextWatcher)
+        editText.addTextChangedListener(editTextWatcher)
 
-        binding.clearIcon.setOnClickListener {
+        clearIcon.setOnClickListener {
             viewModel.clearRequestText()
-            binding.editText.setText("")
+            editText.setText("")
         }
 
-        binding.updateButton.setOnClickListener {
-            viewModel.searchDebounce(binding.editText.text.toString())
+        updateButton.setOnClickListener {
+            viewModel.searchDebounce(editText.text.toString())
         }
 
-        binding.historyButton.setOnClickListener {
+        historyButton.setOnClickListener {
             viewModel.clearHistory()
             hideHistory()
         }
 
         viewModel.showHistory()
+    }
+
+    override fun subscribe() {
+        viewModel.observeState().observe(viewLifecycleOwner) { state ->
+            render(state)
+        }
     }
 
 
