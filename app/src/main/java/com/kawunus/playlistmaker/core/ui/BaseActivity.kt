@@ -5,6 +5,10 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 
+/**
+ * Базовая Activity. Делает то же что и базовый Fragment, но адаптирован под Single Activity
+ *
+ */
 typealias InflateActivity<T> = (LayoutInflater) -> T
 
 abstract class BaseActivity<VB : ViewBinding>(
