@@ -3,9 +3,9 @@ package com.kawunus.playlistmaker.presentation.player.view_model
 import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.kawunus.playlistmaker.core.ui.BaseViewModel
 import com.kawunus.playlistmaker.domain.api.favorite.FavoriteTrackInteractor
 import com.kawunus.playlistmaker.domain.api.player.MediaPlayerInteractor
 import com.kawunus.playlistmaker.domain.api.playlist.PlaylistInteractor
@@ -25,7 +25,7 @@ class PlayerViewModel(
     private val favoriteTrackInteractor: FavoriteTrackInteractor,
     private val playlistInteractor: PlaylistInteractor,
     private val analytics: FirebaseAnalytics
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val playerStateLiveData = MutableLiveData<PlayerState>()
 
