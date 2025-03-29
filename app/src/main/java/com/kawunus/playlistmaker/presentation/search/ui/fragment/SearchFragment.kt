@@ -218,10 +218,12 @@ class SearchFragment :
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        binding?.recyclerView?.adapter = null
+        binding?.historyRecyclerView?.adapter = null
+
         trackAdapter = null
         historyAdapter = null
-        binding.recyclerView.adapter = null
-        binding.historyRecyclerView.adapter = null
+
+        super.onDestroyView()
     }
 }
