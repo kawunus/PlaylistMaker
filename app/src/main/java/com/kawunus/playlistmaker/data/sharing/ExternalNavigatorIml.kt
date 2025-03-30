@@ -51,7 +51,7 @@ class ExternalNavigatorIml(private val context: Context) : ExternalNavigator {
         context.startActivity(intent)
     }
 
-    override fun getShareAppLink(): String = context.getString(R.string.link_on_course)
+    override fun getShareAppLink(): String = context.getString(R.string.link_on_git)
 
     override fun getSupportEmailData(): EmailData = EmailData(
         message = context.getString(R.string.support_message),
@@ -59,7 +59,7 @@ class ExternalNavigatorIml(private val context: Context) : ExternalNavigator {
         email = context.getString(R.string.dev_email)
     )
 
-    override fun getTermsLink(): String = context.getString(R.string.link_to_agreement)
+    override fun getTermsLink(): String = context.getString(R.string.link_to_license)
 
     private fun getPlaylistMessage(
         trackList: List<Track>,
