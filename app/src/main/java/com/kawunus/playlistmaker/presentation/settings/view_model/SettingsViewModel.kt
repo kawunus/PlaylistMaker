@@ -8,7 +8,7 @@ import com.kawunus.playlistmaker.domain.api.sharing.SharingInteractor
 
 class SettingsViewModel(
     private val sharingInteractor: SharingInteractor,
-    private val settingsInteractor: SettingsInteractor
+    settingsInteractor: SettingsInteractor
 ) : BaseViewModel() {
 
     private val themeLiveData = MutableLiveData<Boolean>()
